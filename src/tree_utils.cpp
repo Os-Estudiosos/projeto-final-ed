@@ -1,5 +1,12 @@
 #include "tree_utils.h"
 
-int main(){
+
+void printIndex(BinaryTree* tree){
     
+}
+void printTree(BinaryTree* tree);
+
+
+int main(){
+
 }
