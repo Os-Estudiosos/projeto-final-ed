@@ -14,13 +14,13 @@ namespace BST
     {
         auto start = std::chrono::high_resolution_clock::now();
 
-        InsertResult result;
-        result.numComparisons = 0;
-        result.executionTime = 0;
+        InsertResult result_insert;
+        result_insert.numComparisons = 0;
+        result_insert.executionTime = 0;
 
         if (tree == nullptr)
         {
-            return result;
+            return result_insert;
         }
 
         if (tree->root == nullptr)
@@ -34,8 +34,8 @@ namespace BST
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
             double time_ms = duration.count();
-            result.executionTime = time_ms;
-            return result;
+            result_insert.executionTime = time_ms;
+            return result_insert;
         }
         else
         {
@@ -48,33 +48,33 @@ namespace BST
                     // assume documentIds não vazio, pois nó existente sempre tem pelo menos um ID.
                     if (current->documentIds.back() == documentId)
                     {
-                        result.numComparisons += 1;
+                        result_insert.numComparisons += 1;
                         auto end = std::chrono::high_resolution_clock::now();
                         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
                         double time_ms = duration.count();
-                        result.executionTime = time_ms;
-                        return result;
+                        result_insert.executionTime = time_ms;
+                        return result_insert;
                     }
                     else
                     {
-                        result.numComparisons += 1;
+                        result_insert.numComparisons += 1;
                         current->documentIds.push_back(documentId);
                         auto end = std::chrono::high_resolution_clock::now();
                         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
                         double time_ms = duration.count();
-                        result.executionTime = time_ms;
-                        return result;
+                        result_insert.executionTime = time_ms;
+                        return result_insert;
                     }
                 }
                 else if (word > current->word)
                 {
-                    result.numComparisons += 1;
+                    result_insert.numComparisons += 1;
                     last = current;
                     current = current->right;
                 }
                 else
                 {
-                    result.numComparisons += 1;
+                    result_insert.numComparisons += 1;
                     last = current;
                     current = current->left;
                 }
@@ -89,20 +89,20 @@ namespace BST
 
             if (word > last->word)
             {
-                result.numComparisons += 1;
+                result_insert.numComparisons += 1;
                 last->right = newNode;
             }
             else
             {
-                result.numComparisons += 1;
+                result_insert.numComparisons += 1;
                 last->left = newNode;
             }
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
             double time_ms = duration.count();
-            result.executionTime = time_ms;
-            return result;
+            result_insert.executionTime = time_ms;
+            return result_insert;
         }
     }
 
