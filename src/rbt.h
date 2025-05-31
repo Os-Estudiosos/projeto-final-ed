@@ -8,10 +8,12 @@
 namespace RBT
 {
 
-    void rotateLeft(Node** );
+    enum Color {RED, BLACK};
+
+    void rotateLeft(Node** root, Node* x);
 
 
-    void rotateRight(Node** );
+    void rotateRight(Node** root, Node* y);
 
 
     void fixInsert(Node **root, Node* z);
