@@ -1,5 +1,8 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 struct Node 
 {
@@ -17,6 +20,29 @@ struct BinaryTree
     Node* root;
     Node* NIL;  // usado na RBT (Opcional)
 };
+
+struct InsertResult
+{
+    int numComparisons;
+    double executionTime;
+    //<Possíveis outras variáveis>
+};
+
+struct SearchResult
+{
+    int found;
+    std::vector<int> documentIds;
+    double executionTime;
+    int numComparisons;
+    //<Possíveis outras variáveis>
+};
+
+
+
+// TODO: Adicionar Docstring
+BinaryTree *create();
+InsertResult insert(BinaryTree *tree, const std::string &word, int documentId);
+SearchResult search(BinaryTree *tree, const std::string &word);
 
 
 // TODO: Adicionar docstring
