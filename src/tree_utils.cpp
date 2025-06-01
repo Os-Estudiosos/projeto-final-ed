@@ -26,7 +26,7 @@ Node* createNode(std::string x)
 }
 
 
-BinaryTree* create()
+BinaryTree* createBinaryTree()
 {
     BinaryTree *tree = new BinaryTree;
     tree->root = nullptr;

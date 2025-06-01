@@ -40,7 +40,7 @@ struct SearchResult
 
 
 // TODO: Adicionar Docstring
-BinaryTree *create();
+BinaryTree* createBinaryTree();
 // TODO: Adicionar Docstring
 InsertResult insert(BinaryTree *tree, const std::string &word, int documentId);
 // TODO: Adicionar Docstring
