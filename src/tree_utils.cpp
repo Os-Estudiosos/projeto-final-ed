@@ -1,13 +1,56 @@
 #include "tree_utils.h"
 
 
-void printIndex(BinaryTree* tree)
-{
-    // implementar 
+void auxPrint(Node *aux, int *num){
+    std::cout<< *num << ". " << aux->word <<": ";
+    std::string toPrint = "";
+    for(int i = 0; i < aux->documentIds.size(); i++){
+        toPrint += std::to_string(aux->documentIds[i]) + ", ";
+    }
+    toPrint.erase(toPrint.size() - 2, 2);
+    std::cout << toPrint << std::endl;
+    *num += 1;
+
+    if(aux->left != nullptr){
+        auxPrint(aux->left, num);
+    } 
+    if(aux->right != nullptr){
+        auxPrint(aux->right, num);
+    }
 }
-void printTree(BinaryTree* tree)
-{
-    // implementar 
+
+void printIndex(BinaryTree* tree) {
+    Node *aux = tree->root;
+    int count = 1;
+    
+    if(aux != nullptr){
+        auxPrint(aux, &count);
+    }
+}
+
+void auxPrintTree(Node *aux, std::string space){
+    if(aux->left != nullptr) {
+        std::string folderRep = "├──";
+        if(aux->right == nullptr){
+            folderRep = "└──";
+        }
+        std::cout << space << folderRep << aux->left->word << std::endl;
+        auxPrintTree(aux->left,space + "   ");
+    }
+    if(aux->right != nullptr) {
+        std::cout << space << "└──" << aux->right->word << std::endl;
+        auxPrintTree(aux->right,space + "   ");
+    }
+
+}
+
+void printTree(BinaryTree* tree) {
+    Node *aux = tree->root;
+
+    if(aux != nullptr){
+        std::cout << aux->word << std::endl;
+        auxPrintTree(aux, "");
+    }
 }
 
 

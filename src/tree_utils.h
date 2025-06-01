@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <chrono>
 
 struct Node 
@@ -49,8 +50,10 @@ SearchResult search(BinaryTree *tree, const std::string &word);
 
 // TODO: Adicionar docstring
 void printIndex(BinaryTree* tree);
+void auxPrint(Node *aux, int *num);
 // TODO: Adicionar docstring
 void printTree(BinaryTree* tree);
+void auxPrintTree(Node *aux, std::string space);
 
 
 
