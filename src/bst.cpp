@@ -106,6 +106,63 @@ namespace BST
         }
     }
 
-    SearchResult search(BinaryTree *tree, const std::string &word);
+    SearchResult search(BinaryTree *tree, const std::string &word)
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+
+        SearchResult result_search;
+        result_search.found = 0;
+        result_search.numComparisons = 0;
+        result_search.executionTime = 0;
+        result_search.documentIds = std::vector<int>{};
+
+        if (tree == nullptr)
+        {
+            return result_search;
+        }
+
+        if (tree->root == nullptr)
+        {
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            double time_ms = duration.count();
+            result_search.executionTime = time_ms;
+            return result_search;
+        }
+        else
+        {
+            Node *current = tree->root;
+            while (current != nullptr)
+            {
+                if (word == current->word)
+                {
+                    result_search.numComparisons += 1;
+                    result_search.found = 1;
+                    result_search.documentIds = current->documentIds;
+                    auto end = std::chrono::high_resolution_clock::now();
+                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+                    double time_ms = duration.count();
+                    result_search.executionTime = time_ms;
+                    return result_search;
+                }
+                else if (word > current->word)
+                {
+                    result_search.numComparisons += 1;
+                    current = current->right;
+                }
+                else
+                {
+                    result_search.numComparisons += 1;
+                    current = current->left;
+                }
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            double time_ms = duration.count();
+            result_search.executionTime = time_ms;
+            return result_search;
+        }
+    }
+
     void delete_BST(BinaryTree *tree);
 }
