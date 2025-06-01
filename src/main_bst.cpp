@@ -84,5 +84,65 @@ int main()
     std::cout << "Estrutura final da arvore (inordem):\n";
     printTree(tree->root);
 
+    std::cout << "Teste 8: Buscar 'casa'\n";
+    SearchResult result8 = search(tree, "casa");
+    std::cout << "found: " << result8.found << "\n";
+    std::cout << "numComparisons: " << result8.numComparisons << ", executionTime: " << result8.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result8.documentIds);
+    std::cout << "Tamanho documentIds: " << result8.documentIds.size() << "\n\n";
+
+    std::cout << "Teste 9: Buscar 'mango'\n";
+    SearchResult result9 = search(tree, "mango");
+    std::cout << "found: " << result9.found << "\n";
+    std::cout << "numComparisons: " << result9.numComparisons << ", executionTime: " << result9.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result9.documentIds);
+    std::cout << "documentIds vazio: " << (result9.documentIds.empty() ? "Sim" : "Nao") << "\n\n";
+
+    std::cout << "Teste 10: Buscar 'banana'\n";
+    SearchResult result10 = search(tree, "banana");
+    std::cout << "found: " << result10.found << "\n";
+    std::cout << "numComparisons: " << result10.numComparisons << ", executionTime: " << result10.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result10.documentIds);
+    std::cout << "Tamanho documentIds: " << result10.documentIds.size() << "\n\n";
+
+    std::cout << "Teste 11: Buscar 'teste' em arvore nula\n";
+    SearchResult result11 = search(nullTree, "teste");
+    std::cout << "found: " << result11.found << "\n";
+    std::cout << "numComparisons: " << result11.numComparisons << ", executionTime: " << result11.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result11.documentIds);
+    std::cout << "documentIds vazio: " << (result11.documentIds.empty() ? "Sim" : "Nao") << "\n\n";
+
+    std::cout << "Teste 12: Buscar 'casa' em arvore vazia\n";
+    BinaryTree *emptyTree = new BinaryTree;
+    emptyTree->root = nullptr;
+    SearchResult result12 = search(emptyTree, "casa");
+    std::cout << "found: " << result12.found << "\n";
+    std::cout << "numComparisons: " << result12.numComparisons << ", executionTime: " << result12.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result12.documentIds);
+    std::cout << "documentIds vazio: " << (result12.documentIds.empty() ? "Sim" : "Nao") << "\n\n";
+
+    std::cout << "Teste 13: Inserir 'casa', ID=3 e buscar 'casa'\n";
+    InsertResult result13_insert = insert(tree, "casa", 3);
+    std::cout << "Insercao - numComparisons: " << result13_insert.numComparisons << ", executionTime: " << result13_insert.executionTime << " ms\n";
+    SearchResult result13 = search(tree, "casa");
+    std::cout << "found: " << result13.found << "\n";
+    std::cout << "numComparisons: " << result13.numComparisons << ", executionTime: " << result13.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result13.documentIds);
+    std::cout << "Tamanho documentIds: " << result13.documentIds.size() << "\n\n";
+
+    std::cout << "Teste 14: Buscar palavra vazia\n";
+    SearchResult result14 = search(tree, "");
+    std::cout << "found: " << result14.found << "\n";
+    std::cout << "numComparisons: " << result14.numComparisons << ", executionTime: " << result14.executionTime << " ms\n";
+    std::cout << "DocumentIDs: ";
+    printDocumentIds(result14.documentIds);
+    std::cout << "documentIds vazio: " << (result14.documentIds.empty() ? "Sim" : "Nao") << "\n\n";
+
     return 0;
 }

@@ -164,5 +164,19 @@ namespace BST
         }
     }
 
-    void delete_BST(BinaryTree *tree);
+    void delete_BST(BinaryTree *tree)
+    {
+        if (tree == nullptr)
+        {
+            return;
+        }
+        else if (tree->root == nullptr)
+        {
+            delete tree;
+            return;
+        }
+        else
+        {
+        }
+    }
 }
