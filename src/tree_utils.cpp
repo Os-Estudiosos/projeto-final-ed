@@ -36,6 +36,19 @@ Node* insert(Node* root, std::string x) {
     return root;
 }
 
+
+Node* treeSearch(Node* root, std::string x) {
+    if (root == nullptr || root->word == x) {
+        return root;
+    }
+
+    if (x < root->word) {
+        return treeSearch(root->left, x);
+    } else {
+        return treeSearch(root->right, x);
+    }
+}
+
 int main(){
 
 }

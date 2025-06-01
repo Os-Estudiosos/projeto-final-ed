@@ -29,6 +29,7 @@ void printTree(BinaryTree* tree);
  */
 Node* createNode(std::string x);
 
+
 /**
  * @brief Insere uma palavra na árvore binária de busca.
  * 
@@ -37,3 +38,14 @@ Node* createNode(std::string x);
  * @return Node* Ponteiro para a nova raiz após a inserção.
  */
 Node* insert(Node* root, std::string x);
+
+
+
+/**
+ * @brief Procura uma palavra na árvore binária de busca.
+ * @param root Raiz da árvore/subárvore.
+ * @param x Palavra a ser inserida.
+ * @return Node* Ponteiro para a palavra procurada.
+ */
+Node* treeSearch(Node* root, std::string x);
+
