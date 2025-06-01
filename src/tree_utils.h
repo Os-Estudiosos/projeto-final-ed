@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 
-struct Node {
+struct Node 
+{
     std::string word;
     std::vector<int> documentIds;
     Node* parent;
@@ -11,12 +12,16 @@ struct Node {
     int isRed;     // usado na RBT
 };
 
-struct BinaryTree {
+struct BinaryTree 
+{
     Node* root;
     Node* NIL;  // usado na RBT (Opcional)
 };
 
+
+// TODO: Adicionar docstring
 void printIndex(BinaryTree* tree);
+// TODO: Adicionar docstring
 void printTree(BinaryTree* tree);
 
 
