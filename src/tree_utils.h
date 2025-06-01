@@ -18,3 +18,22 @@ struct BinaryTree {
 
 void printIndex(BinaryTree* tree);
 void printTree(BinaryTree* tree);
+
+
+
+/**
+ * @brief Cria um novo nó com a palavra fornecida.
+ * 
+ * @param x Palavra a ser armazenada no nó.
+ * @return Node* Ponteiro para o novo nó criado.
+ */
+Node* createNode(std::string x);
+
+/**
+ * @brief Insere uma palavra na árvore binária de busca.
+ * 
+ * @param root Raiz da árvore/subárvore.
+ * @param x Palavra a ser inserida.
+ * @return Node* Ponteiro para a nova raiz após a inserção.
+ */
+Node* insert(Node* root, std::string x);
