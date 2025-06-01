@@ -1,9 +1,9 @@
-#include "bst.h"
-#include "data.h"
+#include "./bst.h"
+#include "./data.h"
 
 namespace BST
 {
-    BinaryTree *create()
+    BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;
         tree->root = nullptr;
