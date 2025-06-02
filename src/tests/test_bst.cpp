@@ -34,8 +34,10 @@ void tree_structure_tests() {
         insert(tree, "Almofada", 0);
         std::vector<int> docsIds = tree->root->documentIds;
         if (tree->root->word != "Almofada") {
+            destroy(tree);
             throw std::runtime_error("A palavra não foi inserida no nó da árvore");
         }
+        destroy(tree);
         if (!contains(docsIds, 0)) {
             throw std::runtime_error("O número do documento não foi inserido na árvore");
         }
@@ -60,12 +62,15 @@ void tree_structure_tests() {
         for (int j = 0; j < words_to_insert.size(); j++) {
             SearchResult result = search(tree, words_to_insert[j]);
             if (!result.found) {
+                destroy(tree);
                 throw std::runtime_error("Os nós não estão sendo inseridos corretamente");
             }
             if (!contains(result.documentIds, docsIds[j])) {
+                destroy(tree);
                 throw std::runtime_error("Os números dos documentos, ou não estão sendo inseridos, ou não estão sendo retornados pelo search");
             }
         }
+        destroy(tree);
         printMessage(" CONCLUÍDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
@@ -87,9 +92,11 @@ void tree_structure_tests() {
         if (!(
             tree->root->word == "a" && tree->root->right->word == "b" && tree->root->right->right->word == "c"
         )) {
+            destroy(tree);
             throw std::runtime_error("Não está inserindo da forma correta");
         }
 
+        destroy(tree);
         printMessage(" CONCLUÍDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
@@ -114,6 +121,7 @@ void tree_returns_tests() {
         SearchResult result1 = search(tree, "onomatopeia");
         SearchResult result2 = search(tree, "digimon");
 
+        destroy(tree);
         if (result1.documentIds.size() != 1 || result2.documentIds.size() != 1) {
             throw std::runtime_error("A função está inserindo o mesmo documento mais de uma vez");
         }
@@ -140,6 +148,7 @@ void tree_returns_tests() {
         SearchResult result1 = search(tree, "onomatopeia");
         SearchResult result2 = search(tree, "panorama");
 
+        destroy(tree);
         if (!contains(result1.documentIds, 1) || !contains(result2.documentIds, 5)) {
             throw std::runtime_error("A função não está inserindo documentos novos em novas aparições de palavras");
         }
@@ -161,6 +170,13 @@ void tree_returns_tests() {
         insert(tree, "panorama", 3);
 
         insert(tree, "", 0);
+
+        SearchResult result = search(tree, "");
+
+        destroy(tree);
+        if (result.found) {
+            throw std::runtime_error("A função está adicionando strings vazias");
+        }
 
         printMessage(" CONCLUÍDO", 1, "92");
     } catch (const std::runtime_error& err) {

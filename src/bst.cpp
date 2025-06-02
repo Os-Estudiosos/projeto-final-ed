@@ -19,7 +19,7 @@ namespace BST
         result_insert.numComparisons = 0;                                       // defino ambas variáveis como zero
         result_insert.executionTime = 0;    
 
-        if (tree == nullptr)                                                    // verifico se a árvore é nula
+        if (tree == nullptr || word == "")                                      // verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // se for, apenas retorno a estrutura de insert inicial (tudo 0)
             return result_insert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
