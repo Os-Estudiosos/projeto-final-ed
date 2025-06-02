@@ -48,6 +48,5 @@ void printTree(BinaryTree *tree);
  * @param x Palavra a ser armazenada no nó.
  * @return Node* Ponteiro para o novo nó criado.
  */
-Node *createNode(std::string x);
 
 void deleteNode(Node *node);
