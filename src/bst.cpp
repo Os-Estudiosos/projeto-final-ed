@@ -173,20 +173,21 @@ namespace BST
 
     void destroy(BinaryTree *tree)
     {
-        if (tree == nullptr)                                                
+        if (tree == nullptr)                                                    // caso a árvore seja nula, não há nada a ser deletado 
         {
             return;
         }
-        else if (tree->root == nullptr)
+        else if (tree->root == nullptr)                                         // caso a árvore exista mas não tenha nós
         {
-            delete tree;
+            delete tree;                                                        // apenas deletamos a árvore
             return;
         }
-        else
+        else                                                                    // por fim, se a árvore exita e tenha nós
         {
-            Node *root = tree->root;
-            deleteNode(root);
-            delete tree;
+            Node *root = tree->root;                                            // salvamos o nó raiz
+            deleteNode(root);                                                   // usamos uma função auxiliar que deleta toda a árvore recursivamente
+                                                                                // (só deleta o pai após deletar os filhos)
+            delete tree;                                                        // deletamos a árvore
         }
     }
 }
