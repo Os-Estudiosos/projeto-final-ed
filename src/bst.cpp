@@ -38,72 +38,76 @@ namespace BST
             result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
             return result_insert;                                               // retornamos a struct alterada
         }
-        else
+        else                                                                    // caso a árvore já tenha algum nó
         {
-            Node *current = tree->root;
-            Node *last = nullptr;
-            while (current != nullptr)
+            Node *current = tree->root;                                         // salvo o nó da raiz 
+            Node *last = nullptr;                                               // inicio um nó que irei usar depois para fazer a ligação entre o nó adicionado e seu pai
+            while (current != nullptr)                                          // enquanto o nó não for nulo(vamos fazer a comparação e passar em todos os nós necessários)
             {
-                if (word == current->word)
+                if (word == current->word)                                      // se a palavra for igual a atual
                 {
-                    // assume documentIds não vazio, pois nó existente sempre tem pelo menos um ID.
-                    if (current->documentIds.back() == documentId)
-                    {
-                        result_insert.numComparisons += 1;
-                        auto end = std::chrono::high_resolution_clock::now();
-                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-                        double time_ms = duration.count();
-                        result_insert.executionTime = time_ms;
-                        return result_insert;
+                    // aqui, assumo documentIds não vazio (para não fazer a verificação se é vazio), 
+                    // pois, por construção, o nó existente sempre tem pelo menos um ID
+                    if (current->documentIds.back() == documentId)              // vejo se o último elemento da lista de IDs é igual o id do documento atual
+                    {                                                           // pois se for, eu apenas ignoro
+                                                                                // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
+                        result_insert.numComparisons += 1;                      // incremento o número de comparações(relacionado a comparar word == current-> word)
+                        auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
+                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+                        double time_ms = duration.count();                      // mudamos para double
+                        result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
+                        return result_insert;                                   // retornamos a struct alterada
                     }
-                    else
+                    else                                                        // caso o id ainda não estiver sido incluído no vetor                                                                       
                     {
-                        result_insert.numComparisons += 1;
-                        current->documentIds.push_back(documentId);
-                        auto end = std::chrono::high_resolution_clock::now();
-                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-                        double time_ms = duration.count();
-                        result_insert.executionTime = time_ms;
-                        return result_insert;
+                        result_insert.numComparisons += 1;                      
+                        current->documentIds.push_back(documentId);             // adiciono o id ao vetor 
+                        auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
+                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+                        double time_ms = duration.count();                      // mudamos para double
+                        result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
+                        return result_insert;                                   // retornamos a struct alterada
                     }
                 }
-                else if (word > current->word)
+                else if (word > current->word)                                  // caso a palavra não seja igual ao nó atual e seja "maior"
                 {
-                    result_insert.numComparisons += 1;
-                    last = current;
-                    current = current->right;
+                    result_insert.numComparisons += 1;                          // incrementamos o número de comparações
+                    last = current;                                             // atualizo o último para ser o pai
+                    current = current->right;                                   // atualizo o current para direita pela palavra ser "maior"
                 }
-                else
+                else                                                            // caso contrário (palavra menor que o nó atual)
                 {
-                    result_insert.numComparisons += 1;
-                    last = current;
-                    current = current->left;
+                    result_insert.numComparisons += 1;                          // incrementamos o número de comparações
+                    last = current;                                             // atualizo o último para ser o pai
+                    current = current->left;                                    // atualizo o current para esquerda pela palavra ser "menor"
                 }
             }
 
-            Node *newNode = new Node;
-            newNode->parent = last;
-            newNode->left = nullptr;
+            // se, a palavra não está na lista e chegamos no current ser nullptr(lembre-se que salvamos o pai, o "last"):
+            Node *newNode = new Node;                                           // criamos um novo nó
+            newNode->parent = last;                                             // ligamos ao pai
+            newNode->left = nullptr;                                            // a esquerda e a direita ainda será nullptr
             newNode->right = nullptr;
-            newNode->documentIds.push_back(documentId);
-            newNode->word = word;
+            newNode->documentIds.push_back(documentId);                         // adiciono o id do documento ao seu vetor
+            newNode->word = word;                                               // incremento a palavra sendo a palavra
 
-            if (word > last->word)
-            {
-                result_insert.numComparisons += 1;
-                last->right = newNode;
+            // por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
+            if (word > last->word)                                              // se for "maior"
+            {                                                                   
+                result_insert.numComparisons += 1;                              // incrementamos o número de comparações
+                last->right = newNode;                                          // alteramos o nó da direita do pai como o nó que criamos
             }
-            else
+            else                                                                // se for "menor"
             {
-                result_insert.numComparisons += 1;
-                last->left = newNode;
+                result_insert.numComparisons += 1;                              // incrementamos o número de comparações
+                last->left = newNode;                                           // alteramos o nó da esquerda do pai como o nó que criamos
             }
 
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            double time_ms = duration.count();
-            result_insert.executionTime = time_ms;
-            return result_insert;
+            auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            double time_ms = duration.count();                                  // mudamos para double
+            result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
+            return result_insert;                                               // retornamos a struct alterada
         }
     }
 
