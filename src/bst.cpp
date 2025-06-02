@@ -6,37 +6,37 @@ namespace BST
 {
     BinaryTree *create()
     {
-        BinaryTree *tree = new BinaryTree; // inicio uma árvore nova
-        tree->root = nullptr;              // defino a raiz como nula
-        return tree;                       // retorno a árvore criada
+        BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
+        tree->root = nullptr;                                                   // defino a raiz como nula
+        return tree;                                                            // retorno a árvore criada
     }
 
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {
-        auto start = std::chrono::high_resolution_clock::now(); // inicio a contagem do tempo
-                                                                // crio estrutra de insert
-        InsertResult result_insert;
-        result_insert.numComparisons = 0; // defino ambas variáveis como zero
-        result_insert.executionTime = 0;
+        auto start = std::chrono::high_resolution_clock::now();                 // inicio a contagem do tempo
+                                                                                
+        InsertResult result_insert;                                             // crio estrutra de insert
+        result_insert.numComparisons = 0;                                       // defino ambas variáveis como zero
+        result_insert.executionTime = 0;    
 
-        if (tree == nullptr) //
-        {
-            return result_insert;
-        }
+        if (tree == nullptr)                                                    // verifico se a árvore é nula
+        {                                                                       // se for, apenas retorno a estrutura de insert inicial (tudo 0)
+            return result_insert;                                               
+        }   
 
-        if (tree->root == nullptr)
+        if (tree->root == nullptr)                                              // se a árvore não for nula, mas sua raiz é (árvore vazia)
         {
-            tree->root = new Node;
-            tree->root->word = word;
-            tree->root->documentIds.push_back(documentId);
-            tree->root->parent = nullptr;
+            tree->root = new Node;                                              // então alocamos um novo nó, que, no caso, é a raiz
+            tree->root->word = word;                                            // alocamos a palavra  
+            tree->root->documentIds.push_back(documentId);                      // adicionamos o id ao vetor de ids
+            tree->root->parent = nullptr;                                       // alocamos o restante como null, pois é raiz
             tree->root->left = nullptr;
             tree->root->right = nullptr;
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            double time_ms = duration.count();
-            result_insert.executionTime = time_ms;
-            return result_insert;
+            auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            double time_ms = duration.count();                                  // mudamos para double
+            result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
+            return result_insert;                                               // retornamos a struct alterada
         }
         else
         {
