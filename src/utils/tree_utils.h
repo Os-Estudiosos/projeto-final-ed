@@ -42,6 +42,21 @@ void printIndex(BinaryTree *tree);
 // TODO: Adicionar docstring
 void printTree(BinaryTree *tree);
 
+/**
+ * @brief Função que calcula a altura de uma árvore a partir de um nó
+ * 
+ * @param node Nó a ser analisado
+ * @return int Altura da árvore
+ */
+int computeHeight(Node* node);
+
+/**
+ * @brief Função que calcula a menor altura da árvore a partir de um nó
+ * 
+ * @param node Nó que será analisado
+ * @return int Menor altura
+ */
+int computeMinHeight(Node* node);
 
 /**
  * @brief Libera recursivamente a memória de um nó e seus filhos na árvore.
