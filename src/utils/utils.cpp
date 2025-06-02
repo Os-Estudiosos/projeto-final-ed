@@ -1,5 +1,9 @@
 #include "utils.h"
 
+void clearTerminal() {
+    std::cout << "\033[2J\033[1;1H";
+}
+
 bool valCLI(int argc, char** argv){
     if(argc != 4 || (strcmp(argv[1],"search") && strcmp(argv[1], "stats"))){
         std::cout<<"Argumentos invalidos, por favor usar:\n"<< argv[0]
