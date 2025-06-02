@@ -17,7 +17,7 @@ std::vector<std::string> readArchive(std::string path){
             w = "";
             continue;
         }
-        w += ch;
+        w += std::tolower(ch);
     }
     // a ultima palavra termina com o EOF (fim do arquivo), portanto ela não foi adicionada durante o while
     data.push_back(w);
@@ -25,18 +25,3 @@ std::vector<std::string> readArchive(std::string path){
     return data;
 }
 
-// main feita apenas para testes
-int main(){
-    std::vector<std::string> data;
-    for(int i = 0; i < 2; i++){
-        std::string path = "../data/" + std::to_string(i) +".txt";
-        data = readArchive(path);
-        
-        std::string palavra;
-    for(int i = 0; i < data.size(); i++){
-        std::cout<<data[i]<<std::endl;
-    }
-    std::cout << data.size()<<std::endl;
-    }
-    
-}

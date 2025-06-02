@@ -1,9 +1,10 @@
 #include "tree_utils.h"
 
 
-void auxPrint(Node *aux, int *num){
+void auxPrint(Node *aux, int *num) {
     std::cout<< *num << ". " << aux->word <<": ";
     std::string toPrint = "";
+
     for(int i = 0; i < aux->documentIds.size(); i++){
         toPrint += std::to_string(aux->documentIds[i]) + ", ";
     }
