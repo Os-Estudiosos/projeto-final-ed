@@ -5,20 +5,20 @@ namespace BST
 {
     BinaryTree *create()
     {
-        BinaryTree *tree = new BinaryTree;
-        tree->root = nullptr;
-        return tree;
+        BinaryTree *tree = new BinaryTree; // inicio uma árvore nova
+        tree->root = nullptr;              // defino a raiz como nula
+        return tree;                       // retorno a árvore criada
     }
 
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {
-        auto start = std::chrono::high_resolution_clock::now();
-
+        auto start = std::chrono::high_resolution_clock::now(); // inicio a contagem do tempo
+                                                                // crio estrutra de insert
         InsertResult result_insert;
-        result_insert.numComparisons = 0;
+        result_insert.numComparisons = 0; // defino ambas variáveis como zero
         result_insert.executionTime = 0;
 
-        if (tree == nullptr)
+        if (tree == nullptr) //
         {
             return result_insert;
         }
