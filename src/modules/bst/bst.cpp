@@ -33,7 +33,7 @@ namespace BST
             tree->root->left = nullptr;
             tree->root->right = nullptr;
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
             result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
             return result_insert;                                               // retornamos a struct alterada
@@ -53,7 +53,7 @@ namespace BST
                                                                                 // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
                         result_insert.numComparisons += 1;                      // incremento o número de comparações(relacionado a comparar word == current-> word)
                         auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
-                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+                        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // mudamos para double
                         result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
                         return result_insert;                                   // retornamos a struct alterada
@@ -63,7 +63,7 @@ namespace BST
                         result_insert.numComparisons += 1;                      
                         current->documentIds.push_back(documentId);             // adiciono o id ao vetor 
                         auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
-                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+                        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // mudamos para double
                         result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
                         return result_insert;                                   // retornamos a struct alterada
@@ -104,7 +104,7 @@ namespace BST
             }
 
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
             result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
             return result_insert;                                               // retornamos a struct alterada
@@ -129,7 +129,7 @@ namespace BST
         if (tree->root == nullptr)                                              // caso a árvore exista mas a raiz seja nula  
         {
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
             result_search.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
             return result_search;                                               // retornamos a struct alterada
@@ -145,7 +145,7 @@ namespace BST
                     result_search.found = 1;                                    // altero o found, sinalizando que a palavra foi encontrada
                     result_search.documentIds = current->documentIds;           // altero o vetor de documentos para ser o vetor da palavra encontrada
                     auto end = std::chrono::high_resolution_clock::now();       // encerramos a contagem de tempo
-                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+                    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
                     double time_ms = duration.count();                          // mudamos para double
                     result_search.executionTime = time_ms;                      // alteramos o atributo do tempo de execução 
                     return result_search;                                       // retornamos a struct alterada
@@ -164,7 +164,7 @@ namespace BST
 
             // note que se não acharmos a palavra na árvore, apenas retornaremos a struct search result como definida inicialmente, a menos de mudar o tempo
             auto end = std::chrono::high_resolution_clock::now();               // portanto, encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); // subtraímos o tempo do começo e o do fim
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
             result_search.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
             return result_search;                                               // retornamos a struct alterada

@@ -6,33 +6,10 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <fstream>
 
 using namespace BST;
 using namespace std;
-
-// tirar isso em breve
-void printTree(Node *node)
-{
-    if (node == nullptr)
-        return;
-    printTree(node->left);
-    cout << "Palavra: " << node->word << ", DocumentIDs: ";
-    for (int id : node->documentIds)
-    {
-        cout << id << " ";
-    }
-    cout << endl;
-    printTree(node->right);
-}
-
-void printDocumentIds(const vector<int> &ids)
-{
-    for (int id : ids)
-    {
-        cout << id << " ";
-    }
-    cout << endl;
-}
 
 int main(int argc, char* argv[])
 {
@@ -40,13 +17,13 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    clearTerminal();
-
     string command_type = argv[1];
     int n_docs = stoi(argv[2]);
     string path = argv[3];
 
     if (command_type == "search") {
+        clearTerminal();
+
         BinaryTree* tree = create();
 
         for (int i = 0; i < n_docs; i++) {
@@ -96,6 +73,31 @@ int main(int argc, char* argv[])
             }
             clearTerminal();
         }
+
+        destroy(tree);
+    } else if (command_type == "stats") {
+        BinaryTree* tree = create();
+
+        ofstream InsertingStats("./src/stats/inserting_stats_"+to_string(n_docs)+".csv");
+
+        InsertingStats << "time; comparisions; height; min_height" << endl;
+
+        for (int i = 0; i < n_docs; i++) {
+            string archive_path = path + to_string(i) + ".txt";
+            vector<string> words = readArchive(archive_path);
+            
+            for (int j = 0; j < words.size(); j++) {
+                InsertResult result = insert(tree, words[j], i);
+                int actual_height = computeHeight(tree->root);
+                int actual_min_height = computeMinHeight(tree->root);
+
+                cout << result.executionTime << endl;
+
+                InsertingStats << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << endl;
+            }
+        }
+
+        InsertingStats.close();
 
         destroy(tree);
     }
