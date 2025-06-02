@@ -41,6 +41,7 @@ namespace BST
     BinaryTree *create();
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId);
     SearchResult search(BinaryTree *tree, const std::string &word);
-    void delete_BST(BinaryTree *tree);
+    void destroy(BinaryTree *tree);
+    void deleteNode(Node *node);
 }
 #endif

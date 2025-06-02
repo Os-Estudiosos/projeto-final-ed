@@ -164,7 +164,7 @@ namespace BST
         }
     }
 
-    void delete_BST(BinaryTree *tree)
+    void destroy(BinaryTree *tree)
     {
         if (tree == nullptr)
         {
@@ -177,6 +177,22 @@ namespace BST
         }
         else
         {
+            Node *root = tree->root;
+            deleteNode(root);
+            delete tree;
+        }
+    }
+    void deleteNode(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        else
+        {
+            deleteNode(node->left);
+            deleteNode(node->right);
+            delete node;
         }
     }
 }

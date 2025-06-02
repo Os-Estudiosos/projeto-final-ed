@@ -31,6 +31,7 @@ void printDocumentIds(const std::vector<int> &ids)
 
 int main()
 {
+
     BinaryTree *tree = new BinaryTree;
     tree->root = nullptr;
 
@@ -143,6 +144,10 @@ int main()
     std::cout << "DocumentIDs: ";
     printDocumentIds(result14.documentIds);
     std::cout << "documentIds vazio: " << (result14.documentIds.empty() ? "Sim" : "Nao") << "\n\n";
+
+    destroy(tree);
+    destroy(emptyTree);
+    destroy(nullTree);
 
     return 0;
 }
