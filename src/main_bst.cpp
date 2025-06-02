@@ -1,4 +1,6 @@
 #include "bst.h"
+#include "tree_utils.h"
+
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -6,6 +8,7 @@
 
 using namespace BST;
 
+// tirar isso em breve
 void printTree(Node *node)
 {
     if (node == nullptr)

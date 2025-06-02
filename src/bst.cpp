@@ -1,5 +1,6 @@
 #include "bst.h"
 #include "data.h"
+#include "tree_utils.h"
 
 namespace BST
 {
@@ -180,19 +181,6 @@ namespace BST
             Node *root = tree->root;
             deleteNode(root);
             delete tree;
-        }
-    }
-    void deleteNode(Node *node)
-    {
-        if (node == nullptr)
-        {
-            return;
-        }
-        else
-        {
-            deleteNode(node->left);
-            deleteNode(node->right);
-            delete node;
         }
     }
 }
