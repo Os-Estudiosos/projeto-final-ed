@@ -42,11 +42,9 @@ void printIndex(BinaryTree *tree);
 // TODO: Adicionar docstring
 void printTree(BinaryTree *tree);
 
-/**
- * @brief Cria um novo nó com a palavra fornecida.
- *
- * @param x Palavra a ser armazenada no nó.
- * @return Node* Ponteiro para o novo nó criado.
- */
 
-void deleteNode(Node *node);
+/**
+ * @brief Libera recursivamente a memória de um nó e seus filhos na árvore.
+ * @param node Ponteiro para o nó a ser liberado.
+ */
+void deleteNode(Node* node);
