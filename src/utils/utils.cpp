@@ -26,13 +26,3 @@ bool valCLI(int argc, char** argv){
     fclose(fp);
     return false;
 }
-
-int main(int argc, char** argv){
-    if(valCLI(argc, argv)){
-        std::cout<<"Argumentos errados"<<std::endl;
-        return 1;
-    }
-
-    std::cout<<"Argumentos ok"<<std::endl;
-    return 0;
-}
