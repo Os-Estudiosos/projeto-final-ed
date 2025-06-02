@@ -4,7 +4,7 @@
 
 namespace BST
 {
-    BinaryTree *create()
+    BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;                                                   // defino a raiz como nula
