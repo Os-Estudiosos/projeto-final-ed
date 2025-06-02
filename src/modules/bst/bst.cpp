@@ -1,6 +1,6 @@
 #include "bst.h"
-#include "data.h"
-#include "tree_utils.h"
+#include "../data.h"
+#include "../../utils/tree_utils.h"
 
 namespace BST
 {

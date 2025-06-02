@@ -1,4 +1,4 @@
-#include "../bst.h"
+#include "../modules/bst/bst.h"
 
 using namespace BST;
 

@@ -1,5 +1,5 @@
-#include "bst.h"
-#include "tree_utils.h"
+#include "modules/bst/bst.h"
+#include "utils/tree_utils.h"
 
 #include <iostream>
 #include <string>
