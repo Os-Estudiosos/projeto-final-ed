@@ -37,12 +37,6 @@ struct SearchResult
     //<Possíveis outras variáveis>
 };
 
-// TODO: Adicionar docstring
-void printIndexHelper(Node* node, int& index);
-// TODO: Adicionar docstring
-void printIndex(BinaryTree* tree);
-void printTreeHelper(Node* node, const std::string& prefix, bool isLeft);
-
 /**
  * @brief Função que calcula a altura de uma árvore a partir de um nó
  * 
@@ -64,3 +58,30 @@ int computeMinHeight(Node* node);
  * @param node Ponteiro para o nó a ser liberado.
  */
 void deleteNode(Node* node);
+
+
+/**
+*@brief Usando Pre-ordem, essa função imprime na tela todas as palavras da arvore com os indices dos arquivos em que fazem parte.
+*@param tree Um ponteiro para arvore que terá os indices impressos.
+*/
+void printIndex(BinaryTree* tree);
+
+/**
+*@brief Auxilia a função que printa os indices, sendo usada de forma recursiva.
+*@param aux Ponteiro para o nó que será impresso.
+*@param num Ponteiro para num, usado para guardar qual posição de impressão.
+*/
+void auxPrint(Node *aux, int *num);
+
+/**
+*@brief Usando Pre-ordem, imprime a arvore de forma semelhante a diretórios.
+*@param tree Um ponteiro para arvore que será impressa.
+*/
+void printTree(BinaryTree* tree);
+
+/**
+*@brief Auxilia a função printTree, printando cada uma das palavras do nós da arvore, de forma recursiva.
+*@param aux Ponteiro para o nó que será impresso.
+*@param space String que armazena a quantidade de espaços necessaŕios para uma identação correta.
+*/
+void auxPrintTree(Node *aux, std::string space);

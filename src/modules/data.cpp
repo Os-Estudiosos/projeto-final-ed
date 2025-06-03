@@ -17,7 +17,7 @@ std::vector<std::string> readArchive(std::string path){
             w = "";
             continue;
         }
-        w += ch;
+        w += std::tolower(ch);
     }
     // a ultima palavra termina com o EOF (fim do arquivo), portanto ela não foi adicionada durante o while
     data.push_back(w);
