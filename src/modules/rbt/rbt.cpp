@@ -202,117 +202,116 @@ namespace RBT
             delete tree;                                                        // deletamos a árvore
         }
     }
-    void rotateLeft(Node** root, Node* x)
+        void rotateLeft(Node** root, Node* x)
     {
-        Node* y = x->right;
-        x->right = y->left;
-        
-        if (y->left != nullptr)
-            y->left->parent = x;
+        Node* y = x->right;                                                     // y será o novo pai de x após a rotação
+        x->right = y->left;                                                     // o filho esquerdo de y vira o filho direito de x
 
-        y->parent = x->parent;
+        if (y->left != nullptr)                                                 // se y tiver filho esquerdo
+            y->left->parent = x;                                                // atualiza o pai desse filho para x
 
-        // Atualiza pai de x
-        if (x->parent == nullptr)
-            *root = y;
-        else if (x == x->parent->left)
-            x->parent->left = y;
-        else
-            x->parent->right = y;
+        y->parent = x->parent;                                                  // y assume o pai de x
 
-        y->left = x;
-        x->parent = y;
+        // Atualiza o ponteiro do pai de x para apontar para y
+        if (x->parent == nullptr)                                               // se x era a raiz
+            *root = y;                                                          // y vira a nova raiz
+        else if (x == x->parent->left)                                          // se x era filho à esquerda
+            x->parent->left = y;                                                // y vira o novo filho à esquerda
+        else                                                                    // se x era filho à direita
+            x->parent->right = y;                                               // y vira o novo filho à direita
+
+        y->left = x;                                                            // x vira filho à esquerda de y
+        x->parent = y;                                                          // atualiza o pai de x para ser y
     }
 
 
     void rotateRight(Node** root, Node* y)
     {
-        Node* x = y->left;
-        y->left = x->right;
+        Node* x = y->left;                                                      // x será o novo pai de y após a rotação
+        y->left = x->right;                                                     // o filho direito de x vira o filho esquerdo de y
 
-        if (x->right != nullptr)
-            x->right->parent = y;
+        if (x->right != nullptr)                                                // se x tiver filho direito
+            x->right->parent = y;                                               // atualiza o pai desse filho para y
 
-        x->parent = y->parent;
+        x->parent = y->parent;                                                  // x assume o pai de y
 
-        // Atualiza pai de y
-        if (y->parent == nullptr)
-            *root = x;
-        else if (y == y->parent->right)
-            y->parent->right = x;
-        else
-            y->parent->left = x;
+        // Atualiza o ponteiro do pai de y para apontar para x
+        if (y->parent == nullptr)                                               // se y era a raiz
+            *root = x;                                                          // x vira a nova raiz
+        else if (y == y->parent->right)                                         // se y era filho à direita
+            y->parent->right = x;                                               // x vira o novo filho à direita
+        else                                                                    // se y era filho à esquerda
+            y->parent->left = x;                                                // x vira o novo filho à esquerda
 
-        x->right = y;
-        y->parent = x;
+        x->right = y;                                                           // y vira filho à direita de x
+        y->parent = x;                                                          // atualiza o pai de y para ser x
     }
 
 
     void fixInsert(Node **root, Node* z)
     {
-        while (z->parent != nullptr && z->parent->isRed == RED)
+        while (z->parent != nullptr && z->parent->isRed == RED)                // enquanto o pai de z for vermelho (violação da RBT)
         {
-            Node* parent = z->parent;
-            Node* grandparent = parent->parent;
+            Node* parent = z->parent;                                          // salva o pai
+            Node* grandparent = parent->parent;                                // salva o avô
 
-            if (parent == grandparent->left)
+            if (parent == grandparent->left)                                   // se o pai for filho à esquerda do avô
             {
-                Node* uncle = grandparent->right;
+                Node* uncle = grandparent->right;                              // salva o tio (lado oposto)
 
-                if (uncle != nullptr && uncle->isRed == RED)
+                if (uncle != nullptr && uncle->isRed == RED)                   // caso 1: tio vermelho
                 {
-                    // Tio vermelho — recoloração
-                    parent->isRed = BLACK;
-                    uncle->isRed = BLACK;
-                    grandparent->isRed = RED;
-                    z = grandparent;
+                    parent->isRed = BLACK;                                     // recolore pai para preto
+                    uncle->isRed = BLACK;                                      // recolore tio para preto
+                    grandparent->isRed = RED;                                  // recolore avô para vermelho
+                    z = grandparent;                                           // sobe para corrigir possíveis violações acima
                 }
-                else
+                else                                                           // tio preto (ou nulo)
                 {
-                    if (z == parent->right)
+                    if (z == parent->right)                                   // caso 2: z é filho à direita do pai
                     {
-                        // Conversão para caso 3
-                        z = parent;
-                        rotateLeft(root, z);
-                        parent = z->parent;
-                        grandparent = parent->parent;
+                        z = parent;                                           // salva o pai
+                        rotateLeft(root, z);                                  // rotaciona para transformar no caso 3
+                        parent = z->parent;                                   // atualiza o pai
+                        grandparent = parent->parent;                         // atualiza o avô
                     }
 
-                    // Corrige com rotação
-                    parent->isRed = BLACK;
-                    grandparent->isRed = RED;
-                    rotateRight(root, grandparent);
+                    // caso 3: z é filho à esquerda do pai
+                    parent->isRed = BLACK;                                    // recolore pai para preto
+                    grandparent->isRed = RED;                                 // recolore avô para vermelho
+                    rotateRight(root, grandparent);                           // rotação à direita para balancear
                 }
             }
-            else
+            else                                                               // espelho do caso acima (pai é filho à direita)
             {
-                Node* uncle = grandparent->left;
+                Node* uncle = grandparent->left;                              // salva o tio (lado oposto)
 
-                if (uncle != nullptr && uncle->isRed == RED)
+                if (uncle != nullptr && uncle->isRed == RED)                  // caso 1: tio vermelho
                 {
-                    parent->isRed = BLACK;
-                    uncle->isRed = BLACK;
-                    grandparent->isRed = RED;
-                    z = grandparent;
+                    parent->isRed = BLACK;                                    // recolore pai para preto
+                    uncle->isRed = BLACK;                                     // recolore tio para preto
+                    grandparent->isRed = RED;                                 // recolore avô para vermelho
+                    z = grandparent;                                          // sobe para corrigir possíveis violações acima
                 }
-                else
+                else                                                          // tio preto (ou nulo)
                 {
-                    if (z == parent->left)
+                    if (z == parent->left)                                   // caso 2: z é filho à esquerda do pai
                     {
-                        z = parent;
-                        rotateRight(root, z);
-                        parent = z->parent;
-                        grandparent = parent->parent;
+                        z = parent;                                          // salva o pai
+                        rotateRight(root, z);                                // rotação para transformar no caso 3
+                        parent = z->parent;                                  // atualiza o pai
+                        grandparent = parent->parent;                        // atualiza o avô
                     }
 
-                    parent->isRed = BLACK;
-                    grandparent->isRed = RED;
-                    rotateLeft(root, grandparent);
+                    // caso 3: z é filho à direita do pai
+                    parent->isRed = BLACK;                                   // recolore pai para preto
+                    grandparent->isRed = RED;                                // recolore avô para vermelho
+                    rotateLeft(root, grandparent);                           // rotação à esquerda para balancear
                 }
             }
         }
 
-        (*root)->isRed = BLACK; // Raiz deve ser preta
+        (*root)->isRed = BLACK;                                               // a raiz da árvore deve sempre ser preta
     }
-}
 
+}

@@ -16,10 +16,16 @@ namespace RBT
      * @return BinaryTree* Ponteiro para a nova árvore criada.
      */
     BinaryTree *create();
-
+    
+    /**
+     * @brief Inicializa um nó com os parâmetros passados.
+     * @param documentID ID do documento associado à palavra.
+     * @param word Palavra a ser inserida no nó.
+     * @param color Cor do nó.
+     * @return Node*, um ponteiro para o nó criado.
+     */
     Node* createNode(int documentId, const std::string &word, Color color);
     
-
     /**
      * @brief Insere uma palavra e um ID de documento na árvore binária de busca.
      * @param tree Ponteiro para a árvore onde a palavra será inserida.
