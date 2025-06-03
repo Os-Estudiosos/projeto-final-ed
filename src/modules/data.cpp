@@ -24,19 +24,3 @@ std::vector<std::string> readArchive(std::string path){
     fclose(fp);
     return data;
 }
-
-// main feita apenas para testes
-int main(){
-    std::vector<std::string> data;
-    for(int i = 0; i < 2; i++){
-        std::string path = "../data/" + std::to_string(i) +".txt";
-        data = readArchive(path);
-        
-        std::string palavra;
-    for(int i = 0; i < data.size(); i++){
-        std::cout<<data[i]<<std::endl;
-    }
-    std::cout << data.size()<<std::endl;
-    }
-    
-}

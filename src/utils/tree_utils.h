@@ -43,10 +43,23 @@ void printIndex(BinaryTree *tree);
 void printTree(BinaryTree *tree);
 
 /**
- * @brief Cria um novo nó com a palavra fornecida.
- *
- * @param x Palavra a ser armazenada no nó.
- * @return Node* Ponteiro para o novo nó criado.
+ * @brief Função que calcula a altura de uma árvore a partir de um nó
+ * 
+ * @param node Nó a ser analisado
+ * @return int Altura da árvore
  */
+int computeHeight(Node* node);
 
-void deleteNode(Node *node);
+/**
+ * @brief Função que calcula a menor altura da árvore a partir de um nó
+ * 
+ * @param node Nó que será analisado
+ * @return int Menor altura
+ */
+int computeMinHeight(Node* node);
+
+/**
+ * @brief Libera recursivamente a memória de um nó e seus filhos na árvore.
+ * @param node Ponteiro para o nó a ser liberado.
+ */
+void deleteNode(Node* node);
