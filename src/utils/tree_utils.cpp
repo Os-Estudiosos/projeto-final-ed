@@ -1,14 +1,5 @@
 #include "tree_utils.h"
 
-void printIndex(BinaryTree *tree)
-{
-    // implementar
-}
-void printTree(BinaryTree *tree)
-{
-    // implementar
-}
-
 int computeHeight(Node *node) {
     if (node == nullptr) return 0;
     int left_height = computeHeight(node->left);
@@ -51,4 +42,60 @@ void deleteNode(Node *node)
                                                     // primeiramente, as folhas sejam deletadas, e então seus pais, até a raiz  
         delete node;                                // deleta o nó atual
     }   
+
 }
+
+
+void auxPrint(Node *aux, int *num) {
+    std::cout<< *num << ". " << aux->word <<": ";
+    std::string toPrint = "";
+
+    for(int i = 0; i < aux->documentIds.size(); i++){
+        toPrint += std::to_string(aux->documentIds[i]) + ", ";
+    }
+    toPrint.erase(toPrint.size() - 2, 2);
+    std::cout << toPrint << std::endl;
+    *num += 1;
+
+    if(aux->left != nullptr){
+        auxPrint(aux->left, num);
+    } 
+    if(aux->right != nullptr){
+        auxPrint(aux->right, num);
+    }
+}
+
+void printIndex(BinaryTree* tree) {
+    Node *aux = tree->root;
+    int count = 1;
+    
+    if(aux != nullptr){
+        auxPrint(aux, &count);
+    }
+}
+
+void auxPrintTree(Node *aux, std::string space){
+    if(aux->left != nullptr) {
+        std::string folderRep = "├──";
+        if(aux->right == nullptr){
+            folderRep = "└──";
+        }
+        std::cout << space << folderRep << aux->left->word << std::endl;
+        auxPrintTree(aux->left,space + "   ");
+    }
+    if(aux->right != nullptr) {
+        std::cout << space << "└──" << aux->right->word << std::endl;
+        auxPrintTree(aux->right,space + "   ");
+    }
+
+}
+
+void printTree(BinaryTree* tree) {
+    Node *aux = tree->root;
+
+    if(aux != nullptr){
+        std::cout << aux->word << std::endl;
+        auxPrintTree(aux, "");
+    }
+}
+
