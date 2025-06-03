@@ -8,8 +8,8 @@
 #include <chrono>
 #include <fstream>
 
-using namespace RBT;
-using namespace std;
+// using namespace RBT;
+// using namespace std;
 
 int main(int argc, char* argv[])
 {
@@ -17,89 +17,89 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    string command_type = argv[1];
-    int n_docs = stoi(argv[2]);
-    string path = argv[3];
+    std::string command_type = argv[1];
+    int n_docs = std::stoi(argv[2]);
+    std::string path = argv[3];
 
     if (command_type == "search") {
         clearTerminal();
 
-        BinaryTree* tree = create();
+        BinaryTree* tree = RBT::create();
 
         for (int i = 0; i < n_docs; i++) {
-            string archive_path = path + to_string(i) + ".txt";
-            vector<string> words = readArchive(archive_path);
+            std::string archive_path = path + std::to_string(i) + ".txt";
+            std::vector<std::string> words = readArchive(archive_path);
             
             for (int j = 0; j < words.size(); j++) {
-                insert(tree, words[j], i);
+                RBT::insert(tree, words[j], i);
             }
         }
 
-        string word_to_search = "";
+        std::string word_to_search = "";
         int c;
 
         while(true) {
-            cout << "========================\033[96m PESQUISA COM ÍNDICE INVERTIDO \033[m========================" << endl;
-            cout << "(Se quiser sair, aperte digite Q e dê enter)" << endl;
-            cout << "Digite a palavra que gostaria de procurar:" << endl;
-            cout << "--> ";
-            cin >> word_to_search;
-            cout << endl;
+            std::cout << "========================\033[96m PESQUISA COM ÍNDICE INVERTIDO \033[m========================" << std::endl;
+            std::cout << "(Se quiser sair, aperte digite Q e dê enter)" << std::endl;
+            std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
+            std::cout << "--> ";
+            std::cin >> word_to_search;
+            std::cout << std::endl;
 
             if (word_to_search == "q" || word_to_search == "Q") {
-                cout << "Encerrando o programa" << endl;
+                std::cout << "Encerrando o programa" << std::endl;
                 break;
             }
 
-            SearchResult result = search(tree, word_to_search);
+            SearchResult result = RBT::search(tree, word_to_search);
             
             if (result.found) {
-                cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << endl;
-                cout << "Ela se localiza nos documentos: ";
+                std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
+                std::cout << "Ela se localiza nos documentos: ";
 
                 for (int d = 0; d < result.documentIds.size(); d++) {
-                    cout << result.documentIds[d] << ", ";
+                    std::cout << result.documentIds[d] << ", ";
                 }
-                cout << endl;
+                std::cout << std::endl;
 
-                cout << "Aperte Enter para procurar outra palavra" << endl;
+                std::cout << "Aperte Enter para procurar outra palavra" << std::endl;
 
-                cin.ignore();
-                cin.get();
+                std::cin.ignore();
+                std::cin.get();
             } else {
-                cout << "Sua palavra \033[91mnão\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << endl;
-                cin.ignore();
-                cin.get();
+                std::cout << "Sua palavra \033[91mnão\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << std::endl;
+                std::cin.ignore();
+                std::cin.get();
             }
             clearTerminal();
         }
 
-        destroy(tree);
+        RBT::destroy(tree);
     } else if (command_type == "stats") {
-        BinaryTree* tree = create();
+        BinaryTree* tree = RBT::create();
 
-        ofstream InsertingStats("./src/stats/inserting_stats_"+to_string(n_docs)+".csv");
+        std::ofstream InsertingStats("./src/stats/inserting_stats_"+ std::to_string(n_docs)+".csv");
 
-        InsertingStats << "time; comparisions; height; min_height" << endl;
+        InsertingStats << "time; comparisions; height; min_height" << std::endl;
 
         for (int i = 0; i < n_docs; i++) {
-            string archive_path = path + to_string(i) + ".txt";
-            vector<string> words = readArchive(archive_path);
+            std::string archive_path = path + std::to_string(i) + ".txt";
+            std::vector<std::string> words = readArchive(archive_path);
             
             for (int j = 0; j < words.size(); j++) {
-                InsertResult result = insert(tree, words[j], i);
+                InsertResult result = RBT::insert(tree, words[j], i);
                 int actual_height = computeHeight(tree->root);
                 int actual_min_height = computeMinHeight(tree->root);
 
-                cout << result.executionTime << endl;
+                std::cout << result.executionTime << std::endl;
 
-                InsertingStats << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << endl;
+                InsertingStats << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;
             }
         }
 
         InsertingStats.close();
 
-        destroy(tree);
+        RBT::destroy(tree);
     }
 
     return 0;

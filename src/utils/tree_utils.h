@@ -38,9 +38,10 @@ struct SearchResult
 };
 
 // TODO: Adicionar docstring
-void printIndex(BinaryTree *tree);
+void printIndexHelper(Node* node, int& index);
 // TODO: Adicionar docstring
-void printTree(BinaryTree *tree);
+void printIndex(BinaryTree* tree);
+void printTreeHelper(Node* node, const std::string& prefix, bool isLeft);
 
 /**
  * @brief Função que calcula a altura de uma árvore a partir de um nó
