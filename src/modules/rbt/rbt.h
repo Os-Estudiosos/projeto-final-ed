@@ -9,11 +9,16 @@
 
 namespace RBT
 {
+    enum Color {RED, BLACK};
+    
      /**
      * @brief Cria uma nova árvore binária de busca (BST) vazia.
      * @return BinaryTree* Ponteiro para a nova árvore criada.
      */
     BinaryTree *create();
+
+    Node* createNode(int documentId, const std::string &word, Color color);
+    
 
     /**
      * @brief Insere uma palavra e um ID de documento na árvore binária de busca.
@@ -38,8 +43,7 @@ namespace RBT
      */
     void destroy(BinaryTree *tree);
     
-    enum Color {RED, BLACK};
-    
+
     /**
      * @brief Realiza uma rotação à esquerda em torno do nó x.
      * 
