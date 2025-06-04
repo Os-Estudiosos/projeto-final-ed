@@ -47,7 +47,6 @@ namespace AVL
      */
     void destroy(BinaryTree *tree);
     
-
     /**
      * @brief Realiza uma rotação à esquerda em torno do nó x.
      * @param root Ponteiro para a raiz da árvore.
@@ -68,4 +67,12 @@ namespace AVL
      * @param z Nó recém-inserido que pode causar violação.
      */
     void fixInsert(Node **root, Node* z);
+
+    //Pensar mais
+    bool isBalanced(BinaryTree* tree);
+    void doubleRotateRight(Node** root, Node* y);
+    void doubleRotateLeft(Node** root, Node* y);
+    void recomputeHeight(Node* n);
+    int getHeight(Node* n);
+    int bf(Node* n);
 }
