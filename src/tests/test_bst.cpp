@@ -19,29 +19,29 @@ bool contains(const std::vector<int>& vec, int value) {
 
 void tree_structure_tests() {
     try {
-        printMessage("Testando inserção numa ÁRVORE NULA...", 0);
+        printMessage("Testando insercao numa ÁRVORE NULA...", 0);
         insert(nullptr, "Pamonha", 3);
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUiDO", 1, "92");
     } catch (int errorCode) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
-        printMessage("A função não lida corretamente com a entrada de árvores nulas como parâmetro", 1);
+        printMessage("A funcao não lida corretamente com a entrada de arvores nulas como parametro", 1);
     }
 
     try {
         BinaryTree* tree = create();
-        printMessage("Testando inserção numa árvore com raíz NULA...", 0);
+        printMessage("Testando insercao numa arvore com raiz NULA...", 0);
         insert(tree, "Almofada", 0);
         std::vector<int> docsIds = tree->root->documentIds;
         if (tree->root->word != "Almofada") {
             destroy(tree);
-            throw std::runtime_error("A palavra não foi inserida no nó da árvore");
+            throw std::runtime_error("A palavra nao foi inserida no noh da árvore");
         }
         destroy(tree);
         if (!contains(docsIds, 0)) {
-            throw std::runtime_error("O número do documento não foi inserido na árvore");
+            throw std::runtime_error("O numero do documento nao foi inserido na arvore");
         }
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -49,7 +49,7 @@ void tree_structure_tests() {
     }
 
     try {
-        printMessage("Testando inserção e busca na árvore", 0);
+        printMessage("Testando insercao e busca na arvore", 0);
         std::vector<std::string> words_to_insert = {"orangotango", "chimpanze", "leao", "girafa", "elefante"};
         std::vector<int> docsIds = {0, 1, 2, 3, 4};
 
@@ -63,15 +63,15 @@ void tree_structure_tests() {
             SearchResult result = search(tree, words_to_insert[j]);
             if (!result.found) {
                 destroy(tree);
-                throw std::runtime_error("Os nós não estão sendo inseridos corretamente");
+                throw std::runtime_error("Os nos nao estao sendo inseridos corretamente");
             }
             if (!contains(result.documentIds, docsIds[j])) {
                 destroy(tree);
-                throw std::runtime_error("Os números dos documentos, ou não estão sendo inseridos, ou não estão sendo retornados pelo search");
+                throw std::runtime_error("Os numeros dos documentos, ou nao estao sendo inseridos, ou nao estao sendo retornados pelo search");
             }
         }
         destroy(tree);
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -79,7 +79,7 @@ void tree_structure_tests() {
     }
 
     try {
-        printMessage("Testando inserção em árvore desbalanceada", 0);
+        printMessage("Testando insercao em arvore desbalanceada", 0);
         std::vector<std::string> words_to_insert = {"a", "b", "c"};
         std::vector<int> docsIds = {0, 1, 2};
 
@@ -93,11 +93,11 @@ void tree_structure_tests() {
             tree->root->word == "a" && tree->root->right->word == "b" && tree->root->right->right->word == "c"
         )) {
             destroy(tree);
-            throw std::runtime_error("Não está inserindo da forma correta");
+            throw std::runtime_error("Nao esta inserindo da forma correta");
         }
 
         destroy(tree);
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -114,7 +114,7 @@ void tree_returns_tests() {
         insert(tree, "digimon", 2);
         insert(tree, "panorama", 3);
 
-        printMessage("Testando inserção de palavra duplicada no mesmo documento", 0);
+        printMessage("Testando insercao de palavra duplicada no mesmo documento", 0);
         insert(tree, "onomatopeia", 0);
         insert(tree, "digimon", 2);
 
@@ -123,10 +123,10 @@ void tree_returns_tests() {
 
         destroy(tree);
         if (result1.documentIds.size() != 1 || result2.documentIds.size() != 1) {
-            throw std::runtime_error("A função está inserindo o mesmo documento mais de uma vez");
+            throw std::runtime_error("A funcao está inserindo o mesmo documento mais de uma vez");
         }
 
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -134,7 +134,7 @@ void tree_returns_tests() {
     }
 
     try {
-        printMessage("Testando inserção de palavra duplicada em documento diferente", 0);
+        printMessage("Testando insercao de palavra duplicada em documento diferente", 0);
 
         BinaryTree* tree = create();
         insert(tree, "onomatopeia", 0);
@@ -150,10 +150,10 @@ void tree_returns_tests() {
 
         destroy(tree);
         if (!contains(result1.documentIds, 1) || !contains(result2.documentIds, 5)) {
-            throw std::runtime_error("A função não está inserindo documentos novos em novas aparições de palavras");
+            throw std::runtime_error("A funcao nao esta inserindo documentos novos em novas aparicoes de palavras");
         }
 
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -161,7 +161,7 @@ void tree_returns_tests() {
     }
 
     try {
-        printMessage("Testando inserção de palavras vazias", 0);
+        printMessage("Testando insercao de palavras vazias", 0);
 
         BinaryTree* tree = create();
         insert(tree, "onomatopeia", 0);
@@ -175,10 +175,10 @@ void tree_returns_tests() {
 
         destroy(tree);
         if (result.found) {
-            throw std::runtime_error("A função está adicionando strings vazias");
+            throw std::runtime_error("A funcao esta adicionando strings vazias");
         }
 
-        printMessage(" CONCLUÍDO", 1, "92");
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -191,7 +191,7 @@ int main() {
     std::cout << "=========================== TESTES ESTRUTURAIS DA ÁRVORE ===========================" << std::endl;
     tree_structure_tests();
 
-    std::cout << "=========================== TESTANDO O RETORNO DA ÁRVORE ===========================" << std::endl;
+    std::cout << "=========================== TESTANDO O RETORNO DA ARVORE ===========================" << std::endl;
     tree_returns_tests();
 
     return 0;
