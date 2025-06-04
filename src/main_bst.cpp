@@ -1,15 +1,9 @@
 #include "modules/bst/bst.h"
 #include "modules/data.h"
-// #include "utils/tree_utils.h"
 #include "utils/utils.h"
 
-// #include <iostream>
-// #include <string>
-// #include <chrono>
 #include <fstream>
 
-// using namespace BST;
-// using namespace std;
 
 int main(int argc, char* argv[])
 {

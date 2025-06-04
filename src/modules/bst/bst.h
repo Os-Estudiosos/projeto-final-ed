@@ -2,10 +2,7 @@
 
 #include "../../utils/tree_utils.h"
 
-// #include <iostream>
-// #include <vector>
 #include <string>
-// #include <chrono>
 
 namespace BST
 {
