@@ -1,7 +1,7 @@
 all: bst clean
 
-bst: main_bst.o utils.o tree_utils.o bst.o data.o
-	g++ main_bst.o utils.o tree_utils.o bst.o data.o -o bst
+bst: main_bst.o utils.o tree_utils.o bst.o data.o ./build
+	g++ main_bst.o utils.o tree_utils.o bst.o data.o -o ./build/bst
 
 main_bst.o: ./src/main_bst.cpp
 	g++ -c ./src/main_bst.cpp -Wall -o main_bst.o
@@ -17,6 +17,9 @@ bst.o: ./src/modules/bst/bst.cpp ./src/modules/bst/bst.h
 
 data.o: ./src/modules/data.cpp ./src/modules/data.h
 	g++ -c ./src/modules/data.cpp -Wall -o data.o
+
+./build: 
+	mkdir -p ./build
 
 clean:
 	rm -f *.o
