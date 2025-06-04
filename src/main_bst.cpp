@@ -24,13 +24,12 @@ int main(int argc, char* argv[])
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             
-            for (int j = 0; j < words.size(); j++) {
+            for (long unsigned int j = 0; j < words.size(); j++) {
                 BST::insert(tree, words[j], i);
             }
         }
 
         std::string word_to_search = "";
-        int c;
 
         while(true) {
             std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
@@ -51,7 +50,7 @@ int main(int argc, char* argv[])
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
                 std::cout << "Ela se localiza nos documentos: ";
 
-                for (int d = 0; d < result.documentIds.size() - 1; d++) {
+                for (long unsigned int d = 0; d < result.documentIds.size() - 1; d++) {
                     std::cout << result.documentIds[d] << ", ";
                 }
                 std::cout << result.documentIds[result.documentIds.size() - 1];
@@ -81,7 +80,7 @@ int main(int argc, char* argv[])
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             
-            for (int j = 0; j < words.size(); j++) {
+            for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = BST::insert(tree, words[j], i);
                 int actual_height = computeHeight(tree->root);
                 int actual_min_height = computeMinHeight(tree->root);
