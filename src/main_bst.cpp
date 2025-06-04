@@ -40,13 +40,13 @@ int main(int argc, char* argv[])
 
         while(true) {
             std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
-            std::cout << "(Se quiser sair, aperte digite Q e de enter)" << std::endl;
+            std::cout << "(Se quiser sair, aperte digite . e de enter)" << std::endl;
             std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
             std::cout << "--> ";
             std::cin >> word_to_search;
             std::cout << std::endl;
 
-            if (word_to_search == "q" || word_to_search == "Q") {
+            if (word_to_search == ".") {
                 std::cout << "Encerrando o programa" << std::endl;
                 break;
             }
