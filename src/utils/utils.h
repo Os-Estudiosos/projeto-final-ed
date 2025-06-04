@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <filesystem>   // Biblioteca usada para contar quantos arquivos existem na pasta
 
 /**
 *@brief Essa função foi feita para validar os comandos passados pelo terminal.
