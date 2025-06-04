@@ -50,7 +50,7 @@ void auxPrint(Node *aux, int *num) {
     std::cout<< *num << ". " << aux->word <<": ";
     std::string toPrint = "";
 
-    for(int i = 0; i < aux->documentIds.size(); i++){
+    for(long unsigned int i = 0; i < aux->documentIds.size(); i++){
         toPrint += std::to_string(aux->documentIds[i]) + ", ";
     }
     toPrint.erase(toPrint.size() - 2, 2);
