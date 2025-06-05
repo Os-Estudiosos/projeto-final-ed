@@ -1,10 +1,16 @@
-all: bst clean
+all: bst testsBst clean
 
 bst: main_bst.o utils.o tree_utils.o bst.o data.o ./build
 	g++ main_bst.o utils.o tree_utils.o bst.o data.o -o ./build/bst
 
+testsBst: test_bst.o utils.o tree_utils.o bst.o data.o ./build
+	g++ test_bst.o utils.o tree_utils.o bst.o data.o -o ./build/testsBst
+
 main_bst.o: ./src/main_bst.cpp
 	g++ -c ./src/main_bst.cpp -Wall -o main_bst.o
+
+test_bst.o: ./src/tests/test_bst.cpp
+	g++ -c ./src/tests/test_bst.cpp -Wall -o test_bst.o
 
 utils.o: ./src/utils/utils.cpp ./src/utils/utils.h
 	g++ -c ./src/utils/utils.cpp -Wall -o utils.o
