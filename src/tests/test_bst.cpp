@@ -53,11 +53,11 @@ void tree_structure_tests() {
 
         BinaryTree* tree = BST::create();
 
-        for (int i = 0; i < words_to_insert.size(); i++) {
+        for (long unsigned int i = 0; i < words_to_insert.size(); i++) {
             BST::insert(tree, words_to_insert[i], docsIds[i]);
         }
 
-        for (int j = 0; j < words_to_insert.size(); j++) {
+        for (long unsigned int j = 0; j < words_to_insert.size(); j++) {
             SearchResult result = BST::search(tree, words_to_insert[j]);
             if (!result.found) {
                 BST::destroy(tree);
