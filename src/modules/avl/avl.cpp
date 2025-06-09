@@ -127,14 +127,15 @@ namespace AVL
         return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
     }
 
+
     void fixInsert(Node** root, Node* x)
     {
-        if (root == nullptr || x == nullptr)                                    // se a raiz for nula ou o nó x for nulo
+        if (root == nullptr || x == nullptr)                                   // se a raiz for nula ou o nó x for nulo
         {
             return;
         }    
-        int bf = balanceFactor(x);                                         // calculo o fator de balanceamento do nó x
-        if (bf < 1 && bf > -1)                                             // se o nó x estiver balanceado
+        int bf = balanceFactor(x);                                             // calculo o fator de balanceamento do nó x
+        if (bf < 1 && bf > -1)                                                 // se o nó x estiver balanceado
         {
             return;
         }
@@ -172,6 +173,7 @@ namespace AVL
         se a subárvore da esquerda tem x>0, é uma rotação dupla à direita
         se a subárvore da esquerda tem x<=0, é uma rotação à direita
     */
+
 
     // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
@@ -250,6 +252,7 @@ namespace AVL
                 result_insert.numComparisons += 1;                              // Incrementamos o número de comparações
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
+            fixInsert(&tree->root, newNode);                                    // Corrigimos as propriedades da árvore após a inserção
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
