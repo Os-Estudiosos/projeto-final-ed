@@ -5,16 +5,17 @@
 namespace AVL
 {
 
-
+    // Auxiliares
     BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;                                                   // defino a raiz como nula
+
         return tree;                                                            // retorno a árvore criada
     }
 
 
-    Node* createNode(int documentId, const std::string &word, Color color)
+    Node* createNode(int documentId, const std::string &word)
     {
         Node* node = new Node;                                                  // Então alocamos um novo nó, que, no caso, é a raiz
         node->word = word;                                                      // Alocamos a palavra  
@@ -22,28 +23,111 @@ namespace AVL
         node->parent = nullptr;                                                 // Alocamos o restante como null, pois é raiz
         node->left = nullptr;
         node->right = nullptr;
-        node->isRed = color;   
+        node->height = 0;                                                       // Definimos a altura como 1, pois é raiz
         
         return node;  
     }
 
 
+    void destroy(BinaryTree *tree)
+    {
+        if (tree == nullptr)                                                    // caso a árvore seja nula, não há nada a ser deletado 
+        {
+            return;
+        }
+        else if (tree->root == nullptr)                                         // caso a árvore exista mas não tenha nós
+        {
+            delete tree;                                                        // apenas deletamos a árvore
+            return;
+        }
+        else                                                                    // por fim, se a árvore exita e tenha nós
+        {
+            Node *root = tree->root;                                            // salvamos o nó raiz
+            deleteNode(root);                                                   // usamos uma função auxiliar que deleta toda a árvore recursivamente (só deleta o pai após deletar os filhos)
+            delete tree;                                                        // deletamos a árvore
+        }
+    }
+
+
+    int max(int a, int b) 
+    {
+        return (a > b) ? a : b;                                                // Retorna o maior entre a e b
+    }
+
+
+    int getHeight(Node* n) 
+    {
+        return n == nullptr ? 0 : n->height;
+    }
+
+
+    void recomputeHeight(Node* n)
+    {
+        n->height = 1 + max(getHeight(n->left), getHeight(n->right));
+    }
+
+
+    void transplant(Node** root, Node* u, Node* v)
+    {
+        if (root == nullptr || u == nullptr)                                    // se a raiz for nula ou o nó u for nulo
+            return;                                                             // não há nada a fazer, apenas retornamos
+        if (u->parent == nullptr)                                               // se u for a raiz
+            *root = v;                                                          // v vira a nova raiz
+        else if (u == u->parent->left)                                          // se u for filho à esquerda
+            u->parent->left = v;                                                // v vira o novo filho à esquerda
+        else                                                                    // se u for filho à direita
+            u->parent->right = v;                                               // v vira o novo filho à direita
+        if (v != nullptr)                                                       // se v não for nulo
+            v->parent = u->parent;                                              // atualiza o pai de v para ser o pai de u
+    }
+    
+
+    void rotateLeft(Node** root, Node* x)
+    {
+        Node* newRoot = x->right;
+        transplant(root, newRoot, newRoot->left);
+        transplant(root, *root, newRoot);
+        newRoot->left = *root;
+        (*root)->parent = newRoot;
+        recomputeHeight(*root);                                                 // atualiza o nó que foi para baixo
+        recomputeHeight(newRoot);                                               // atualiza a nova raiz da subárvore                     
+    }
+
+
+    void rotateRight(Node** root, Node* y)
+    {
+        Node* newRoot = y->left;
+        transplant(root, newRoot, newRoot->right);
+        transplant(root, *root, newRoot);
+        newRoot->right = *root;
+        (*root)->parent = newRoot;
+        recomputeHeight(*root);      
+        recomputeHeight(newRoot);                                                           
+    }
+
+    int bf(Node* n) 
+    {
+        if (n == nullptr) 
+            return 0;                                                          // Se o nó for nulo, o fator de balanceamento é 0
+        return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
+    }
+
+
+
+    // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {
         auto start = std::chrono::high_resolution_clock::now();                 // Inicio a contagem do tempo
-                                                                                
         InsertResult result_insert;                                             // Crio estrutura de insert
         result_insert.numComparisons = 0;                                       // Defino ambas variáveis como zero
         result_insert.executionTime = 0;    
-
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
             return result_insert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
-
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
         {
-            tree->root = createNode(documentId, word, BLACK);                                         // Raiz é sempre preta em uma RBT
+            tree->root = createNode(documentId, word);                          
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
@@ -94,10 +178,8 @@ namespace AVL
                     current = current->left;                                    // Atualizo o current para esquerda pela palavra ser "menor"
                 }
             }
-
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
-            Node* newNode = createNode(documentId, word, RED);                        // Criamos um novo nó
-
+            Node* newNode = createNode(documentId, word);                        // Criamos um novo nó
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
             {                                                                   
@@ -109,10 +191,6 @@ namespace AVL
                 result_insert.numComparisons += 1;                              // Incrementamos o número de comparações
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
-
-            // Corrigir as propriedades da RBT após a inserção
-            fixInsert(&tree->root, newNode);
-
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
@@ -125,18 +203,15 @@ namespace AVL
     SearchResult search(BinaryTree *tree, const std::string &word)
     {
         auto start = std::chrono::high_resolution_clock::now();                 // inicio a contagem do tempo
-
         SearchResult result_search;                                             // inicio a struct search result
         result_search.found = 0;                                                // inicio genéricamente os atributos 
         result_search.numComparisons = 0;
         result_search.executionTime = 0;
         result_search.documentIds = std::vector<int>{};                         // inicio um vetor vazio ao vetor de documentos
-
         if (tree == nullptr)                                                    // se a árvore for vazia
         {
             return result_search;                                               // apenas retorno a estrutura genérica criada antes  
         }                                                                       // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
-
         if (tree->root == nullptr)                                              // caso a árvore exista mas a raiz seja nula  
         {
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
@@ -172,7 +247,6 @@ namespace AVL
                     current = current->left;                                    // atualizo o current para esquerda pela palavra ser "menor"
                 }
             }
-
             // note que se não acharmos a palavra na árvore, apenas retornaremos a struct search result como definida inicialmente, a menos de mudar o tempo
             auto end = std::chrono::high_resolution_clock::now();               // portanto, encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
@@ -181,137 +255,4 @@ namespace AVL
             return result_search;                                               // retornamos a struct alterada
         }
     }
-
-
-    void destroy(BinaryTree *tree)
-    {
-        if (tree == nullptr)                                                    // caso a árvore seja nula, não há nada a ser deletado 
-        {
-            return;
-        }
-        else if (tree->root == nullptr)                                         // caso a árvore exista mas não tenha nós
-        {
-            delete tree;                                                        // apenas deletamos a árvore
-            return;
-        }
-        else                                                                    // por fim, se a árvore exita e tenha nós
-        {
-            Node *root = tree->root;                                            // salvamos o nó raiz
-            deleteNode(root);                                                   // usamos uma função auxiliar que deleta toda a árvore recursivamente
-                                                                                // (só deleta o pai após deletar os filhos)
-            delete tree;                                                        // deletamos a árvore
-        }
-    }
-        void rotateLeft(Node** root, Node* x)
-    {
-        Node* y = x->right;                                                     // y será o novo pai de x após a rotação
-        x->right = y->left;                                                     // o filho esquerdo de y vira o filho direito de x
-
-        if (y->left != nullptr)                                                 // se y tiver filho esquerdo
-            y->left->parent = x;                                                // atualiza o pai desse filho para x
-
-        y->parent = x->parent;                                                  // y assume o pai de x
-
-        // Atualiza o ponteiro do pai de x para apontar para y
-        if (x->parent == nullptr)                                               // se x era a raiz
-            *root = y;                                                          // y vira a nova raiz
-        else if (x == x->parent->left)                                          // se x era filho à esquerda
-            x->parent->left = y;                                                // y vira o novo filho à esquerda
-        else                                                                    // se x era filho à direita
-            x->parent->right = y;                                               // y vira o novo filho à direita
-
-        y->left = x;                                                            // x vira filho à esquerda de y
-        x->parent = y;                                                          // atualiza o pai de x para ser y
-    }
-
-
-    void rotateRight(Node** root, Node* y)
-    {
-        Node* x = y->left;                                                      // x será o novo pai de y após a rotação
-        y->left = x->right;                                                     // o filho direito de x vira o filho esquerdo de y
-
-        if (x->right != nullptr)                                                // se x tiver filho direito
-            x->right->parent = y;                                               // atualiza o pai desse filho para y
-
-        x->parent = y->parent;                                                  // x assume o pai de y
-
-        // Atualiza o ponteiro do pai de y para apontar para x
-        if (y->parent == nullptr)                                               // se y era a raiz
-            *root = x;                                                          // x vira a nova raiz
-        else if (y == y->parent->right)                                         // se y era filho à direita
-            y->parent->right = x;                                               // x vira o novo filho à direita
-        else                                                                    // se y era filho à esquerda
-            y->parent->left = x;                                                // x vira o novo filho à esquerda
-
-        x->right = y;                                                           // y vira filho à direita de x
-        y->parent = x;                                                          // atualiza o pai de y para ser x
-    }
-
-
-    void fixInsert(Node **root, Node* z)
-    {
-        while (z->parent != nullptr && z->parent->isRed == RED)                // enquanto o pai de z for vermelho (violação da RBT)
-        {
-            Node* parent = z->parent;                                          // salva o pai
-            Node* grandparent = parent->parent;                                // salva o avô
-
-            if (parent == grandparent->left)                                   // se o pai for filho à esquerda do avô
-            {
-                Node* uncle = grandparent->right;                              // salva o tio (lado oposto)
-
-                if (uncle != nullptr && uncle->isRed == RED)                   // caso 1: tio vermelho
-                {
-                    parent->isRed = BLACK;                                     // recolore pai para preto
-                    uncle->isRed = BLACK;                                      // recolore tio para preto
-                    grandparent->isRed = RED;                                  // recolore avô para vermelho
-                    z = grandparent;                                           // sobe para corrigir possíveis violações acima
-                }
-                else                                                           // tio preto (ou nulo)
-                {
-                    if (z == parent->right)                                   // caso 2: z é filho à direita do pai
-                    {
-                        z = parent;                                           // salva o pai
-                        rotateLeft(root, z);                                  // rotaciona para transformar no caso 3
-                        parent = z->parent;                                   // atualiza o pai
-                        grandparent = parent->parent;                         // atualiza o avô
-                    }
-
-                    // caso 3: z é filho à esquerda do pai
-                    parent->isRed = BLACK;                                    // recolore pai para preto
-                    grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    rotateRight(root, grandparent);                           // rotação à direita para balancear
-                }
-            }
-            else                                                               // espelho do caso acima (pai é filho à direita)
-            {
-                Node* uncle = grandparent->left;                              // salva o tio (lado oposto)
-
-                if (uncle != nullptr && uncle->isRed == RED)                  // caso 1: tio vermelho
-                {
-                    parent->isRed = BLACK;                                    // recolore pai para preto
-                    uncle->isRed = BLACK;                                     // recolore tio para preto
-                    grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    z = grandparent;                                          // sobe para corrigir possíveis violações acima
-                }
-                else                                                          // tio preto (ou nulo)
-                {
-                    if (z == parent->left)                                   // caso 2: z é filho à esquerda do pai
-                    {
-                        z = parent;                                          // salva o pai
-                        rotateRight(root, z);                                // rotação para transformar no caso 3
-                        parent = z->parent;                                  // atualiza o pai
-                        grandparent = parent->parent;                        // atualiza o avô
-                    }
-
-                    // caso 3: z é filho à direita do pai
-                    parent->isRed = BLACK;                                   // recolore pai para preto
-                    grandparent->isRed = RED;                                // recolore avô para vermelho
-                    rotateLeft(root, grandparent);                           // rotação à esquerda para balancear
-                }
-            }
-        }
-
-        (*root)->isRed = BLACK;                                               // a raiz da árvore deve sempre ser preta
-    }
-
 }

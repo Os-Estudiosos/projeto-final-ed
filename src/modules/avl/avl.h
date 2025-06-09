@@ -1,11 +1,7 @@
 #pragma once
 
 #include "../../utils/tree_utils.h"
-
-// #include <vector>
-// #include <iostream>
 #include <string>
-
 
 namespace AVL
 {
@@ -62,17 +58,39 @@ namespace AVL
     void rotateRight(Node** root, Node* y);
 
     /**
-     * @brief Corrige as violações da propriedade rubro-negra após uma inserção.
+     * @brief Transplanta o nó u pelo nó v na árvore.
      * @param root Ponteiro para a raiz da árvore.
-     * @param z Nó recém-inserido que pode causar violação.
+     * @param u Nó a ser transplantado.
+     * @param v Nó que substituirá u.
      */
-    void fixInsert(Node **root, Node* z);
+    void transplant(Node** root, Node* u, Node* v);
 
-    //Pensar mais
-    bool isBalanced(BinaryTree* tree);
-    void doubleRotateRight(Node** root, Node* y);
-    void doubleRotateLeft(Node** root, Node* y);
-    void recomputeHeight(Node* n);
+    /**
+     * @brief Calcula a altura de um nó.
+     * @param n Ponteiro para o nó cujo altura será calculada.
+     * @return Altura do nó.
+     */
     int getHeight(Node* n);
+
+    /**
+     * @brief Recalcula a altura mínima de um nó.
+     * @param n Ponteiro para o nó cujo altura mínima será calculada.
+     * @return Altura mínima do nó recalculada.
+     */
+    void recomputeHeight(Node* n);
+
+    /**
+     * @brief Calcula o fator de balanceamento de um nó.
+     * @param n Ponteiro para o nó cujo fator de balanceamento será calculado.
+     * @return Fator de balanceamento do nó.
+     */
     int bf(Node* n);
+
+    /**
+     * @brief Calcula o maior valor entre dois inteiros.
+     * @param a Primeiro inteiro.
+     * @param b Segundo inteiro.
+     * @return O maior valor entre a e b.
+     */
+    int max(int a, int b);
 }
