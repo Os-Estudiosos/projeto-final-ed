@@ -119,14 +119,59 @@ namespace AVL
         rotateRight(root, y);
     }
 
-    
-    int bf(Node* n) 
+
+    int balanceFactor(Node* n) 
     {
         if (n == nullptr) 
             return 0;                                                          // Se o nó for nulo, o fator de balanceamento é 0
         return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
     }
 
+    void fixInsert(Node** root, Node* x)
+    {
+        if (root == nullptr || x == nullptr)                                    // se a raiz for nula ou o nó x for nulo
+        {
+            return;
+        }    
+        int bf = balanceFactor(x);                                         // calculo o fator de balanceamento do nó x
+        if (bf < 1 && bf > -1)                                             // se o nó x estiver balanceado
+        {
+            return;
+        }
+        if (bf > 1)
+        {
+            if (balanceFactor(x->right) < 0)
+            {
+                doubleRotateLeft(root, x);
+            }
+            else
+            {
+                rotateLeft(root, x);
+            }
+        }
+        else
+        {
+            if (balanceFactor(x->left) > 0)
+            {
+                doubleRotateRight(root, x);
+            }
+            else
+            {
+                rotateRight(root, x);
+            }
+        }
+    }
+
+    /*
+    Ver o bf do nó
+    se -1<=x<=1, está balanceado
+    se x>1:
+        se a subárvore da direita tem x<0, é uma rotação dupla à esquerda
+        se a subárvore da direita tem x>=0, é uma rotação à esquerda
+    se x<-1:
+        se a subárvore da esquerda tem x>0, é uma rotação dupla à direita
+        se a subárvore da esquerda tem x<=0, é uma rotação à direita
+    */
 
     // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
@@ -151,7 +196,7 @@ namespace AVL
         else                                                                    // Caso a árvore já tenha algum nó
         {
             Node *current = tree->root;                                         // Salvo o nó da raiz 
-            Node *last = nullptr;                                               // Inicio um nó que irei usar depois para fazer a ligação entre o nó adicionado e seu pai
+            Node *last = nullptr;                                              // Inicio um nó que irei usar depois para fazer a ligação entre o nó adicionado e seu pai
             while (current != nullptr)                                          // Enquanto o nó não for nulo (vamos fazer a comparação e passar em todos os nós necessários)
             {
                 if (word == current->word)                                      // Se a palavra for igual a atual

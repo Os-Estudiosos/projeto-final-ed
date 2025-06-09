@@ -98,7 +98,7 @@ namespace AVL
      * @param n Ponteiro para o nó cujo fator de balanceamento será calculado.
      * @return Fator de balanceamento do nó.
      */
-    int bf(Node* n);
+    int balanceFactor(Node* n);
 
     /**
      * @brief Calcula o maior valor entre dois inteiros.
@@ -107,4 +107,11 @@ namespace AVL
      * @return O maior valor entre a e b.
      */
     int max(int a, int b);
+
+    /**
+     * @brief Corrige a inserção de um nó na árvore AVL.
+     * @param root Ponteiro para a raiz da árvore.
+     * @param x Nó que foi inserido e precisa ser corrigido.
+     */
+    void fixInsert(Node** root, Node* x);
 }
