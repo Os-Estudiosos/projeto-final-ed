@@ -105,13 +105,27 @@ namespace AVL
         recomputeHeight(newRoot);                                                           
     }
 
+
+    void doubleRotateLeft(Node** root, Node* x)
+    {
+        rotateRight(root, x->right);
+        rotateLeft(root, x);
+    }
+
+
+    void doubleRotateRight(Node** root, Node* y)
+    {
+        rotateLeft(root, y->left);
+        rotateRight(root, y);
+    }
+
+    
     int bf(Node* n) 
     {
         if (n == nullptr) 
             return 0;                                                          // Se o nó for nulo, o fator de balanceamento é 0
         return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
     }
-
 
 
     // Principais

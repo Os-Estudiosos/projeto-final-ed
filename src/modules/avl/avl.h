@@ -58,6 +58,20 @@ namespace AVL
     void rotateRight(Node** root, Node* y);
 
     /**
+     * @brief Realiza uma rotação dupla à esquerda em torno do nó x.
+     * @param root Ponteiro para a raiz da árvore.
+     * @param x Nó ao redor do qual a rotação dupla será feita.
+     */
+    void doubleRotateLeft(Node** root, Node* x);
+
+    /**
+     * @brief Realiza uma rotação dupla à direita em torno do nó y.
+     * @param root Ponteiro para a raiz da árvore.
+     * @param y Nó ao redor do qual a rotação dupla será feita.
+     */
+    void doubleRotateRight(Node** root, Node* y);
+
+    /**
      * @brief Transplanta o nó u pelo nó v na árvore.
      * @param root Ponteiro para a raiz da árvore.
      * @param u Nó a ser transplantado.
