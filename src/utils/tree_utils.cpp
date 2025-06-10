@@ -79,13 +79,35 @@ void auxPrintTree(Node *aux, std::string space){
         std::string folderRep = "├──";
         if(aux->right == nullptr){
             folderRep = "└──";
-        }
+            std::cout << space << folderRep << aux->left->word << std::endl;
+            auxPrintTree(aux->left,space + "   ");
+        } else{
         std::cout << space << folderRep << aux->left->word << std::endl;
-        auxPrintTree(aux->left,space + "   ");
+        auxPrintTree(aux->left,space + "│  ");
+        }
     }
     if(aux->right != nullptr) {
         std::cout << space << "└──" << aux->right->word << std::endl;
-        auxPrintTree(aux->right,space + "   ");
+        int n = space.size();
+        std::string space2 = "";
+        std::string tmp = "";
+        int c = 0;
+        for(int i = n; i > -1; i++){
+            tmp = "";
+            tmp += space[i];
+            if(strcmp(tmp.c_str(), "│")){
+                c = i;
+                break;
+            }
+        }
+        for(int i = 0; i < c ; i++){
+            space2 += space[i];
+        }
+        for(int i = 0; i < n-c; i++){
+            space2 += " ";
+        }
+        
+        auxPrintTree(aux->right,space2 + "   ");
     }
 
 }
