@@ -97,6 +97,7 @@ namespace RBT
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
             Node* newNode = createNode(documentId, word, RED);                        // Criamos um novo nó
+            newNode->parent = last;
 
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
@@ -202,6 +203,8 @@ namespace RBT
             delete tree;                                                        // deletamos a árvore
         }
     }
+
+
         void rotateLeft(Node** root, Node* x)
     {
         Node* y = x->right;                                                     // y será o novo pai de x após a rotação
@@ -302,7 +305,7 @@ namespace RBT
                         parent = z->parent;                                  // atualiza o pai
                         grandparent = parent->parent;                        // atualiza o avô
                     }
-
+                    
                     // caso 3: z é filho à direita do pai
                     parent->isRed = BLACK;                                   // recolore pai para preto
                     grandparent->isRed = RED;                                // recolore avô para vermelho
