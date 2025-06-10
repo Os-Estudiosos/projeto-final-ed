@@ -27,8 +27,8 @@ bst.o: ./src/modules/bst/bst.cpp ./src/modules/bst/bst.h
 	g++ -c ./src/modules/bst/bst.cpp -Wall -o bst.o
 
 # AVL
-avl: main_bst.o utils.o tree_utils.o avl.o data.o ./build
-	g++ main_bst.o utils.o tree_utils.o avl.o data.o -o ./build/avl
+avl: main_avl.o utils.o tree_utils.o avl.o data.o ./build
+	g++ main_avl.o utils.o tree_utils.o avl.o data.o -o ./build/avl
 
 main_avl.o: ./src/main_avl.cpp
 	g++ -c ./src/main_avl.cpp -Wall -o main_avl.o
