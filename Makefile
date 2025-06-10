@@ -10,13 +10,13 @@ rbt: RBT
 # Não precisamos mais verificar se a build existe, já que ela sempre é a primeira a ser feita caso não exista
 OBJ = ./build/obj
 # BST
-BST: src/main_bst.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/bst.o $(OBJ)/data.o
+BST: $(OBJ)/main_bst.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/bst.o $(OBJ)/data.o
 	g++ $(OBJ)/main_bst.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/bst.o $(OBJ)/data.o -o ./build/bst
 
 testsBst: $(OBJ)/test_bst.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/bst.o $(OBJ)/data.o ./build
 	g++ $(OBJ)/test_bst.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/bst.o $(OBJ)/data.o -o ./build/testsBst
 
-test_bst.o: ./src/tests/test_bst.cpp $(OBJ)
+build/obj/test_bst.o: ./src/tests/test_bst.cpp $(OBJ)
 	g++ -c ./src/tests/test_bst.cpp -Wall -o $(OBJ)/test_bst.o
 
 build/obj/main_bst.o: ./src/main_bst.cpp $(OBJ)
