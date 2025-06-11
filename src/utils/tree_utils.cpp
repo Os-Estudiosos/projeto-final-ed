@@ -121,3 +121,28 @@ void printTree(BinaryTree* tree) {
     }
 }
 
+int countNodes(BinaryTree* tree, std::vector<std::string> *words) {
+    if(tree == nullptr){
+        return -1;
+    }
+    Node *aux = tree->root;
+    int count = 1;
+
+    if(aux != nullptr){
+        words->push_back(aux->word);
+        countNodesAux(aux, &count, words);
+    }
+    return count;
+}
+void countNodesAux(Node *aux, int *num, std::vector<std::string> *words) {
+    *num += 1;
+
+    if(aux->left != nullptr){
+        words->push_back(aux->word);
+        countNodesAux(aux->left, num, words);
+    } 
+    if(aux->right != nullptr){
+        words->push_back(aux->word);
+        countNodesAux(aux->right, num, words);
+    }
+}

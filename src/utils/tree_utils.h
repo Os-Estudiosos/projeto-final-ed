@@ -86,3 +86,6 @@ void printTree(BinaryTree* tree);
 *@param space String que armazena a quantidade de espaços necessaŕios para uma identação correta.
 */
 void auxPrintTree(Node *aux, std::string space);
+
+int countNodes(BinaryTree* tree, std::vector<std::string> *words);
+void countNodesAux(Node *aux, int *num, std::vector<std::string> *words);
