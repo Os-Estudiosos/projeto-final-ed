@@ -241,6 +241,8 @@ namespace AVL
             }
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
             Node* newNode = createNode(documentId, word);                        // Criamos um novo nó
+            newNode->parent = last;                                             // Definimos o pai do novo nó como o último nó que visitamos
+
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
             {                                                                   
