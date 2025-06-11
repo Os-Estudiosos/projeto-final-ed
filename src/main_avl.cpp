@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
         for (int i = 0; i < n_docs; i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
-            
-            for (int j = 0; j < words.size(); j++) {
+            int sizew = words.size();
+            for (int j = 0; j < sizew; j++) {
                 AVL::insert(tree, words[j], i);
             }
         }
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
         std::string word_to_search = "";
         while(true) {
             std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
-            std::cout << "(Se quiser sair, aperte digite . e de enter)" << std::endl;
+            std::cout << "(Se quiser sair, digite . e de enter)" << std::endl;
             std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
             std::cout << "--> ";
             std::cin >> word_to_search;
@@ -50,8 +50,8 @@ int main(int argc, char* argv[])
             if (result.found) {
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
                 std::cout << "Ela se localiza nos documentos: ";
-
-                for (int d = 0; d < result.documentIds.size(); d++) {
+                int size = result.documentIds.size();
+                for (int d = 0; d < size; d++) {
                     std::cout << result.documentIds[d] << ", ";
                 }
                 std::cout << std::endl;
@@ -71,10 +71,11 @@ int main(int argc, char* argv[])
         AVL::destroy(tree);
     } else if (command_type == "stats") {
         BinaryTree* tree = AVL::create();
+        
+        std::filesystem::create_directories("./build/stats/bst/");
+        std::ofstream InsertingStats("./build/stats/avl/avlStats_"+ std::to_string(n_docs)+"archives.csv");
 
-        std::ofstream InsertingStats("./src/stats/inserting_stats_"+ std::to_string(n_docs)+".csv");
-
-        InsertingStats << "time; comparisions; height; min_height" << std::endl;
+        InsertingStats << "word; time; comparisions; height; min_height" << std::endl;
 
         int comparacoes = 0;
         long int time = 0;
@@ -86,20 +87,23 @@ int main(int argc, char* argv[])
             c = words.size();
             cwords += c;
             for (int j = 0; j < c; j++) {
-                InsertResult result = AVL::insert(tree, words[j], i);      
+                InsertResult result = AVL::insert(tree, words[j], i); 
+                int actual_height = computeHeight(tree->root);
+                int actual_min_height = computeMinHeight(tree->root);
+                InsertingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;         
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
         }
         std::vector<std::string> words;
         int uwords = countNodes(tree, &words);
-        std::cout << "Tempo de execucao: " << (float)time/1e9 << std::endl;
+        std::cout << "Tempo de execucao: " << (float)time/1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        //std::cout << "Altura: " << computeHeight(tree) << std::endl;
-        //std::cout << "Menor altura: " << computeMinHeight(tree) << std::endl;
+        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         SearchResult result;
         std::string toSearch;
         long int stime = 0;
@@ -109,9 +113,8 @@ int main(int argc, char* argv[])
             result = AVL::search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
-            std::cout << toSearch << ":  " << result.numComparisons << std::endl; 
         }
-        std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << std::endl;
+        std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
         std::cout << "Media de comparacoes de busca: " << (float)scomp/uwords << std::endl;
 
         InsertingStats.close();
