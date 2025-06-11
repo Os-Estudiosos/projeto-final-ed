@@ -76,18 +76,18 @@ void printIndex(BinaryTree* tree) {
 
 void auxPrintTree(Node *aux, std::string space){
     if(aux->left != nullptr) {
-        std::string folderRep = "├──";
+        std::string folderRep = "|--";
         if(aux->right == nullptr){
-            folderRep = "└──";
+            folderRep = "|--";
             std::cout << space << folderRep << aux->left->word << std::endl;
             auxPrintTree(aux->left,space + "   ");
         } else{
         std::cout << space << folderRep << aux->left->word << std::endl;
-        auxPrintTree(aux->left,space + "│  ");
+        auxPrintTree(aux->left,space + "|  ");
         }
     }
     if(aux->right != nullptr) {
-        std::cout << space << "└──" << aux->right->word << std::endl;
+        std::cout << space << "|--" << aux->right->word << std::endl;
         int n = space.size();
         std::string space2 = "";
         std::string tmp = "";
@@ -95,7 +95,7 @@ void auxPrintTree(Node *aux, std::string space){
         for(int i = n; i > -1; i++){
             tmp = "";
             tmp += space[i];
-            if(strcmp(tmp.c_str(), "│")){
+            if(strcmp(tmp.c_str(), "|")){
                 c = i;
                 break;
             }

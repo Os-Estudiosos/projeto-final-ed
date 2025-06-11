@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = AVL::create();
 
+
         for (int i = 0; i < n_docs; i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
@@ -28,11 +29,12 @@ int main(int argc, char* argv[])
                 AVL::insert(tree, words[j], i);
             }
         }
+        printTree(tree);
 
         std::string word_to_search = "";
         while(true) {
-            std::cout << "========================\033[96m PESQUISA COM ÍNDICE INVERTIDO \033[m========================" << std::endl;
-            std::cout << "(Se quiser sair, aperte digite Q e dê enter)" << std::endl;
+            std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
+            std::cout << "(Se quiser sair, aperte digite . e de enter)" << std::endl;
             std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
             std::cout << "--> ";
             std::cin >> word_to_search;
@@ -59,7 +61,7 @@ int main(int argc, char* argv[])
                 std::cin.ignore();
                 std::cin.get();
             } else {
-                std::cout << "Sua palavra \033[91mnão\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << std::endl;
+                std::cout << "Sua palavra \033[91nao\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << std::endl;
                 std::cin.ignore();
                 std::cin.get();
             }
@@ -116,6 +118,7 @@ int main(int argc, char* argv[])
 
         AVL::destroy(tree);                                                
         }
+
 
     return 0;
 }

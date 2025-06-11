@@ -137,16 +137,19 @@ namespace AVL
         int bf = balanceFactor(x);                                             // calculo o fator de balanceamento do nó x
         if (bf < 1 && bf > -1)                                                 // se o nó x estiver balanceado
         {
+            std::cout << "TESTE 1" << std::endl;
             return;
         }
         if (bf > 1)
         {
             if (balanceFactor(x->right) < 0)
             {
+                std::cout << "TESTE 2" << std::endl;
                 doubleRotateLeft(root, x);
             }
             else
             {
+                std::cout << "TESTE 3" << std::endl;
                 rotateLeft(root, x);
             }
         }
@@ -154,26 +157,18 @@ namespace AVL
         {
             if (balanceFactor(x->left) > 0)
             {
+                std::cout << "TESTE 4" << std::endl;
                 doubleRotateRight(root, x);
             }
             else
             {
+                std::cout << "TESTE 5" << std::endl;
                 rotateRight(root, x);
             }
         }
     }
 
-    /*
-    Ver o bf do nó
-    se -1<=x<=1, está balanceado
-    se x>1:
-        se a subárvore da direita tem x<0, é uma rotação dupla à esquerda
-        se a subárvore da direita tem x>=0, é uma rotação à esquerda
-    se x<-1:
-        se a subárvore da esquerda tem x>0, é uma rotação dupla à direita
-        se a subárvore da esquerda tem x<=0, é uma rotação à direita
-    */
-
+    // TODO: Consertar ao fix insertion, as rotações e o balanceamento
 
     // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
