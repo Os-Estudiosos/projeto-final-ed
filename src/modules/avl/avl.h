@@ -48,36 +48,14 @@ namespace AVL
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó ao redor do qual a rotação será feita.
      */
-    void rotateLeft(Node** root, Node* x);
+    Node* rotateLeft(Node* x);
 
     /**
      * @brief Realiza uma rotação à direita em torno do nó y.
      * @param root Ponteiro para a raiz da árvore.
      * @param y Nó ao redor do qual a rotação será feita.
      */
-    void rotateRight(Node** root, Node* y);
-
-    /**
-     * @brief Realiza uma rotação dupla à esquerda em torno do nó x.
-     * @param root Ponteiro para a raiz da árvore.
-     * @param x Nó ao redor do qual a rotação dupla será feita.
-     */
-    void doubleRotateLeft(Node** root, Node* x);
-
-    /**
-     * @brief Realiza uma rotação dupla à direita em torno do nó y.
-     * @param root Ponteiro para a raiz da árvore.
-     * @param y Nó ao redor do qual a rotação dupla será feita.
-     */
-    void doubleRotateRight(Node** root, Node* y);
-
-    /**
-     * @brief Transplanta o nó u pelo nó v na árvore.
-     * @param root Ponteiro para a raiz da árvore.
-     * @param u Nó a ser transplantado.
-     * @param v Nó que substituirá u.
-     */
-    void transplant(Node** root, Node* u, Node* v);
+    Node* rotateRight(Node* y);
 
     /**
      * @brief Calcula a altura de um nó.
