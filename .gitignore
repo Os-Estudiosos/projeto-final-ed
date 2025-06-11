@@ -2,3 +2,5 @@
 /src/stats/
 /.vscode
 /build
+/venv
+**/__pycache__/
