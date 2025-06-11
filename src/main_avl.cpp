@@ -30,8 +30,6 @@ int main(int argc, char* argv[])
         }
 
         std::string word_to_search = "";
-        int c;
-
         while(true) {
             std::cout << "========================\033[96m PESQUISA COM ÍNDICE INVERTIDO \033[m========================" << std::endl;
             std::cout << "(Se quiser sair, aperte digite Q e dê enter)" << std::endl;
@@ -40,7 +38,7 @@ int main(int argc, char* argv[])
             std::cin >> word_to_search;
             std::cout << std::endl;
 
-            if (word_to_search == "q" || word_to_search == "Q") {
+            if (word_to_search == ".") {
                 std::cout << "Encerrando o programa" << std::endl;
                 break;
             }
@@ -76,25 +74,28 @@ int main(int argc, char* argv[])
 
         InsertingStats << "time; comparisions; height; min_height" << std::endl;
 
+        int comparacoes = 0;
+        int time = 0;
+        int cwords = 0;
         for (int i = 0; i < n_docs; i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
-            
-            for (int j = 0; j < words.size(); j++) {
-                InsertResult result = AVL::insert(tree, words[j], i);
-                int actual_height = computeHeight(tree->root);
-                int actual_min_height = computeMinHeight(tree->root);
-
-                std::cout << result.executionTime << std::endl;
-
-                InsertingStats << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;
+            cwords = words.size();
+            for (int j = 0; j < cwords; j++) {
+                InsertResult result = AVL::insert(tree, words[j], i);      
+                time +=result.executionTime;
+                comparacoes += result.numComparisons;
             }
         }
+        std::cout << "Tempo de execucao: " << time << std::endl;
+        std::cout << "Total de palavras inseridas: " << cwords << std::endl;
+        std::cout << "Total de comparacoes: " << comparacoes << std::endl;
+        std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
 
         InsertingStats.close();
 
-        AVL::destroy(tree);
-    }
+        AVL::destroy(tree);                                                
+        }
 
     return 0;
 }

@@ -3,6 +3,12 @@
 void clearTerminal() {
     std::cout << "\033[2J\033[1;1H";
 }
+void searchMsg(){
+    std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
+    std::cout << "(Se quiser sair, aperte digite . e de enter)" << std::endl;
+    std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
+    std::cout << "--> ";
+}
 
 bool valCLI(int argc, char** argv){
 
