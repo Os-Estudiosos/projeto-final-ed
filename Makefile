@@ -1,11 +1,9 @@
 # General
-all: BST testsBst AVL RBT
+all: BST testsBst AVL #testsAvl
 
 bst: BST testsBst
 
-avl: AVL
-
-rbt: RBT
+avl: AVL #testsAvl
 
 OBJ = ./build/obj
 # BST
@@ -28,22 +26,19 @@ build/obj/bst.o: ./src/modules/bst/bst.cpp ./src/modules/bst/bst.h | $(OBJ)
 AVL: $(OBJ)/main_avl.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/avl.o $(OBJ)/data.o
 	g++ $(OBJ)/main_avl.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/avl.o $(OBJ)/data.o -o ./build/avl
 
+#testsAvl: $(OBJ)/test_avl.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/avl.o $(OBJ)/data.o | ./build
+#	g++ $(OBJ)/test_avl.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/avl.o $(OBJ)/data.o -o ./build/testsAvl
+
+#build/obj/test_avl.o: ./src/tests/test_avl.cpp | $(OBJ)
+#	g++ -c ./src/tests/test_avl.cpp -Wall -o $(OBJ)/test_avl.o
+
 build/obj/main_avl.o: ./src/main_avl.cpp | $(OBJ)
 	g++ -c ./src/main_avl.cpp -Wall -o $(OBJ)/main_avl.o
 
 build/obj/avl.o: ./src/modules/avl/avl.cpp ./src/modules/avl/avl.h | $(OBJ)
 	g++ -c ./src/modules/avl/avl.cpp -Wall -o $(OBJ)/avl.o
 
-# RBT
-RBT: $(OBJ)/main_rbt.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/rbt.o $(OBJ)/data.o
-	g++ $(OBJ)/main_rbt.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/rbt.o $(OBJ)/data.o -o ./build/rbt
-
-build/obj/main_rbt.o: ./src/main_rbt.cpp | $(OBJ)
-	g++ -c ./src/main_rbt.cpp -Wall -o $(OBJ)/main_rbt.o
-
-build/obj/rbt.o: ./src/modules/rbt/rbt.cpp ./src/modules/rbt/rbt.h | $(OBJ)
-	g++ -c ./src/modules/rbt/rbt.cpp -Wall -o $(OBJ)/rbt.o
-
+#imports
 build/obj/data.o: ./src/modules/data.cpp ./src/modules/data.h | $(OBJ)
 	g++ -c ./src/modules/data.cpp -Wall -o $(OBJ)/data.o
 

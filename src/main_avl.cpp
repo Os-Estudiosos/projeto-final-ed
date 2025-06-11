@@ -2,9 +2,6 @@
 #include "modules/data.h"
 #include "utils/utils.h"
 
-#include <fstream>
-
-
 int main(int argc, char* argv[])
 {
     if (valCLI(argc, argv)){
@@ -83,6 +80,7 @@ int main(int argc, char* argv[])
         InsertingStats << "word; time; comparisions; height; min_height" << std::endl;
 
         int comparacoes = 0;
+        long int rotacoes = 0;
         long int time = 0;
         int cwords = 0;
         int c = 0;
@@ -98,6 +96,7 @@ int main(int argc, char* argv[])
                 InsertingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;         
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
+                rotacoes += result.numRotations;
             }
         }
         std::vector<std::string> words;
@@ -111,7 +110,7 @@ int main(int argc, char* argv[])
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
         std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
-
+        std::cout << "Quantidade de rotacoes: " << rotacoes << std::endl;
         std::cout << std::endl;
 
         std::cout << std::endl;

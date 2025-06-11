@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <fstream>
 #include <filesystem>   // Biblioteca usada para contar quantos arquivos existem na pasta
 
 /**
