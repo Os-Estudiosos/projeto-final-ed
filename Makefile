@@ -31,6 +31,9 @@ AVL: $(OBJ)/main_avl.o $(OBJ)/utils.o $(OBJ)/tree_utils.o $(OBJ)/avl.o $(OBJ)/da
 build/obj/main_avl.o: ./src/main_avl.cpp | $(OBJ)
 	g++ -c ./src/main_avl.cpp -Wall -o $(OBJ)/main_avl.o
 
+build/obj/test_avl.o: ./src/tests/test_avl.cpp | $(OBJ)
+	g++ -c ./src/tests/test_avl.cpp -Wall -o $(OBJ)/test_avl.o
+
 build/obj/avl.o: ./src/modules/avl/avl.cpp ./src/modules/avl/avl.h | $(OBJ)
 	g++ -c ./src/modules/avl/avl.cpp -Wall -o $(OBJ)/avl.o
 
