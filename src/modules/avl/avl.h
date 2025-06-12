@@ -92,4 +92,12 @@ namespace AVL
      * @param x Nó que foi inserido e precisa ser corrigido.
      */
     void fixInsert(Node** root, Node* x);
+
+    /**
+     * @brief Verifica se duas árvores são iguais.
+     * @param root1 Ponteiro para a raiz da primeira árvore.
+     * @param root2 Ponteiro para a raiz da segunda árvore.
+     * @returns True se forem iguais ou False se forem diferentes 
+     */
+    bool isEqual(Node* root1, Node* root2);
 }

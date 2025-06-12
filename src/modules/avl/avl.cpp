@@ -119,7 +119,7 @@ namespace AVL
     }
 
     // Função para balancear o nó após a inserção
-    Node* balance(Node* node, InsertResult &result_insert) {
+    Node* balance(Node* node) {
         if (node == nullptr) return node;
 
         recomputeHeight(node);
@@ -128,26 +128,22 @@ namespace AVL
 
         // Caso Esquerda-Esquerda
         if (bf > 1 && balanceFactor(node->left) >= 0) {
-            result_insert.numRotations++;
             return rotateRight(node);
         }
 
         // Caso Direita-Direita
         if (bf < -1 && balanceFactor(node->right) <= 0) {
-            result_insert.numRotations++;
             return rotateLeft(node);
         }
 
         // Caso Esquerda-Direita
         if (bf > 1 && balanceFactor(node->left) < 0) {
-            result_insert.numRotations += 2;
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
 
         // Caso Direita-Esquerda
         if (bf < -1 && balanceFactor(node->right) > 0) {
-            result_insert.numRotations += 2;
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
@@ -156,17 +152,17 @@ namespace AVL
     }
 
     // Função auxiliar recursiva para inserção
-    Node* insertRecursive(Node* node, int documentId, const std::string &word, InsertResult &result_insert) {
+    Node* insertRecursive(Node* node, int documentId, const std::string &word, int &numComparisons) {
         if (node == nullptr) {
             return createNode(documentId, word);
         }
 
-        result_insert.numComparisons++;
+        numComparisons++;
         if (word < node->word) {
-            node->left = insertRecursive(node->left, documentId, word, result_insert);
+            node->left = insertRecursive(node->left, documentId, word, numComparisons);
             node->left->parent = node;
         } else if (word > node->word) {
-            node->right = insertRecursive(node->right, documentId, word, result_insert);
+            node->right = insertRecursive(node->right, documentId, word, numComparisons);
             node->right->parent = node;
         } else {
             // Palavra já existe, adiciona documentId se não estiver presente
@@ -183,7 +179,21 @@ namespace AVL
             return node;
         }
 
-        return balance(node, result_insert);
+        return balance(node);
+    }
+
+    bool isEqual(Node* root1, Node* root2) {
+        if (root1 == nullptr && root2 == nullptr)
+            return true;
+
+        if (root1 == nullptr || root2 == nullptr)
+            return false;
+
+        if (root1->word != root2->word || root1->documentIds != root2->documentIds)
+            return false;
+
+        return isEqual(root1->left, root2->left) &&
+            isEqual(root1->right, root2->right);
     }
 
     // Principais
@@ -192,14 +202,13 @@ namespace AVL
         auto start = std::chrono::high_resolution_clock::now();                 // Inicio a contagem do tempo
         InsertResult result_insert;                                             // Crio estrutura de insert
         result_insert.numComparisons = 0;                                       // Defino ambas variáveis como zero
-        result_insert.executionTime = 0;
-        result_insert.numRotations = 0;    
+        result_insert.executionTime = 0;    
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
             return result_insert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
         
-        tree->root = insertRecursive(tree->root, documentId, word, result_insert);
+        tree->root = insertRecursive(tree->root, documentId, word, result_insert.numComparisons);
 
         auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
