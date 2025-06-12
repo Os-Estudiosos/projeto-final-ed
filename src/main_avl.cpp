@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
                 InsertResult result = AVL::insert(tree, words[j], i); 
                 int actual_height = computeHeight(tree->root);
                 int actual_min_height = computeMinHeight(tree->root);
-                InsertingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;         
+                InsertingStats << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;         
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
