@@ -1,6 +1,5 @@
 #include "../modules/avl/avl.h"
 
-
 void printMessage(std::string message, bool breakLine = 0, std::string color_code = "") {
     std::cout << "\033[" << color_code << "m" << message << "\033[m";
     if (breakLine) std::cout << std::endl;
@@ -77,7 +76,7 @@ void tree_structure_tests() {
     }
 
     try {
-        printMessage("Testando insercao em arvore desbalanceada", 0);
+        printMessage("Testando insercao em arvore desbalanceada (caso RR)", 0);
         std::vector<std::string> words_to_insert = {"a", "b", "c"};
         std::vector<int> docsIds = {0, 1, 2};
 
@@ -87,11 +86,117 @@ void tree_structure_tests() {
         AVL::insert(tree, words_to_insert[1], docsIds[1]);
         AVL::insert(tree, words_to_insert[2], docsIds[2]);
 
+        // Apos a insercao de a, b, c, a arvore AVL deve estar balanceada com \'b\' como raiz
+        // e \'a\' a esquerda e \'c\' a direita.
         if (!(
-            tree->root->word == "a" && tree->root->right->word == "b" && tree->root->right->right->word == "c"
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
         )) {
             AVL::destroy(tree);
-            throw std::runtime_error("Nao esta inserindo da forma correta");
+            throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso RR");
+        }
+
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
+    } catch (const std::runtime_error& err) {
+        printMessage(" ERRO", 1, "91");
+        printMessage(".......", 0);
+        printMessage(err.what(), 1);
+    }
+
+    try {
+        printMessage("Testando insercao em arvore desbalanceada (caso LL)", 0);
+        std::vector<std::string> words_to_insert = {"c", "b", "a"};
+        std::vector<int> docsIds = {0, 1, 2};
+
+        BinaryTree* tree = AVL::create();
+
+        AVL::insert(tree, words_to_insert[0], docsIds[0]);
+        AVL::insert(tree, words_to_insert[1], docsIds[1]);
+        AVL::insert(tree, words_to_insert[2], docsIds[2]);
+
+        // Apos a insercao de c, b, a, a arvore AVL deve estar balanceada com \'b\' como raiz
+        // e \'a\' a esquerda e \'c\' a direita.
+        if (!(
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso LL");
+        }
+
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
+    } catch (const std::runtime_error& err) {
+        printMessage(" ERRO", 1, "91");
+        printMessage(".......", 0);
+        printMessage(err.what(), 1);
+    }
+
+    try {
+        printMessage("Testando insercao em arvore desbalanceada (caso LR)", 0);
+        std::vector<std::string> words_to_insert = {"c", "a", "b"};
+        std::vector<int> docsIds = {0, 1, 2};
+
+        BinaryTree* tree = AVL::create();
+
+        AVL::insert(tree, words_to_insert[0], docsIds[0]);
+        AVL::insert(tree, words_to_insert[1], docsIds[1]);
+        AVL::insert(tree, words_to_insert[2], docsIds[2]);
+
+        // Apos a insercao de c, a, b, a arvore AVL deve estar balanceada com \'b\' como raiz
+        // e \'a\' a esquerda e \'c\' a direita.
+        if (!(
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso LR");
+        }
+
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
+    } catch (const std::runtime_error& err) {
+        printMessage(" ERRO", 1, "91");
+        printMessage(".......", 0);
+        printMessage(err.what(), 1);
+    }
+
+    try {
+        printMessage("Testando insercao em arvore desbalanceada (caso RL)", 0);
+        std::vector<std::string> words_to_insert = {"a", "c", "b"};
+        std::vector<int> docsIds = {0, 1, 2};
+
+        BinaryTree* tree = AVL::create();
+
+        AVL::insert(tree, words_to_insert[0], docsIds[0]);
+        AVL::insert(tree, words_to_insert[1], docsIds[1]);
+        AVL::insert(tree, words_to_insert[2], docsIds[2]);
+
+        // Apos a insercao de a, c, b, a arvore AVL deve estar balanceada com \'b\' como raiz
+        // e \'a\' a esquerda e \'c\' a direita.
+        if (!(
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso RL");
         }
 
         AVL::destroy(tree);
@@ -183,31 +288,29 @@ void tree_returns_tests() {
         printMessage(err.what(), 1);
     }
 
+    // Testes de rotação
     try {
-        printMessage("Testando rotacao pela esquerda", 0);
+        printMessage("Testando rotacao pela esquerda (RR)", 0);
 
-        BinaryTree* tree1 = AVL::create();
-        AVL::insert(tree1, "digimon", 2);
-        AVL::insert(tree1, "onomatopeia", 0);
-        AVL::insert(tree1, "panorama", 3);
+        BinaryTree* tree = AVL::create();
+        AVL::insert(tree, "digimon", 2);
+        AVL::insert(tree, "onomatopeia", 0);
+        AVL::insert(tree, "panorama", 3);
 
-        BinaryTree* tree2 = AVL::create();
-        AVL::insert(tree2, "onomatopeia", 0);
-        AVL::insert(tree2, "digimon", 2);
-        AVL::insert(tree2, "panorama", 3);
-
-        if (AVL::isEqual(tree1->root, tree2->root))
-        {
-            printMessage(" CONCLUIDO", 1, "92");
+        // Estrutura esperada: onomatopeia (root), digimon (left), panorama (right)
+        if (!(
+            tree->root->word == "onomatopeia" &&
+            tree->root->left->word == "digimon" &&
+            tree->root->right->word == "panorama" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("Rotacao a esquerda (RR) falhou");
         }
-        else
-        {
-            printMessage(" ERRO", 1, "91");
-        }
-
-        AVL::destroy(tree1);
-        AVL::destroy(tree2);
-
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -215,30 +318,27 @@ void tree_returns_tests() {
     }
 
     try {
-        printMessage("Testando rotacao pela direita", 0);
+        printMessage("Testando rotacao pela direita (LL)", 0);
 
-        BinaryTree* tree1 = AVL::create();
-        AVL::insert(tree1, "panorama", 3);
-        AVL::insert(tree1, "onomatopeia", 0);
-        AVL::insert(tree1, "digimon", 2);
+        BinaryTree* tree = AVL::create();
+        AVL::insert(tree, "panorama", 3);
+        AVL::insert(tree, "onomatopeia", 0);
+        AVL::insert(tree, "digimon", 2);
 
-        BinaryTree* tree2 = AVL::create();
-        AVL::insert(tree2, "panorama", 3);
-        AVL::insert(tree2, "digimon", 2);
-        AVL::insert(tree1, "onomatopeia", 0);
-
-        if (AVL::isEqual(tree1->root, tree2->root))
-        {
-            printMessage(" CONCLUIDO", 1, "92");
+        // Estrutura esperada: onomatopeia (root), digimon (left), panorama (right)
+        if (!(
+            tree->root->word == "onomatopeia" &&
+            tree->root->left->word == "digimon" &&
+            tree->root->right->word == "panorama" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("Rotacao a direita (LL) falhou");
         }
-        else
-        {
-            printMessage(" ERRO", 1, "91");
-        }
-
-        AVL::destroy(tree1);
-        AVL::destroy(tree2);
-        
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -246,30 +346,27 @@ void tree_returns_tests() {
     }
 
     try {
-        printMessage("Testando rotacao dupla pela esquerda", 0);
+        printMessage("Testando rotacao dupla pela esquerda (RL)", 0);
 
-        BinaryTree* tree1 = AVL::create();
-        AVL::insert(tree1, "digimon", 2);
-        AVL::insert(tree1, "onomatopeia", 0);
-        AVL::insert(tree1, "panorama", 3);
+        BinaryTree* tree = AVL::create();
+        AVL::insert(tree, "a", 0);
+        AVL::insert(tree, "c", 1);
+        AVL::insert(tree, "b", 2);
 
-        BinaryTree* tree2 = AVL::create();
-        AVL::insert(tree2, "panorama", 3);
-        AVL::insert(tree2, "onomatopeia", 0);
-        AVL::insert(tree2, "digimon", 2);
-
-        if (AVL::isEqual(tree1->root, tree2->root))
-        {
-            printMessage(" CONCLUIDO", 1, "92");
+        // Estrutura esperada: b (root), a (left), c (right)
+        if (!(
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("Rotacao dupla a esquerda (RL) falhou");
         }
-        else
-        {
-            printMessage(" ERRO", 1, "91");
-        }
-
-        AVL::destroy(tree1);
-        AVL::destroy(tree2);
-        
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
@@ -277,31 +374,27 @@ void tree_returns_tests() {
     }
 
     try {
-        printMessage("Testando rotacao dupla pela direita", 0);
+        printMessage("Testando rotacao dupla pela direita (LR)", 0);
 
-        BinaryTree* tree1 = AVL::create();
-        AVL::insert(tree1, "digimon", 2);
-        AVL::insert(tree1, "onomatopeia", 0);
-        AVL::insert(tree1, "panorama", 3);
+        BinaryTree* tree = AVL::create();
+        AVL::insert(tree, "c", 0);
+        AVL::insert(tree, "a", 1);
+        AVL::insert(tree, "b", 2);
 
-        BinaryTree* tree2 = AVL::create();
-        AVL::insert(tree1, "panorama", 3);
-        AVL::insert(tree1, "digimon", 2);
-        AVL::insert(tree1, "onomatopeia", 0);
-
-
-        if (AVL::isEqual(tree1->root, tree2->root))
-        {
-            printMessage(" CONCLUIDO", 1, "92");
+        // Estrutura esperada: b (root), a (left), c (right)
+        if (!(
+            tree->root->word == "b" && 
+            tree->root->left->word == "a" && 
+            tree->root->right->word == "c" &&
+            tree->root->height == 2 &&
+            tree->root->left->height == 1 &&
+            tree->root->right->height == 1
+        )) {
+            AVL::destroy(tree);
+            throw std::runtime_error("Rotacao dupla a direita (LR) falhou");
         }
-        else
-        {
-            printMessage(" ERRO", 1, "91");
-        }
-
-        AVL::destroy(tree1);
-        AVL::destroy(tree2);
-        
+        AVL::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err) {
         printMessage(" ERRO", 1, "91");
         printMessage(".......", 0);
