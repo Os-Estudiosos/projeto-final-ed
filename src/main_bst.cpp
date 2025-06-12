@@ -21,11 +21,11 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = BST::create();
 
-        for (int i = 0; i < n_docs; i++) {
+        for (int i = 0;i < n_docs;i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             
-            for (long unsigned int j = 0; j < words.size(); j++) {
+            for (long unsigned int j = 0;j < words.size();j++) {
                 BST::insert(tree, words[j], i);
             }
         }
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
                 std::cout << "Ela se localiza nos documentos: ";
 
-                for (long unsigned int d = 0; d < result.documentIds.size() - 1; d++) {
+                for (long unsigned int d = 0;d < result.documentIds.size() - 1;d++) {
                     std::cout << result.documentIds[d] << ", ";
                 }
                 std::cout << result.documentIds[result.documentIds.size() - 1];
@@ -81,21 +81,21 @@ int main(int argc, char* argv[])
         std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
-        InsertingStats << "word; time; comparisions; height; min_height" << std::endl;
+        InsertingStats << "word;time;comparisions;height;min_height" << std::endl;
         int comparacoes = 0;
         long int time = 0;
         int cwords = 0;
         int c = 0;
-        for (int i = 0; i < n_docs; i++) {
+        for (int i = 0;i < n_docs;i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             c = words.size();
             cwords += c;
-            for (int j = 0; j < c; j++) {
+            for (int j = 0;j < c;j++) {
                 InsertResult result = BST::insert(tree, words[j], i);
                 int actual_height = computeHeight(tree->root);
                 int actual_min_height = computeMinHeight(tree->root);
-                InsertingStats << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;    
+                InsertingStats << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << actual_height << ";" << actual_min_height << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
@@ -119,19 +119,19 @@ int main(int argc, char* argv[])
 
         std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
 
-        SearchingStats << "word; time; comparisions; word_height" << std::endl;
+        SearchingStats << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
         long int stime = 0;
         int scomp = 0;
-        for(int i = 0; i < uwords; i++){
+        for(int i = 0;i < uwords;i++){
             toSearch = words[i];
             result = BST::search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
 
-            SearchingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+            SearchingStats << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
         }
         std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
         std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
