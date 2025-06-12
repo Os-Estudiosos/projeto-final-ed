@@ -182,6 +182,20 @@ namespace AVL
         return balance(node);
     }
 
+    bool isEqual(Node* root1, Node* root2) {
+        if (root1 == nullptr && root2 == nullptr)
+            return true;
+
+        if (root1 == nullptr || root2 == nullptr)
+            return false;
+
+        if (root1->word != root2->word || root1->documentIds != root2->documentIds)
+            return false;
+
+        return isEqual(root1->left, root2->left) &&
+            isEqual(root1->right, root2->right);
+    }
+
     // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {
