@@ -29,7 +29,6 @@ int main(int argc, char* argv[])
                 AVL::insert(tree, words[j], i);
             }
         }
-        printTree(tree);
 
         std::string word_to_search = "";
         while(true) {

@@ -48,14 +48,14 @@ namespace AVL
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó ao redor do qual a rotação será feita.
      */
-    Node* rotateLeft(Node* x);
+    void rotateLeft(Node** root, Node* x);
 
     /**
      * @brief Realiza uma rotação à direita em torno do nó y.
      * @param root Ponteiro para a raiz da árvore.
      * @param y Nó ao redor do qual a rotação será feita.
      */
-    Node* rotateRight(Node* y);
+    void rotateRight(Node** root, Node* y);
 
     /**
      * @brief Calcula a altura de um nó.
