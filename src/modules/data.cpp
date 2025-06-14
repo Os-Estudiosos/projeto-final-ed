@@ -6,13 +6,11 @@ std::vector<std::string> readArchive(std::string spath){
     std::filesystem::path p = std::filesystem::current_path();
     if(!path.is_absolute()){
         path = p / path;
-        std::cout << path <<std::endl;
     }
     char ch;
     std::vector<std::string> data;
     FILE *fp;
-    fp = fopen(path.c_str(), "r");
-    fp = nullptr;
+    fp = fopen(path.string().c_str(), "r");
     if (fp == nullptr) {
         std::cerr << "Erro ao abrir o arquivo:" << path <<std::endl;
         exit(1);
