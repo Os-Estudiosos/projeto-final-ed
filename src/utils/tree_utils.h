@@ -20,6 +20,7 @@ struct BinaryTree
 {
     Node *root;
     Node *NIL; // usado na RBT (Opcional)
+    int height;
 };
 
 struct InsertResult
