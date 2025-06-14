@@ -87,34 +87,20 @@ void printTree(BinaryTree* tree);
 void auxPrintTree(Node *aux, std::string space);
 
 /**
-<<<<<<< HEAD
- * @brief Conta quantas palavras únicas existem numa árvore.
- * @param tree Ponteiro para a árvore onde a busca será realizada.
- * @param words Vetor onde serão armazenadas as palavras. 
-=======
  * @brief Armazena em um vetor todas as palavras presentes na arvore, conta a quantidade de palavras unicas e define a altura da arvore, usando a função countNodesAux
  * @param tree Ponteiro para arvore
  * @param words Ponteiro para o vetor de palavras que será atualizado durante a função
  * @return Retorna a quantidade de palavras unicas
->>>>>>> paths
  */
 int countNodes(BinaryTree* tree, std::vector<std::string> *words);
 
 /**
-<<<<<<< HEAD
- * @brief Função auxiliar para countNodes. Percorre a árvore buscando palavras únicas e ao final também computa a altura da árvore.
- * @param aux ponteiro para o Nó atual da recursão.
- * @param num ponteiro para um inteiro que representa o número de palavras únicas encontradas até o momento.
- * @param height Altura atual do nó.
- * @param tree Ponteiro para a árvore onde a busca será realizada.
-=======
  * @brief Auxilia a função countNodes de forma recursiva
  * @param aux Ponteiro para nó
  * @param num Ponteiro de int que armazena a quantidade de nós na arvore
  * @param words Ponteiro para o vetor de palavras que será atualizado durante a função
  * @param height armazena a altura do nó atual
  * @param tree Ponteiro para arvore, usado para poder alterar sua altura
->>>>>>> paths
  */
 void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree);
 
