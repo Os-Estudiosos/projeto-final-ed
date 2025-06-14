@@ -1,4 +1,5 @@
-#include "../modules/rbt/rbt.h" // Supondo que rbt.h está neste caminho
+#include "../modules/rbt/rbt.h" 
+#include "../utils/tree_utils.h"
 
 // =============== FUNÇÕES AUXILIARES DE TESTE ===============
 
@@ -172,7 +173,7 @@ void tree_structure_tests() {
             RBT::insert(tree, words_to_insert[i], docsIds[i]);
         }
         for (size_t j = 0; j < words_to_insert.size(); j++) {
-            SearchResult result = RBT::search(tree, words_to_insert[j]);
+            SearchResult result = search(tree, words_to_insert[j]);
             if (!result.found || !contains(result.documentIds, docsIds[j])) {
                 RBT::destroy(tree);
                 throw std::runtime_error("Os nos ou doc IDs nao estao sendo inseridos/retornados corretamente.");
@@ -193,7 +194,7 @@ void tree_returns_tests() {
         RBT::insert(tree, "onomatopeia", 0);
         RBT::insert(tree, "digimon", 2);
         RBT::insert(tree, "onomatopeia", 0); // Inserção duplicada
-        SearchResult result = RBT::search(tree, "onomatopeia");
+        SearchResult result = search(tree, "onomatopeia");
         RBT::destroy(tree);
         if (result.documentIds.size() != 1) {
             throw std::runtime_error("A funcao esta inserindo o mesmo documento mais de uma vez.");
@@ -209,7 +210,7 @@ void tree_returns_tests() {
         BinaryTree* tree = RBT::create();
         RBT::insert(tree, "onomatopeia", 0);
         RBT::insert(tree, "onomatopeia", 1); // Mesma palavra, outro doc
-        SearchResult result = RBT::search(tree, "onomatopeia");
+        SearchResult result = search(tree, "onomatopeia");
         RBT::destroy(tree);
         if (result.documentIds.size() != 2 || !contains(result.documentIds, 0) || !contains(result.documentIds, 1)) {
             throw std::runtime_error("A funcao nao esta inserindo documentos novos em palavras existentes.");
@@ -225,7 +226,7 @@ void tree_returns_tests() {
         BinaryTree* tree = RBT::create();
         RBT::insert(tree, "palavra", 0);
         RBT::insert(tree, "", 1); // Tenta inserir string vazia
-        SearchResult result = RBT::search(tree, "");
+        SearchResult result = search(tree, "");
         RBT::destroy(tree);
         if (result.found) {
             throw std::runtime_error("A funcao esta adicionando strings vazias.");

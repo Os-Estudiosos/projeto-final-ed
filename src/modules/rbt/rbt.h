@@ -36,14 +36,6 @@ namespace RBT
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId);
 
     /**
-     * @brief Busca uma palavra na árvore binária de busca.
-     * @param tree Ponteiro para a árvore onde a busca será realizada.
-     * @param word Palavra a ser buscada.
-     * @return SearchResult Estrutura contendo se a palavra foi encontrada (found), a lista de documentIds, o número de comparações (numComparisons), e o tempo de execução (executionTime) em milissegundos.
-     */
-    SearchResult search(BinaryTree *tree, const std::string &word);
-
-    /**
      * @brief Libera toda a memória alocada pela árvore binária de busca.
      * @param tree Ponteiro para a árvore a ser destruída.
      */
