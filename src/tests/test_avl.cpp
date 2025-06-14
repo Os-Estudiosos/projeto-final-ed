@@ -200,7 +200,6 @@ void tree_structure_tests() {
     }
 }
 
-
 void tree_returns_tests() {
     try {
         BinaryTree* tree = AVL::create();
@@ -393,7 +392,6 @@ void tree_returns_tests() {
         printMessage(err.what(), 1);
     }
 }
-
 
 int main() {
     std::cout << "=========================== TESTES ESTRUTURAIS DA ARVORE ===========================" << std::endl;

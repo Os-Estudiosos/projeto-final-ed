@@ -6,7 +6,6 @@
 #include <string>
 // #include <iostream>
 
-
 namespace RBT
 {
     enum Color {RED, BLACK};

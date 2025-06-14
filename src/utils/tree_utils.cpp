@@ -45,7 +45,6 @@ void deleteNode(Node *node)
 
 }
 
-
 void auxPrint(Node *aux, int *num) {
     std::cout<< *num << ". " << aux->word <<": ";
     std::string toPrint = "";

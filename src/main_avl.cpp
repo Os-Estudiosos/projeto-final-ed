@@ -4,7 +4,6 @@
 
 #include <fstream>
 
-
 int main(int argc, char* argv[])
 {
     if (valCLI(argc, argv)){
@@ -149,7 +148,6 @@ int main(int argc, char* argv[])
 
         AVL::destroy(tree);
     }
-
 
     return 0;
 }

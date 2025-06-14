@@ -59,7 +59,6 @@ int computeMinHeight(Node* node);
  */
 void deleteNode(Node* node);
 
-
 /**
 * @brief Usando Pre-ordem, essa função imprime na tela todas as palavras da arvore com os indices dos arquivos em que fazem parte.
 * @param tree Um ponteiro para arvore que terá os indices impressos.

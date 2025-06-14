@@ -5,7 +5,6 @@
 #include <fstream>
 #include <filesystem>
 
-
 int main(int argc, char* argv[])
 {
     if (valCLI(argc, argv)){
@@ -150,6 +149,6 @@ int main(int argc, char* argv[])
         SearchingStats.close();
         RBT::destroy(tree);
     }
-
+    
     return 0;
 }

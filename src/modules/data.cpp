@@ -1,6 +1,5 @@
 #include "data.h"
 
-
 std::vector<std::string> readArchive(std::string spath){
     std::filesystem::path path = spath;
     std::filesystem::path p = std::filesystem::current_path();
