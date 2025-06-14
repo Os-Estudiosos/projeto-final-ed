@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <filesystem>
 
 /**
 *@brief Garantindo que nenhuma letra será maiuscula, acrescenta todas elas em um vetor de string.
@@ -11,3 +12,9 @@
 *@note A função considera como palavra qualquer sequencia de char separados por espaços.
 */
 std::vector<std::string> readArchive(std::string path);
+
+/**
+ * @brief verifica a estrutura correta para gerar o caminho correto para build/stats
+ * @return retorna o caminho absoluto correto para criar a pasta
+ */
+std::filesystem::path pathAbsStats();
