@@ -1,7 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <stdexcept>
 #include "../modules/rbt/rbt.h" // Supondo que rbt.h está neste caminho
 
 // =============== FUNÇÕES AUXILIARES DE TESTE ===============
