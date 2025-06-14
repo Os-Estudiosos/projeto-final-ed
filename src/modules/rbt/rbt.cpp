@@ -10,7 +10,7 @@ namespace RBT
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;  
-        tree->height = 0;                                                 // defino a raiz como nula
+        tree->height = 0;                                                       // defino a raiz como nula
         return tree;                                                            // retorno a árvore criada
     }
 

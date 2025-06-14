@@ -44,7 +44,6 @@ namespace RBT
 
     /**
      * @brief Realiza uma rotação à esquerda em torno do nó x.
-     * 
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó ao redor do qual a rotação será feita.
      */
@@ -52,7 +51,6 @@ namespace RBT
 
     /**
      * @brief Realiza uma rotação à direita em torno do nó y.
-     * 
      * @param root Ponteiro para a raiz da árvore.
      * @param y Nó ao redor do qual a rotação será feita.
      */
@@ -60,7 +58,6 @@ namespace RBT
 
     /**
      * @brief Corrige as violações da propriedade rubro-negra após uma inserção.
-     * 
      * @param root Ponteiro para a raiz da árvore.
      * @param z Nó recém-inserido que pode causar violação.
      */
