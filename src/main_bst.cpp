@@ -93,9 +93,9 @@ int main(int argc, char* argv[])
             cwords += c;
             for (int j = 0;j < c;j++) {
                 InsertResult result = BST::insert(tree, words[j], i);
-                int actual_height = computeHeight(tree->root);
-                int actual_min_height = computeMinHeight(tree->root);
-                InsertingStats << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << actual_height << ";" << actual_min_height << std::endl;
+                // int actual_height = computeHeight(tree->root);
+                // int actual_min_height = computeMinHeight(tree->root);
+                // InsertingStats << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << actual_height << ";" << actual_min_height << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
@@ -115,30 +115,30 @@ int main(int argc, char* argv[])
 
         std::cout << std::endl;
 
-        std::ofstream SearchingStats("./build/stats/bst/bstSearchStats_"+std::to_string(n_docs)+"archives.csv");
+        // std::ofstream SearchingStats("./build/stats/bst/bstSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
-        std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
+        // std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
 
-        SearchingStats << "word;time;comparisions;word_height" << std::endl;
+        // SearchingStats << "word;time;comparisions;word_height" << std::endl;
 
-        SearchResult result;
-        std::string toSearch;
-        long int stime = 0;
-        int scomp = 0;
-        for(int i = 0;i < uwords;i++){
-            toSearch = words[i];
-            result = BST::search(tree, toSearch);
-            stime += result.executionTime;
-            scomp += result.numComparisons;
+        // SearchResult result;
+        // std::string toSearch;
+        // long int stime = 0;
+        // int scomp = 0;
+        // for(int i = 0;i < uwords;i++){
+        //     toSearch = words[i];
+        //     result = BST::search(tree, toSearch);
+        //     stime += result.executionTime;
+        //     scomp += result.numComparisons;
 
-            SearchingStats << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
-        }
-        std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
-        std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
-        std::cout << "Media de comparacoes de busca: " << (float)scomp/uwords << std::endl;
+        //     SearchingStats << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
+        // }
+        // std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
+        // std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
+        // std::cout << "Media de comparacoes de busca: " << (float)scomp/uwords << std::endl;
 
         InsertingStats.close();
-        SearchingStats.close();
+        // SearchingStats.close();
         BST::destroy(tree);
     }
 
