@@ -1,28 +1,28 @@
 #include "tree_utils.h"
 
 int computeHeight(Node *node) {
-    if (node == nullptr) return 0;
-    int left_height = computeHeight(node->left);
-    int right_height = computeHeight(node->right);
+    if (node == nullptr) return 0;                                          // Se o nó é vazio, para
+    int left_height = computeHeight(node->left);                            // Recursão para a esquerda
+    int right_height = computeHeight(node->right);                          // Recursão para a direita 
     
-    if (left_height >= right_height) {
-        return left_height + 1;
+    if (left_height >= right_height) {                                      // Checagem se a altura da esquerda é maior do que a direita
+        return left_height + 1;                                             // Retorna a altura da árvore
     } else {
-        return right_height + 1;
+        return right_height + 1;                                            // Retorna a altura da árvore
     }
 }
 
 int computeMinHeight(Node* node) {
-    if (node == nullptr) return 0;
-    if (node->left == nullptr && node->right == nullptr) return 1;
+    if (node == nullptr) return 0;                                          // Se o nó é vazio, para        
+    if (node->left == nullptr && node->right == nullptr) return 1;          // Se apenas não há filhos, retorna 1
 
-    if (node->left == nullptr) return computeMinHeight(node->right) + 1;
-    if (node->right == nullptr) return computeMinHeight(node->left) + 1;
+    if (node->left == nullptr) return computeMinHeight(node->right) + 1;    // Se o filho à esquerda é inexistente, então aplica a recursão para o filho à direita
+    if (node->right == nullptr) return computeMinHeight(node->left) + 1;    // Se o filho à esquerda é inexistente, então aplica a recursão para o filho à direita
 
-    int h_left = computeMinHeight(node->left);
-    int h_right = computeMinHeight(node->right);
+    int h_left = computeMinHeight(node->left);                              // Aplica a recursão para o filho da esquerda
+    int h_right = computeMinHeight(node->right);                            // Aplica a recursão para o filho da direita
 
-    if (h_left >= h_right) {
+    if (h_left >= h_right) {                                                // Decide qual dos filhos possuem o nó com a maior altura
         return h_right + 1;
     } else {
         return h_left + 1;
@@ -213,10 +213,10 @@ SearchResult search(BinaryTree *tree, const std::string &word)
 }
 
 bool contains(const std::vector<int>& vec, int value) {
-    for (size_t i = 0; i < vec.size(); ++i) {
-        if (vec[i] == value) {
+    for (size_t i = 0; i < vec.size(); ++i) {                               // Processo de iteração do loop
+        if (vec[i] == value) {                                              // Se encontrar o valor no vetor, retorna verdade
             return true;
         }
     }
-    return false;
+    return false;                                                           // Não encontrou, então retorna false
 }
