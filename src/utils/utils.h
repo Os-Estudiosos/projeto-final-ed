@@ -12,4 +12,8 @@
 */
 bool valCLI(int argc, char** argv);
 
+
+/**
+ * @brief Limpa o terminal.
+ */
 void clearTerminal();
