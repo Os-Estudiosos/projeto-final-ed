@@ -64,7 +64,7 @@ namespace AVL
     void recomputeHeight(Node* n)
     {
         if (n != nullptr) {
-            n->height = max(computeHeight(n->left), computeHeight(n->right));
+            n->height = 1 + max(getHeight(n->left), getHeight(n->right));
         }
     }
 
