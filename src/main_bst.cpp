@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            SearchResult result = BST::search(tree, word_to_search);
+            SearchResult result = search(tree, word_to_search);
             
             if (result.found) {
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insert_string;
-        insert_string << "word;time;comparisions\n";
+        insert_string << "word;time;comparisions;treeHeight\n";
         
         int comparacoes = 0;
         long int time = 0;
@@ -96,9 +96,9 @@ int main(int argc, char* argv[])
 
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = BST::insert(tree, words[j], i);
-                // int actual_height = computeHeight(tree->root);
+                int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << std::endl;
+                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        std::cout << "Altura: " << tree->height << std::endl; 
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         
         std::cout << std::endl;
@@ -133,7 +133,7 @@ int main(int argc, char* argv[])
         int scomp = 0;
         for(int i = 0; i < uwords; i++){
             toSearch = words[i];
-            result = BST::search(tree, toSearch);
+            result = search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
 

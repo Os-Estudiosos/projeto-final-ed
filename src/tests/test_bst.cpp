@@ -1,19 +1,10 @@
 #include "../modules/bst/bst.h"
-
+#include "../utils/tree_utils.h"
 
 void printMessage(std::string message, bool breakLine = 0, std::string color_code = "") {
     std::cout << "\033[" << color_code << "m" << message << "\033[m";
     if (breakLine) std::cout << std::endl;
 }
-bool contains(const std::vector<int>& vec, int value) {
-    for (size_t i = 0; i < vec.size(); ++i) {
-        if (vec[i] == value) {
-            return true;
-        }
-    }
-    return false;
-}
-
 
 void tree_structure_tests() {
     try {
@@ -58,7 +49,7 @@ void tree_structure_tests() {
         }
 
         for (long unsigned int j = 0; j < words_to_insert.size(); j++) {
-            SearchResult result = BST::search(tree, words_to_insert[j]);
+            SearchResult result = search(tree, words_to_insert[j]);
             if (!result.found) {
                 BST::destroy(tree);
                 throw std::runtime_error("Os nos nao estao sendo inseridos corretamente");
@@ -116,8 +107,8 @@ void tree_returns_tests() {
         BST::insert(tree, "onomatopeia", 0);
         BST::insert(tree, "digimon", 2);
 
-        SearchResult result1 = BST::search(tree, "onomatopeia");
-        SearchResult result2 = BST::search(tree, "digimon");
+        SearchResult result1 = search(tree, "onomatopeia");
+        SearchResult result2 = search(tree, "digimon");
 
         BST::destroy(tree);
         if (result1.documentIds.size() != 1 || result2.documentIds.size() != 1) {
@@ -143,8 +134,8 @@ void tree_returns_tests() {
         BST::insert(tree, "onomatopeia", 1);
         BST::insert(tree, "panorama", 5);
 
-        SearchResult result1 = BST::search(tree, "onomatopeia");
-        SearchResult result2 = BST::search(tree, "panorama");
+        SearchResult result1 = search(tree, "onomatopeia");
+        SearchResult result2 = search(tree, "panorama");
 
         BST::destroy(tree);
         if (!contains(result1.documentIds, 1) || !contains(result2.documentIds, 5)) {
@@ -169,7 +160,7 @@ void tree_returns_tests() {
 
         BST::insert(tree, "", 0);
 
-        SearchResult result = BST::search(tree, "");
+        SearchResult result = search(tree, "");
 
         BST::destroy(tree);
         if (result.found) {

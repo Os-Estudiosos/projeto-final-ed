@@ -111,66 +111,6 @@ namespace BST
         }
     }
 
-    SearchResult search(BinaryTree *tree, const std::string &word)
-    {
-        auto start = std::chrono::high_resolution_clock::now();                 // inicio a contagem do tempo
-
-        SearchResult result_search;                                             // inicio a struct search result
-        result_search.found = 0;                                                // inicio genéricamente os atributos 
-        result_search.numComparisons = 0;
-        result_search.executionTime = 0;
-        result_search.documentIds = std::vector<int>{};                         // inicio um vetor vazio ao vetor de documentos
-
-        if (tree == nullptr)                                                    // se a árvore for vazia
-        {
-            return result_search;                                               // apenas retorno a estrutura genérica criada antes  
-        }                                                                       // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
-
-        if (tree->root == nullptr)                                              // caso a árvore exista mas a raiz seja nula  
-        {
-            auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-            double time_ms = duration.count();                                  // mudamos para double
-            result_search.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
-            return result_search;                                               // retornamos a struct alterada
-        }
-        else                                                                    // caso exista a árvore e exista algum nó
-        {
-            Node *current = tree->root;                                         // salvo o nó raiz
-            while (current != nullptr)                                          // enquanto o nó não for nulo
-            {
-                if (word == current->word)                                      // verifico se a palavra atual é igual a palavra procurada
-                {
-                    result_search.numComparisons += 1;                          // incremento ao número de comparações
-                    result_search.found = 1;                                    // altero o found, sinalizando que a palavra foi encontrada
-                    result_search.documentIds = current->documentIds;           // altero o vetor de documentos para ser o vetor da palavra encontrada
-                    auto end = std::chrono::high_resolution_clock::now();       // encerramos a contagem de tempo
-                    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-                    double time_ms = duration.count();                          // mudamos para double
-                    result_search.executionTime = time_ms;                      // alteramos o atributo do tempo de execução 
-                    return result_search;                                       // retornamos a struct alterada
-                }
-                else if (word > current->word)                                  // caso a palavra não seja igual ao nó atual e seja "maior"
-                {
-                    result_search.numComparisons += 1;                          // incrementamos o número de comparações
-                    current = current->right;                                   // atualizo o current para direita pela palavra ser "maior"
-                }
-                else                                                            // caso contrário (palavra menor que o nó atual)
-                {
-                    result_search.numComparisons += 1;                          // incrementamos o número de comparações
-                    current = current->left;                                    // atualizo o current para esquerda pela palavra ser "menor"
-                }
-            }
-
-            // note que se não acharmos a palavra na árvore, apenas retornaremos a struct search result como definida inicialmente, a menos de mudar o tempo
-            auto end = std::chrono::high_resolution_clock::now();               // portanto, encerramos a contagem de tempo
-            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-            double time_ms = duration.count();                                  // mudamos para double
-            result_search.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
-            return result_search;                                               // retornamos a struct alterada
-        }
-    }
-
     void destroy(BinaryTree *tree)
     {
         if (tree == nullptr)                                                    // caso a árvore seja nula, não há nada a ser deletado 
