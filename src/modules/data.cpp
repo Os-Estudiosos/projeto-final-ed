@@ -12,7 +12,6 @@ std::vector<std::string> readArchive(std::string spath){
     std::vector<std::string> data;
     FILE *fp;
     fp = fopen(path.c_str(), "r");
-    fp = nullptr;
     if (fp == nullptr) {
         std::cerr << "Erro ao abrir o arquivo:" << path <<std::endl;
         exit(1);
