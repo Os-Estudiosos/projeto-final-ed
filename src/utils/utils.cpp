@@ -11,7 +11,6 @@ void searchMsg(){
 }
 
 bool valCLI(int argc, char** argv){
-
     if(argc != 4 || (strcmp(argv[1],"search") && strcmp(argv[1], "stats"))){
         std::cout<<"Argumentos invalidos, por favor usar:\n"<< argv[0]
         << " search <n_docs> <diretorio> \t \"para realizar busca por palavras\"\n" <<
