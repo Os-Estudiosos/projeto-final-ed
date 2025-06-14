@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstring>
 #include <filesystem>
+#include <fstream>
 
 /**
 * @brief Garantindo que nenhuma letra será maiuscula, acrescenta todas elas em um vetor de string.

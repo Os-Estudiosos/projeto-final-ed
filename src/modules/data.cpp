@@ -3,20 +3,27 @@
 std::vector<std::string> readArchive(std::string spath){
     std::filesystem::path path = spath;
     std::filesystem::path p = std::filesystem::current_path();
+    // Verifica se o caminho é absoluto
     if(!path.is_absolute()){
-        path = p / path;
+        path = p / path;        // Concatena o caminho absoluto com o caminho relativo dado
     }
     char ch;
     std::vector<std::string> data;
     FILE *fp;
-    fp = fopen(path.string().c_str(), "r");
+    
+    // Abre o arquivo no modo leitura
+    fp = fopen(path.c_str(), "r");
+    
+    // Caso dê problema retorna erro informando qual arquivo não foi possível ler
     if (fp == nullptr) {
         std::cerr << "Erro ao abrir o arquivo:" << path <<std::endl;
         exit(1);
     }
     std::string w;
+
+    // Junta os char do arquivos para formar palavras
     while ((ch = fgetc(fp)) != EOF) {
-        if(ch == ' '){
+        if(ch == ' '){                  //quando encontrar um espaço a palavra termina
             data.push_back(w);
             w = "";
             continue;
@@ -41,11 +48,12 @@ std::filesystem::path pathAbsStats() {
         }
     }
 
+    // Se "build" não foi encontrada, considera que estamos no diretorio raiz do projeto
     if (caminhoBuild.filename() != "build") {
-        // Se "build" não foi encontrada, considera que estamos no diretorio raiz do projeto
         caminhoBuild = atual / "build";
     }
 
+    // Termina de montar o caminho absoluto e retorna
     std::filesystem::path caminhoFinal = caminhoBuild / "stats/";
     return std::filesystem::absolute(caminhoFinal);
 }

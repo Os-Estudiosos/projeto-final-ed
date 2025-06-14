@@ -48,14 +48,20 @@ void deleteNode(Node *node)
 void auxPrint(Node *aux, int *num) {
     std::cout<< *num << ". " << aux->word <<": ";
     std::string toPrint = "";
-
-    for(long unsigned int i = 0; i < aux->documentIds.size(); i++){
+    int size = aux->documentIds.size();
+    // Armazena todos os ids referentes a uma palavras em uma string
+    for(int i = 0; i < size; i++){
         toPrint += std::to_string(aux->documentIds[i]) + ", ";
     }
+    // Apaga os dois ultimos elementos da string formada acima
     toPrint.erase(toPrint.size() - 2, 2);
+
     std::cout << toPrint << std::endl;
+
+    // Acrescenta na contagem de palavras
     *num += 1;
 
+    // Chama de forma recursiva para imprimir os próximos nós
     if(aux->left != nullptr){
         auxPrint(aux->left, num);
     } 
@@ -68,6 +74,7 @@ void printIndex(BinaryTree* tree) {
     Node *aux = tree->root;
     int count = 1;
     
+    // Chama a função auxPrint para que imprima os indices
     if(aux != nullptr){
         auxPrint(aux, &count);
     }
@@ -75,22 +82,18 @@ void printIndex(BinaryTree* tree) {
 
 void auxPrintTree(Node *aux, std::string space){
     if(aux->left != nullptr) {
-        std::string folderRep = "|--";
-        if(aux->right == nullptr){
-            folderRep = "|--";
-            std::cout << space << folderRep << aux->left->word << std::endl;
-            auxPrintTree(aux->left,space + "   ");
-        } else{
-        std::cout << space << folderRep << aux->left->word << std::endl;
+        std::cout << space << "|--" << aux->left->word << std::endl;
         auxPrintTree(aux->left,space + "|  ");
-        }
     }
     if(aux->right != nullptr) {
         std::cout << space << "|--" << aux->right->word << std::endl;
+        
         int n = space.size();
         std::string space2 = "";
         std::string tmp = "";
         int c = 0;
+
+        // Encontra o | e o apaga para que faça sentido seu uso quando não existirá mais um nó irmão
         for(int i = n; i > -1; i++){
             tmp = "";
             tmp += space[i];
@@ -99,6 +102,7 @@ void auxPrintTree(Node *aux, std::string space){
                 break;
             }
         }
+        
         for(int i = 0; i < c ; i++){
             space2 += space[i];
         }
@@ -106,6 +110,7 @@ void auxPrintTree(Node *aux, std::string space){
             space2 += " ";
         }
         
+        // Continua de forma recursiva com o espaço correto
         auxPrintTree(aux->right,space2 + "   ");
     }
 
@@ -113,7 +118,7 @@ void auxPrintTree(Node *aux, std::string space){
 
 void printTree(BinaryTree* tree) {
     Node *aux = tree->root;
-
+    // Usa auxPrintTree para fazer a impressão da arvore
     if(aux != nullptr){
         std::cout << aux->word << std::endl;
         auxPrintTree(aux, "");
@@ -126,7 +131,7 @@ int countNodes(BinaryTree* tree, std::vector<std::string> *words) {
     }
     Node *aux = tree->root;
     int count = 1;
-
+    // usa countNodesAux para contar a quantidade de nós e armazenar a quantidade de palavras
     if(aux != nullptr){
         words->push_back(aux->word);
         countNodesAux(aux, &count, words, 0, tree);
@@ -137,11 +142,13 @@ int countNodes(BinaryTree* tree, std::vector<std::string> *words) {
 void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree) {
     *num += 1;
     height += 1;
+    // Calcula a altura da arvore e caso seja maior que a atual, atualiza para a estrutura
     if (tree->height < height)
     {
         tree->height = height;
     }
 
+    // Salva as palavras de cada nó no vetor e continua assim de forma recursiva
     if(aux->left != nullptr){
         words->push_back(aux->word);
         countNodesAux(aux->left, num, words, height, tree);

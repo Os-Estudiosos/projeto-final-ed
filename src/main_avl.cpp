@@ -2,8 +2,6 @@
 #include "modules/data.h"
 #include "utils/utils.h"
 
-#include <fstream>
-
 int main(int argc, char* argv[])
 {
     if (valCLI(argc, argv)){
