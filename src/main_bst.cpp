@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
                 InsertResult result = BST::insert(tree, words[j], i);
                 int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << std::endl;
+                insert_string << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << actual_height << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
         std::ofstream SearchingStats("./build/stats/bst/bstSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::stringstream search_string;
-        search_string << "word; time; comparisions; word_height" << std::endl;
+        search_string << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
             stime += result.executionTime;
             scomp += result.numComparisons;
 
-            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+            search_string << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
         }
 
         SearchingStats << search_string.str();

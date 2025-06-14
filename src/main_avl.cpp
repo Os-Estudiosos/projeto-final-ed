@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = AVL::insert(tree, words[j], i);
-                int actual_height = computeHeight(tree->root);
+                int actual_height = tree->root->height;
                 // int actual_min_height = computeMinHeight(tree->root);
                 insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; "<< actual_height << std::endl;
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << tree->height << std::endl;
+        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         
         std::cout << std::endl;
