@@ -53,7 +53,7 @@ void auxPrint(Node *aux, int *num) {
     for(int i = 0; i < size; i++){
         toPrint += std::to_string(aux->documentIds[i]) + ", ";
     }
-    // Apaga os dois ultimos elementos da string formada acima
+    // Apaga os dois ultimos elementos da string formada acima, uma vez que eles serão com certeza ", "
     toPrint.erase(toPrint.size() - 2, 2);
 
     std::cout << toPrint << std::endl;
