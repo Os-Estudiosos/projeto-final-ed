@@ -5,15 +5,6 @@ void printMessage(std::string message, bool breakLine = 0, std::string color_cod
     std::cout << "\033[" << color_code << "m" << message << "\033[m";
     if (breakLine) std::cout << std::endl;
 }
-bool contains(const std::vector<int>& vec, int value) {
-    for (size_t i = 0; i < vec.size(); ++i) {
-        if (vec[i] == value) {
-            return true;
-        }
-    }
-    return false;
-}
-
 
 void tree_structure_tests() {
     try {

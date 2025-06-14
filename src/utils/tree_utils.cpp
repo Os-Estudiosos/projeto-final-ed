@@ -212,3 +212,12 @@ SearchResult search(BinaryTree *tree, const std::string &word)
         return result_search;                                               // retornamos a struct alterada
     }
 }
+
+bool contains(const std::vector<int>& vec, int value) {
+    for (size_t i = 0; i < vec.size(); ++i) {
+        if (vec[i] == value) {
+            return true;
+        }
+    }
+    return false;
+}

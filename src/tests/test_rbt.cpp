@@ -14,21 +14,6 @@ void printMessage(const std::string& message, bool breakLine = false, const std:
     if (breakLine) std::cout << std::endl;
 }
 
-/**
- * @brief Verifica se um valor está contido em um vetor de inteiros.
- * @param vec O vetor a ser verificado.
- * @param value O valor a ser procurado.
- * @return true se o valor for encontrado, false caso contrário.
- */
-bool contains(const std::vector<int>& vec, int value) {
-    for (int item : vec) {
-        if (item == value) {
-            return true;
-        }
-    }
-    return false;
-}
-
 // =============== FUNÇÕES DE VALIDAÇÃO DA RBT ===============
 
 // Protótipos das funções de validação para que possam chamar umas às outras.

@@ -98,3 +98,11 @@ void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int hei
  * @return SearchResult Estrutura contendo se a palavra foi encontrada (found), a lista de documentIds, o número de comparações (numComparisons), e o tempo de execução (executionTime) em milissegundos.
  */
 SearchResult search(BinaryTree *tree, const std::string &word);
+
+/**
+ * @brief Verifica se um valor está contido em um vetor de inteiros.
+ * @param vec O vetor a ser verificado.
+ * @param value O valor a ser procurado.
+ * @return true se o valor for encontrado, false caso contrário.
+ */
+bool contains(const std::vector<int>& vec, int value);
