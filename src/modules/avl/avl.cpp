@@ -4,7 +4,6 @@
 
 namespace AVL
 {
-
     // Auxiliares
     BinaryTree* create()
     {
@@ -13,7 +12,6 @@ namespace AVL
 
         return tree;                                                            // retorno a árvore criada
     }
-
 
     Node* createNode(int documentId, const std::string &word)
     {
@@ -27,7 +25,6 @@ namespace AVL
         
         return node;  
     }
-
 
     void destroy(BinaryTree *tree)
     {
@@ -48,18 +45,15 @@ namespace AVL
         }
     }
 
-
     int max(int a, int b) 
     {
         return (a > b) ? a : b;                                                // Retorna o maior entre a e b
     }
 
-
     int getHeight(Node* n) 
     {
         return n == nullptr ? 0 : n->height;
     }
-
 
     void recomputeHeight(Node* n)
     {
@@ -67,7 +61,6 @@ namespace AVL
             n->height = 1 + max(getHeight(n->left), getHeight(n->right));
         }
     }
-
 
     void rotateLeft(Node** root, Node* x)
     {
@@ -91,7 +84,6 @@ namespace AVL
         x->parent = y;                                                          // atualiza o pai de x para ser y
     }
 
-
     void rotateRight(Node** root, Node* y)
     {
         Node* x = y->left;                                                      // x será o novo pai de y após a rotação
@@ -113,7 +105,6 @@ namespace AVL
         x->right = y;                                                           // y vira filho à direita de x
         y->parent = x;                                                          // atualiza o pai de y para ser x
     }
-
 
     void fixInsert(Node **root, Node* z)
     {
@@ -170,7 +161,6 @@ namespace AVL
             isEqual(root1->right, root2->right);
     }
 
-    
     // Principais
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {

@@ -1,6 +1,5 @@
 #include "data.h"
 
-
 std::vector<std::string> readArchive(std::string spath){
     std::filesystem::path path = spath;
     std::filesystem::path p = std::filesystem::current_path();
@@ -10,7 +9,7 @@ std::vector<std::string> readArchive(std::string spath){
     char ch;
     std::vector<std::string> data;
     FILE *fp;
-    fp = fopen(path.c_str(), "r");
+    fp = fopen(path.string().c_str(), "r");
     if (fp == nullptr) {
         std::cerr << "Erro ao abrir o arquivo:" << path <<std::endl;
         exit(1);

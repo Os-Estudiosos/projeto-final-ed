@@ -4,16 +4,13 @@
 
 namespace RBT
 {
-
-
     BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;  
-        tree->height = 0;                                                 // defino a raiz como nula
+        tree->height = 0;                                                       // defino a raiz como nula
         return tree;                                                            // retorno a árvore criada
     }
-
 
     Node* createNode(int documentId, const std::string &word, Color color)
     {
@@ -27,7 +24,6 @@ namespace RBT
         
         return node;  
     }
-
 
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId)
     {
@@ -142,7 +138,6 @@ namespace RBT
         }
     }
 
-
         void rotateLeft(Node** root, Node* x)
     {
         Node* y = x->right;                                                     // y será o novo pai de x após a rotação
@@ -165,7 +160,6 @@ namespace RBT
         x->parent = y;                                                          // atualiza o pai de x para ser y
     }
 
-
     void rotateRight(Node** root, Node* y)
     {
         Node* x = y->left;                                                      // x será o novo pai de y após a rotação
@@ -187,7 +181,6 @@ namespace RBT
         x->right = y;                                                           // y vira filho à direita de x
         y->parent = x;                                                          // atualiza o pai de y para ser x
     }
-
 
     void fixInsert(Node **root, Node* z)
     {
@@ -254,5 +247,4 @@ namespace RBT
 
         (*root)->isRed = BLACK;                                               // a raiz da árvore deve sempre ser preta
     }
-
 }
