@@ -50,21 +50,17 @@ if __name__ == "__main__":
             files[wich_tree][type_of_archive] = archive
 
     if files["bst"]["search"] is not None and files["bst"]["insert"] is not None:
-        # bst_insert_process = mp.Process(
-        #    target=generate_bst_insert_graphics,
-        #    args=(os.path.join(DATA_PATH, 'bst', files['bst']['insert']), GRAPHICS_PATH)
-        # )
-        generate_bst_insert_graphics(
-            os.path.join(DATA_PATH, 'bst', files['bst']['insert']),
-            GRAPHICS_PATH
+        bst_insert_process = mp.Process(
+           target=generate_bst_insert_graphics,
+           args=(os.path.join(DATA_PATH, 'bst', files['bst']['insert']), GRAPHICS_PATH)
         )
-        # bst_search_process = mp.Process(
-        #    target=generate_bst_search_graphics,
-        #    args=(os.path.join(DATA_PATH, 'bst', files['bst']['search']), GRAPHICS_PATH)
-        # )
+        bst_search_process = mp.Process(
+           target=generate_bst_search_graphics,
+           args=(os.path.join(DATA_PATH, 'bst', files['bst']['search']), GRAPHICS_PATH)
+        )
 
-        # bst_insert_process.start()
-        # bst_search_process.start()
+        bst_insert_process.start()
+        bst_search_process.start()
 
-        # bst_insert_process.join()
-        # bst_search_process.join()
+        bst_insert_process.join()
+        bst_search_process.join()

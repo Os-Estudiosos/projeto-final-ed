@@ -14,15 +14,12 @@ def generate_bst_insert_graphics(path: str, graphics_path: str):
         path (str): Statistics path
         graphics_path (str): Graphics directory path
     """
-    # Gerando os gráficos da BST
-    print("Inicio")
-
     insertion_infos = pd.read_csv(path, sep=";")
 
     plot_df = insertion_infos.groupby(by="word").median().tail(500)
     ordered_indexes = plot_df.sort_values(by="time").index
 
-    plt.title("Histograma da mediana do tempo de Inserção")
+    plt.title("Histograma da Mediana do Tempo de Inserção (BST)")
 
     sns.barplot(
         data=plot_df,
@@ -38,8 +35,8 @@ def generate_bst_insert_graphics(path: str, graphics_path: str):
 
     plt.xticks([])
 
-    # plt.savefig(os.path.join(graphics_path, "Insertion_Time_Median.png"))
-    plt.show()
+    plt.savefig(os.path.join(graphics_path, "Insertion_Time_Median.png"))
+    plt.close()
 
 
 @execution_time
