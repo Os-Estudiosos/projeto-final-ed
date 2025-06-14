@@ -109,7 +109,8 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        // std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        std::cout << "Altura: " << tree->height << std::endl; 
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
 
 

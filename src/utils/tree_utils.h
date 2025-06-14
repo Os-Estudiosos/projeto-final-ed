@@ -89,4 +89,4 @@ void printTree(BinaryTree* tree);
 void auxPrintTree(Node *aux, std::string space);
 
 int countNodes(BinaryTree* tree, std::vector<std::string> *words);
-void countNodesAux(Node *aux, int *num, std::vector<std::string> *words);
+void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree);

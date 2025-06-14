@@ -130,19 +130,25 @@ int countNodes(BinaryTree* tree, std::vector<std::string> *words) {
 
     if(aux != nullptr){
         words->push_back(aux->word);
-        countNodesAux(aux, &count, words);
+        countNodesAux(aux, &count, words, 0, tree);
     }
     return count;
 }
-void countNodesAux(Node *aux, int *num, std::vector<std::string> *words) {
+
+void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree) {
     *num += 1;
+    height += 1;
+    if (tree->height < height)
+    {
+        tree->height = height;
+    }
 
     if(aux->left != nullptr){
         words->push_back(aux->word);
-        countNodesAux(aux->left, num, words);
+        countNodesAux(aux->left, num, words, height, tree);
     } 
     if(aux->right != nullptr){
         words->push_back(aux->word);
-        countNodesAux(aux->right, num, words);
+        countNodesAux(aux->right, num, words, height, tree);
     }
 }

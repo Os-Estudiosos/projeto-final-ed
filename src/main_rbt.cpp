@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
         int cwords = 0;
         int c = 0;
         for (int i = 0; i < n_docs; i++) {
-            std::cout<<"Documento "<<i<<"\n";
+            // if std::cout<<"Documento "<<i<<"\n";
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             c = words.size();
@@ -105,15 +105,14 @@ int main(int argc, char* argv[])
         int uwords = countNodes(tree, &words);
 
         std::cout << "=====================\033[36mESTATÍSTICAS DE INSERÇÃO\033[m=====================" << std::endl;
-        std::cout << "Tempo de execucao: " << (float)time/1e9 << " segundos" << std::endl;
+        std::cout << "Tempo de execucao: " << (float)time / 1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        std::cout << "Altura: " << tree->height <<std::endl;
+        // std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
-
-
         std::cout << std::endl;
 
         std::ofstream SearchingStats("./build/stats/RBT/RBTSearchStats_"+std::to_string(n_docs)+"archives.csv");
