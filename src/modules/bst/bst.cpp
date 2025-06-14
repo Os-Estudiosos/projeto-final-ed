@@ -8,6 +8,7 @@ namespace BST
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;                                                   // defino a raiz como nula
+        tree->height = 0;                                                       // inicio a altura como 0
         return tree;                                                            // retorno a árvore criada
     }
 
@@ -32,6 +33,7 @@ namespace BST
             tree->root->parent = nullptr;                                       // alocamos o restante como null, pois é raiz
             tree->root->left = nullptr;
             tree->root->right = nullptr;
+            tree->root->depth = 0;                                              // profundidade da raiz é 0
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
@@ -90,6 +92,7 @@ namespace BST
             newNode->right = nullptr;
             newNode->documentIds.push_back(documentId);                         // adiciono o id do documento ao seu vetor
             newNode->word = word;                                               // incremento a palavra sendo a palavra
+            newNode->depth = newNode->parent->depth + 1;                        // a profundidade do novo nó sera a profundidade do pai mais um
 
             // por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // se for "maior"
@@ -101,6 +104,11 @@ namespace BST
             {
                 result_insert.numComparisons += 1;                              // incrementamos o número de comparações
                 last->left = newNode;                                           // alteramos o nó da esquerda do pai como o nó que criamos
+            }
+
+            if (tree->height < newNode->depth)                                  //  Enfim, se a altura da árvore for menor que a profundidade do novo nó adicionado
+            {
+                tree->height = newNode->depth;                                  // então a altura da raiz (árvore) é a nova maior profundidade
             }
 
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo

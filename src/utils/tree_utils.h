@@ -12,6 +12,7 @@ struct Node
     Node *parent;
     Node *left;
     Node *right;
+    int depth; 
     int height; // usado na AVL
     int isRed;  // usado na RBT
 };
