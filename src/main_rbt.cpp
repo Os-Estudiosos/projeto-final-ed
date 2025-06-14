@@ -79,7 +79,9 @@ int main(int argc, char* argv[])
         std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
-        InsertingStats << "word; time; comparisions; height; min_height" << std::endl;
+        std::stringstream insert_string;
+        insert_string << "word;time;comparisions\n";
+        
         int comparacoes = 0;
         long int time = 0;
         int cwords = 0;
@@ -89,20 +91,25 @@ int main(int argc, char* argv[])
             std::vector<std::string> words = readArchive(archive_path);
             c = words.size();
             cwords += c;
+
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = RBT::insert(tree, words[j], i);
                 // int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
-                // InsertingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << "; " << actual_min_height << std::endl;         
+                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << std::endl;
+
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
         }
+        
+        InsertingStats << insert_string.str();
+
         std::vector<std::string> words;
         int uwords = countNodes(tree, &words);
 
         std::cout << "=====================\033[36mESTATÍSTICAS DE INSERÇÃO\033[m=====================" << std::endl;
-        std::cout << "Tempo de execucao: " << (float)time/1e9 << " segundos" << std::endl;
+        std::cout << "Tempo de Inserção: " << (float)time/1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
@@ -112,31 +119,33 @@ int main(int argc, char* argv[])
         
         std::cout << std::endl;
 
-        std::cout << std::endl;
+        std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
+        std::ofstream SearchingStats("./build/stats/rbt/rbtSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
-        // std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
-        // std::ofstream SearchingStats("./build/stats/rbt/rbtSearchStats_"+std::to_string(n_docs)+"archives.csv");
-        // SearchingStats << "word; time; comparisions; word_height" << std::endl;
+        std::stringstream search_string;
+        search_string << "word; time; comparisions; word_height" << std::endl;
 
-        // SearchResult result;
-        // std::string toSearch;
-        // long int stime = 0;
-        // int scomp = 0;
-        // for(int i = 0; i < uwords; i++){
-        //     toSearch = words[i];
-        //     result = RBT::search(tree, toSearch);
-        //     stime += result.executionTime;
-        //     scomp += result.numComparisons;
+        SearchResult result;
+        std::string toSearch;
+        long int stime = 0;
+        int scomp = 0;
+        for(int i = 0; i < uwords; i++){
+            toSearch = words[i];
+            result = RBT::search(tree, toSearch);
+            stime += result.executionTime;
+            scomp += result.numComparisons;
 
-        //     SearchingStats << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
-        // }
+            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+        }
 
-        // std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
-        // std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
-        // std::cout << "Media de comparacoes de busca: " << (float)scomp/uwords << std::endl;
+        SearchingStats << search_string.str();
+
+        std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
+        std::cout << "Media tempo de busca: " << (float)stime/(uwords*1e9) << " segundos" << std::endl;
+        std::cout << "Media de comparacoes de busca: " << (float)scomp/uwords << std::endl;
 
         InsertingStats.close();
-        // SearchingStats.close();
+        SearchingStats.close();
 
         RBT::destroy(tree);
     }
