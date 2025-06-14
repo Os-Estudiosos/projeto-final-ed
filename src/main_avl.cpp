@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            SearchResult result = AVL::search(tree, word_to_search);
+            SearchResult result = search(tree, word_to_search);
             
             if (result.found) {
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
         int scomp = 0;
         for(int i = 0; i < uwords; i++){
             toSearch = words[i];
-            result = AVL::search(tree, toSearch);
+            result = search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
 

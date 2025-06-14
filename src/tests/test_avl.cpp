@@ -1,4 +1,5 @@
 #include "../modules/avl/avl.h"
+#include "../utils/tree_utils.h"
 
 void printMessage(std::string message, bool breakLine = 0, std::string color_code = "") {
     std::cout << "\033[" << color_code << "m" << message << "\033[m";
@@ -57,7 +58,7 @@ void tree_structure_tests() {
         }
 
         for (long unsigned int j = 0; j < words_to_insert.size(); j++) {
-            SearchResult result = AVL::search(tree, words_to_insert[j]);
+            SearchResult result = search(tree, words_to_insert[j]);
             if (!result.found) {
                 AVL::destroy(tree);
                 throw std::runtime_error("Os nos nao estao sendo inseridos corretamente");
@@ -221,8 +222,8 @@ void tree_returns_tests() {
         AVL::insert(tree, "onomatopeia", 0);
         AVL::insert(tree, "digimon", 2);
 
-        SearchResult result1 = AVL::search(tree, "onomatopeia");
-        SearchResult result2 = AVL::search(tree, "digimon");
+        SearchResult result1 = search(tree, "onomatopeia");
+        SearchResult result2 = search(tree, "digimon");
 
         AVL::destroy(tree);
         if (result1.documentIds.size() != 1 || result2.documentIds.size() != 1) {
@@ -248,8 +249,8 @@ void tree_returns_tests() {
         AVL::insert(tree, "onomatopeia", 1);
         AVL::insert(tree, "panorama", 5);
 
-        SearchResult result1 = AVL::search(tree, "onomatopeia");
-        SearchResult result2 = AVL::search(tree, "panorama");
+        SearchResult result1 = search(tree, "onomatopeia");
+        SearchResult result2 = search(tree, "panorama");
 
         AVL::destroy(tree);
         if (!contains(result1.documentIds, 1) || !contains(result2.documentIds, 5)) {
@@ -274,7 +275,7 @@ void tree_returns_tests() {
 
         AVL::insert(tree, "", 0);
 
-        SearchResult result = AVL::search(tree, "");
+        SearchResult result = search(tree, "");
 
         AVL::destroy(tree);
         if (result.found) {

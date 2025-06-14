@@ -1,7 +1,6 @@
 #include "modules/bst/bst.h"
 #include "modules/data.h"
 #include "utils/utils.h"
-#include "utils/tree_utils.h"
 
 #include <fstream>
 #include <filesystem>
