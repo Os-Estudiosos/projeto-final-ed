@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
@@ -47,5 +48,14 @@ if files["bst"]["search"] is not None and files["bst"]["insert"] is not None:
     insertion_infos = pd.read_csv(os.path.join(DATA_PATH, 'bst', files['bst']['insert']), sep=";")
     search_infos = pd.read_csv(os.path.join(DATA_PATH, 'bst', files['bst']['search']), sep=";")
 
-    sns.barplot(data=insertion_infos, x="word", y="time", estimator="mean")
-    plt.show()
+    print(search_infos)
+
+    # plt.title("Histograma da mediana do tempo de Inserção")
+    # sns.barplot(
+    #     data=insertion_infos,
+    #     x="word",
+    #     y="time",
+    #     estimator=np.median,
+    # )
+    # plt.xticks([])
+    # plt.show()
