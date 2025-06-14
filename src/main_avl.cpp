@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insert_string;
-        insert_string << "word;time;comparisions\n";
+        insert_string << "word;time;comparisions;treeHeight\n";
         
         int comparacoes = 0;
         long int time = 0;
@@ -94,9 +94,9 @@ int main(int argc, char* argv[])
 
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = AVL::insert(tree, words[j], i);
-                // int actual_height = computeHeight(tree->root);
+                int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << std::endl;
+                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; "<< actual_height << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;

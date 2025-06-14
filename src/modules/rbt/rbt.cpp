@@ -137,8 +137,7 @@ namespace RBT
         else                                                                    // por fim, se a árvore exita e tenha nós
         {
             Node *root = tree->root;                                            // salvamos o nó raiz
-            deleteNode(root);                                                   // usamos uma função auxiliar que deleta toda a árvore recursivamente
-                                                                                // (só deleta o pai após deletar os filhos)
+            deleteNode(root);                                                   // usamos uma função auxiliar que deleta toda a árvore recursivamente                                                                 // (só deleta o pai após deletar os filhos)
             delete tree;                                                        // deletamos a árvore
         }
     }
