@@ -1,6 +1,7 @@
 #include "modules/bst/bst.h"
 #include "modules/data.h"
 #include "utils/utils.h"
+#include "utils/tree_utils.h"
 
 #include <fstream>
 #include <filesystem>
@@ -45,7 +46,7 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            SearchResult result = BST::search(tree, word_to_search);
+            SearchResult result = search(tree, word_to_search);
             
             if (result.found) {
                 std::cout << "Sua palavra foi \033[92mENCONTRADA\033[m!" << std::endl;
@@ -109,7 +110,6 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        // std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
         std::cout << "Altura: " << tree->height << std::endl; 
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
 
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
         int scomp = 0;
         for(int i = 0; i < uwords; i++){
             toSearch = words[i];
-            result = BST::search(tree, toSearch);
+            result = search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
 

@@ -90,3 +90,11 @@ void auxPrintTree(Node *aux, std::string space);
 
 int countNodes(BinaryTree* tree, std::vector<std::string> *words);
 void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree);
+
+/**
+ * @brief Busca uma palavra na árvore binária de busca.
+ * @param tree Ponteiro para a árvore onde a busca será realizada.
+ * @param word Palavra a ser buscada.
+ * @return SearchResult Estrutura contendo se a palavra foi encontrada (found), a lista de documentIds, o número de comparações (numComparisons), e o tempo de execução (executionTime) em milissegundos.
+ */
+SearchResult search(BinaryTree *tree, const std::string &word);
