@@ -74,14 +74,14 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = RBT::create();
 
-        std::filesystem::create_directories("./build/stats/RBT/");
-        std::ofstream InsertingStats("./build/stats/RBT/RBTInsertStats_"+std::to_string(n_docs)+"archives.csv");
+        std::filesystem::create_directories("./build/stats/rbt/");
+        std::ofstream InsertingStats("./build/stats/rbt/rbtInsertStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insert_string;
-        insert_string << "word;time;comparisions;treeHeight\n";
+        insert_string << "word;time;comparisions;treeHeight;algorithm\n";
         
         int comparacoes = 0;
         long int time = 0;
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = RBT::insert(tree, words[j], i);
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << std::endl;
+                insert_string << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << actual_height << ";" << "RBT" << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
         std::ofstream SearchingStats("./build/stats/rbt/rbtSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::stringstream search_string;
-        search_string << "word; time; comparisions; word_height" << std::endl;
+        search_string << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
             stime += result.executionTime;
             scomp += result.numComparisons;
 
-            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+            search_string << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
         }
 
         SearchingStats << search_string.str();

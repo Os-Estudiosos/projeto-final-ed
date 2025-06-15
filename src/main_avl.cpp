@@ -79,23 +79,23 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insert_string;
-        insert_string << "word;time;comparisions;treeHeight\n";
+        insert_string << "word;time;comparisions;treeHeight;algorithm\n";
         
         int comparacoes = 0;
         long int time = 0;
         int cwords = 0;
         int c = 0;
-        for (int i = 0; i < n_docs; i++) {
+        for (int i = 0;i < n_docs;i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             c = words.size();
             cwords += c;
 
-            for (long unsigned int j = 0; j < words.size(); j++) {
+            for (long unsigned int j = 0;j < words.size();j++) {
                 InsertResult result = AVL::insert(tree, words[j], i);
                 int actual_height = tree->root->height;
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; "<< actual_height << std::endl;
+                insert_string << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< actual_height << ";" << "AVL" << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
@@ -122,19 +122,19 @@ int main(int argc, char* argv[])
         std::ofstream SearchingStats("./build/stats/avl/avlSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::stringstream search_string;
-        search_string << "word; time; comparisions; word_height" << std::endl;
+        search_string << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
         long int stime = 0;
         int scomp = 0;
-        for(int i = 0; i < uwords; i++){
+        for(int i = 0;i < uwords;i++){
             toSearch = words[i];
             result = search(tree, toSearch);
             stime += result.executionTime;
             scomp += result.numComparisons;
 
-            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+            search_string << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons+1 << std::endl;
         }
 
         SearchingStats << search_string.str();

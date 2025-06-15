@@ -81,23 +81,23 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insert_string;
-        insert_string << "word;time;comparisions;treeHeight\n";
+        insert_string << "word;time;comparisions;treeHeight;algorithm\n";
         
         int comparacoes = 0;
         long int time = 0;
         int cwords = 0;
         int c = 0;
-        for (int i = 0; i < n_docs; i++) {
+        for (int i = 0;i < n_docs;i++) {
             std::string archive_path = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archive_path);
             c = words.size();
             cwords += c;
 
-            for (long unsigned int j = 0; j < words.size(); j++) {
+            for (long unsigned int j = 0;j < words.size();j++) {
                 InsertResult result = BST::insert(tree, words[j], i);
                 // int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
-                insert_string << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << tree->height << std::endl;
+                insert_string << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << tree->height << ";" << "BST" << std::endl;
 
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uwords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << computeHeight(tree->root) << std::endl; 
+        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         
         std::cout << std::endl;
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
         std::string toSearch;
         long int stime = 0;
         int scomp = 0;
-        for(int i = 0; i < uwords; i++){
+        for(int i = 0;i < uwords;i++){
             toSearch = words[i];
             result = search(tree, toSearch);
             stime += result.executionTime;

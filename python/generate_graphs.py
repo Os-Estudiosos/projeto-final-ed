@@ -1,5 +1,5 @@
 import os
-from bst import *
+from insertion import *
 import multiprocessing as mp
 
 if __name__ == "__main__":
@@ -49,18 +49,37 @@ if __name__ == "__main__":
 
             files[wich_tree][type_of_archive] = archive
 
-    if files["bst"]["search"] is not None and files["bst"]["insert"] is not None:
-        bst_insert_process = mp.Process(
-           target=generate_bst_insert_graphics,
-           args=(os.path.join(DATA_PATH, 'bst', files['bst']['insert']), GRAPHICS_PATH)
-        )
-        bst_search_process = mp.Process(
-           target=generate_bst_search_graphics,
-           args=(os.path.join(DATA_PATH, 'bst', files['bst']['search']), GRAPHICS_PATH)
-        )
+    # Eu preciso de todos os arquivos para conseguir gerar os gráficos
+    for file in files.values():
+        if file["search"] is None or file["insert"] is None:
+            print("\033[31mVocê precisa gerar as estatísticas de todos os algoritmos\033[m")
 
-        bst_insert_process.start()
-        bst_search_process.start()
+    insertion_bst = pd.read_csv(os.path.join(
+        DATA_PATH,
+        'bst',
+        files["bst"]["insert"],
+    ), chunksize=100000, sep=";")
+    insertion_avl = pd.read_csv(os.path.join(
+        DATA_PATH,
+        'avl',
+        files["avl"]["insert"]
+    ), chunksize=100000, sep=";")
+    insertion_rbt = pd.read_csv(os.path.join(
+        DATA_PATH,
+        'rbt',
+        files["rbt"]["insert"]
+    ), chunksize=100000, sep=";")
+    
+    insert_graphics_process = mp.Process(
+        target=generate_insert_graphics,
+        args=(
+            insertion_bst,
+            insertion_avl,
+            insertion_rbt,
+            GRAPHICS_PATH
+        )
+    )
 
-        bst_insert_process.join()
-        bst_search_process.join()
+    insert_graphics_process.start()
+
+    insert_graphics_process.join()
