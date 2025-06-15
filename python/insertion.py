@@ -91,6 +91,7 @@ def generate_insert_graphics(
         y="median_time",
         ax=axes[0],
         palette="pastel",
+        x="tree",
         legend=False
     )
     axes[0].set_title("Média do Tempo de Inserção em Nanosegundos por Árvore")
@@ -103,6 +104,7 @@ def generate_insert_graphics(
         y="mean_comparisions",
         ax=axes[1],
         palette="pastel",
+        x="tree",
         legend=False
     )
     axes[1].set_title("Média de Comparações na Inserção por Árvore")
