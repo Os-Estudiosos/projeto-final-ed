@@ -23,7 +23,7 @@ namespace AVL
         node->parent = nullptr;                                                 // Alocamos o restante como null, pois é raiz
         node->left = nullptr;
         node->right = nullptr;
-        node->height = 0;                                                       // Definimos a altura como 1, pois é um novo nó
+        node->height = 0;                                                       // Definimos a altura como 0, pois é um novo nó
         
         return node;  
     }
@@ -75,20 +75,32 @@ namespace AVL
         x->right = y->left;                                                     // o filho esquerdo de y vira o filho direito de x
 
         if (y->left != nullptr)                                                 // se y tiver filho esquerdo
+        {
             y->left->parent = x;                                                // atualiza o pai desse filho para x
+        }
 
         y->parent = x->parent;                                                  // y assume o pai de x
 
         // Atualiza o ponteiro do pai de x para apontar para y
         if (x->parent == nullptr)                                               // se x era a raiz
+        {
             *root = y;                                                          // y vira a nova raiz
+        }
         else if (x == x->parent->left)                                          // se x era filho à esquerda
+        {
             x->parent->left = y;                                                // y vira o novo filho à esquerda
+        }
         else                                                                    // se x era filho à direita
+        {
             x->parent->right = y;                                               // y vira o novo filho à direita
+        }
 
         y->left = x;                                                            // x vira filho à esquerda de y
         x->parent = y;                                                          // atualiza o pai de x para ser y
+
+        recomputeHeight(x);                                                     // Recomputo as alturas
+        recomputeHeight(y);
+
     }
 
 
@@ -98,57 +110,34 @@ namespace AVL
         y->left = x->right;                                                     // o filho direito de x vira o filho esquerdo de y
 
         if (x->right != nullptr)                                                // se x tiver filho direito
+        {
             x->right->parent = y;                                               // atualiza o pai desse filho para y
+        }
 
         x->parent = y->parent;                                                  // x assume o pai de y
 
         // Atualiza o ponteiro do pai de y para apontar para x
         if (y->parent == nullptr)                                               // se y era a raiz
+        {
             *root = x;                                                          // x vira a nova raiz
+        }
         else if (y == y->parent->right)                                         // se y era filho à direita
+        {
             y->parent->right = x;                                               // x vira o novo filho à direita
+        }
         else                                                                    // se y era filho à esquerda
+        {
             y->parent->left = x;                                                // x vira o novo filho à esquerda
+        }
 
         x->right = y;                                                           // y vira filho à direita de x
         y->parent = x;                                                          // atualiza o pai de y para ser x
+
+        recomputeHeight(x);                                                     // recomputo as alturas
+        recomputeHeight(y);
     }
 
-
-    void fixInsert(Node **root, Node* z)
-    {
-        Node* current = z;
-        while (current != nullptr)                                              // Percorre até a raiz
-        {
-            recomputeHeight(current);                                           // Atualiza a altura do nó atual
-            int bf = balanceFactor(current);                                    // Calcula o fator de balanceamento
-
-            if (bf > 1)                                                        // Subárvore esquerda é mais alta
-            {
-                if (balanceFactor(current->left) < 0)                          // Caso Esquerda-Direita
-                {
-                    rotateLeft(root, current->left);                           // Rotação à esquerda no filho esquerdo
-                    recomputeHeight(current->left);                            // Atualiza altura após rotação
-                    recomputeHeight(current);                                  // Atualiza altura do nó atual
-                }
-                rotateRight(root, current);                                    // Rotação à direita no nó atual
-                recomputeHeight(current);                                      // Atualiza altura após rotação
-            }
-            else if (bf < -1)                                                  // Subárvore direita é mais alta
-            {
-                if (balanceFactor(current->right) > 0)                         // Caso Direita-Esquerda
-                {
-                    rotateRight(root, current->right);                         // Rotação à direita no filho direito
-                    recomputeHeight(current->right);                           // Atualiza altura após rotação
-                    recomputeHeight(current);                                  // Atualiza altura do nó atual
-                }
-                rotateLeft(root, current);                                     // Rotação à esquerda no nó atual
-                recomputeHeight(current);                                      // Atualiza altura após rotação
-            }
-            current = current->parent;                                         // Sobe para o pai
-        }
-    }
-
+    
     int balanceFactor(Node* n) 
     {
         if (n == nullptr) 
@@ -156,18 +145,37 @@ namespace AVL
         return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
     }
 
-    bool isEqual(Node* root1, Node* root2) {
-        if (root1 == nullptr && root2 == nullptr)
-            return true;
 
-        if (root1 == nullptr || root2 == nullptr)
-            return false;
+    void fixInsert(Node **root, Node* z)
+    {
+        Node* current = z;
+        while (current != nullptr) {
+            recomputeHeight(current);
+            int bf = balanceFactor(current);
 
-        if (root1->word != root2->word || root1->documentIds != root2->documentIds)
-            return false;
-
-        return isEqual(root1->left, root2->left) &&
-            isEqual(root1->right, root2->right);
+            if (bf > 1) { // Left-heavy
+                if (balanceFactor(current->left) < 0) { // LR
+                    rotateLeft(root, current->left);
+                    rotateRight(root, current);
+                } else { // LL
+                    rotateRight(root, current);
+                }
+                recomputeHeight(current->left);
+                recomputeHeight(current->right);
+                recomputeHeight(current);
+            } else if (bf < -1) { // Right-heavy
+                if (balanceFactor(current->right) > 0) { // RL
+                    rotateRight(root, current->right);
+                    rotateLeft(root, current);
+                } else { // RR
+                    rotateLeft(root, current);
+                }
+                    recomputeHeight(current->left);
+                recomputeHeight(current->right);
+                recomputeHeight(current);
+            }
+            current = current->parent;
+        }
     }
 
     
