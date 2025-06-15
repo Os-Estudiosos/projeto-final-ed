@@ -94,9 +94,10 @@ int main(int argc, char* argv[])
             c = words.size();
             cwords += c;
 
+            int actual_height = computeHeight(tree->root);
+
             for (long unsigned int j = 0; j < words.size(); j++) {
                 InsertResult result = RBT::insert(tree, words[j], i);
-                int actual_height = computeHeight(tree->root);
                 // int actual_min_height = computeMinHeight(tree->root);
                 insert_string << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actual_height << std::endl;
 
