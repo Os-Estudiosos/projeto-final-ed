@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
             result = search(tree, toSearch);
             sumtime += result.executionTime;
             sumComparisons += result.numComparisons;
-            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons+1 << std::endl;
+            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons + 1 << std::endl;
         }
 
         SearchingStats << search_string.str();
