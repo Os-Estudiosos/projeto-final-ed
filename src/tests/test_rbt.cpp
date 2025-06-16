@@ -1,33 +1,17 @@
 #include "../modules/rbt/rbt.h" 
 #include "../utils/tree_utils.h"
 
-// ====================== FUNÇÕES AUXILIARES DE TESTE ======================
-
-/**
- * @brief Imprime uma mensagem no console com uma cor ANSI opcional.
- * 
- * @param message     Texto a ser impresso.
- * @param breakLine   Define se deve pular linha após imprimir.
- * @param color_code  Código da cor ANSI (ex: "91" para vermelho claro).
- */
 void printMessage(const std::string& message, bool breakLine = false, const std::string& color_code = "") {
     std::cout << (color_code.empty() ? "" : "\033[" + color_code + "m") << message << (color_code.empty() ? "" : "\033[m");
     if (breakLine) std::cout << std::endl;
 }
 
-// =================== FUNÇÕES DE VERIFICAÇÃO DAS PROPRIEDADES DA RBT ===================
 
 // Protótipos auxiliares para validação da árvore
 bool isBstUtil(Node* node, Node*& prev);
 int checkBlackHeight(Node* node);
 bool checkRedProperty(Node* node);
 
-/**
- * @brief Valida se a árvore segue todas as propriedades de uma Red-Black Tree.
- * 
- * @param tree Ponteiro para a árvore.
- * @return true se a árvore for uma RBT válida, false caso contrário.
- */
 bool isRBT(BinaryTree* tree) {
     if (!tree || !tree->root) return true; // Árvore vazia é válida por definição
 
@@ -59,13 +43,7 @@ bool isRBT(BinaryTree* tree) {
     return true;
 }
 
-/**
- * @brief Verifica se a árvore segue a propriedade de ordenação da BST.
- * 
- * @param node Nó atual do percurso.
- * @param prev Nó anterior visitado (por referência).
- * @return true se a subárvore estiver corretamente ordenada.
- */
+
 bool isBstUtil(Node* node, Node*& prev) {
     if (node == nullptr) return true;
 
@@ -77,12 +55,6 @@ bool isBstUtil(Node* node, Node*& prev) {
     return isBstUtil(node->right, prev);
 }
 
-/**
- * @brief Verifica recursivamente se todos os caminhos possuem a mesma altura negra.
- * 
- * @param node Nó atual.
- * @return Altura negra da subárvore ou -1 se houver violação.
- */
 int checkBlackHeight(Node* node) {
     if (node == nullptr) return 1;
 
@@ -97,12 +69,6 @@ int checkBlackHeight(Node* node) {
     return left + (node->isRed == RBT::BLACK ? 1 : 0);
 }
 
-/**
- * @brief Verifica se não há dois nós vermelhos consecutivos na árvore.
- * 
- * @param node Nó atual.
- * @return true se a propriedade for respeitada.
- */
 bool checkRedProperty(Node* node) {
     if (!node) return true;
 
@@ -116,11 +82,6 @@ bool checkRedProperty(Node* node) {
     return checkRedProperty(node->left) && checkRedProperty(node->right);
 }
 
-// ============================= SUÍTES DE TESTE =============================
-
-/**
- * @brief Testes relacionados à estrutura da árvore.
- */
 void tree_structure_tests() {
     try {
         printMessage("Testando insercao numa ÁRVORE NULA...", 0);
@@ -169,9 +130,6 @@ void tree_structure_tests() {
     }
 }
 
-/**
- * @brief Testes relacionados ao comportamento de retorno da árvore.
- */
 void tree_returns_tests() {
     try {
         printMessage("Testando insercao de palavra duplicada no mesmo documento", 0);
@@ -223,9 +181,7 @@ void tree_returns_tests() {
     }
 }
 
-/**
- * @brief Testes das propriedades estruturais da Red-Black Tree.
- */
+
 void rbt_properties_tests() {
     // Teste com inserção crescente
     try {
@@ -307,7 +263,6 @@ void rbt_properties_tests() {
     }
 }
 
-// ========================== FUNÇÃO PRINCIPAL ==========================
 
 int main() {
     std::cout << "======================= TESTES ESTRUTURAIS DA ARVORE =======================" << std::endl;
