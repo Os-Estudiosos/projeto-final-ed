@@ -27,13 +27,53 @@ def get_mean_time_and_mean_comparisons(chunks: Iterator[pd.DataFrame], time_mean
     comparision_mean.value = mean_comparisions
 
 
+def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, queue):
+    registered_comparisions = None
+    registered_times = None
+    registered_lines = None
+
+    for chunk in chunks:
+        grouped_chunk = chunk.groupby("treeHeight")
+
+        comparisions_sum_result = grouped_chunk["comparisions"].sum().copy()
+        if registered_comparisions is None:
+            registered_comparisions = comparisions_sum_result
+        else:
+            partial_sum = registered_comparisions + comparisions_sum_result
+            registered_comparisions = partial_sum.combine_first(comparisions_sum_result).combine_first(registered_comparisions)
+        
+        times_sum_result = grouped_chunk["time"].sum().copy()
+        if registered_times is None:
+            registered_times = times_sum_result
+        else:
+            partial_sum = registered_times + times_sum_result
+            registered_times = partial_sum.combine_first(times_sum_result).combine_first(registered_times)
+
+        number_of_lines_per_treeHeight = grouped_chunk.size().copy()
+        if registered_lines is None:
+            registered_lines = number_of_lines_per_treeHeight
+        else:
+            partial_sum = registered_lines + number_of_lines_per_treeHeight
+            registered_lines = partial_sum.combine_first(number_of_lines_per_treeHeight).combine_first(registered_lines)
+    
+    average_comparisions = registered_comparisions / registered_lines
+    average_performance = registered_times / registered_lines
+
+    
+    queue.put((wich, average_comparisions, average_performance))
+
+
 @execution_time
 def generate_insert_graphics(
-    bst_insert: Iterator[pd.DataFrame],
-    avl_insert: Iterator[pd.DataFrame],
-    rbt_insert: Iterator[pd.DataFrame],
+    bst_insert_path: Iterator[pd.DataFrame],
+    avl_insert_path: Iterator[pd.DataFrame],
+    rbt_insert_path: Iterator[pd.DataFrame],
     graphics_path: str
 ):
+    bst_insert = pd.read_csv(bst_insert_path, chunksize=100000, sep=";")
+    avl_insert = pd.read_csv(avl_insert_path, chunksize=100000, sep=";")
+    rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
+
     bst_mean_time = mp.Value('d', 0.0)
     bst_mean_comparisions = mp.Value('d', 0.0)
 
@@ -115,13 +155,77 @@ def generate_insert_graphics(
     plt.close()
 
 
-# @execution_time
-# def generate_bst_search_graphics(path: str, graphics_path: str):
-#     """Generates the graphics about the BST searching statistics
+@execution_time
+def generate_insert_difference_graphics(
+    bst_insert_path: Iterator[pd.DataFrame],
+    avl_insert_path: Iterator[pd.DataFrame],
+    rbt_insert_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    queue = mp.Queue()
+    processes = []
 
-#     Args:
-#         path (str): Statistics path
-#         graphics_path (str): Graphics directory path
-#     """
-#     search_infos = pd.read_csv(path, sep=";")
-#     print(search_infos)
+    bst_insert = pd.read_csv(bst_insert_path, chunksize=100000, sep=";")
+    avl_insert = pd.read_csv(avl_insert_path, chunksize=100000, sep=";")
+    rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
+
+    bst_grouping_process = mp.Process(
+        target=group_by_and_average,
+        args=(
+            bst_insert,
+            "bst",
+            queue
+        )
+    )
+
+    avl_grouping_process = mp.Process(
+        target=group_by_and_average,
+        args=(
+            avl_insert,
+            "avl",
+            queue
+        )
+    )
+
+    rbt_grouping_process = mp.Process(
+        target=group_by_and_average,
+        args=(
+            rbt_insert,
+            "rbt",
+            queue
+        )
+    )
+
+    processes.append(bst_grouping_process)
+    processes.append(avl_grouping_process)
+    processes.append(rbt_grouping_process)
+
+    for process in processes:
+        process.start()
+
+    infos_to_plot = []
+
+    for _ in range(len(processes)):
+        infos_to_plot.append(queue.get())
+    
+    for process in processes:
+        process.join()
+    
+
+    plt.title("Média de Comparações em Função da Altura da Árvore")
+    for info in infos_to_plot:
+        plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4)
+    plt.xlabel("Altura")
+    plt.ylabel("Média de Comparações")
+    plt.legend()
+    plt.savefig(os.path.join(graphics_path, "Mean_Comparisions_per_Height.png"))
+    plt.close()
+
+    plt.title("Média de Performance em Função da Altura da Árvore")
+    for info in infos_to_plot:
+        plt.plot(info[2].index, info[2], "--o", label=info[0], linewidth=1, markersize=4)
+    plt.xlabel("Altura")
+    plt.ylabel("Média de Performance (Nanosegundos)")
+    plt.legend()
+    plt.savefig(os.path.join(graphics_path, "Mean_Performance_per_Height.png"))
+    plt.close()

@@ -54,32 +54,32 @@ if __name__ == "__main__":
         if file["search"] is None or file["insert"] is None:
             print("\033[31mVocê precisa gerar as estatísticas de todos os algoritmos\033[m")
 
-    insertion_bst = pd.read_csv(os.path.join(
-        DATA_PATH,
-        'bst',
-        files["bst"]["insert"],
-    ), chunksize=100000, sep=";")
-    insertion_avl = pd.read_csv(os.path.join(
-        DATA_PATH,
-        'avl',
-        files["avl"]["insert"]
-    ), chunksize=100000, sep=";")
-    insertion_rbt = pd.read_csv(os.path.join(
-        DATA_PATH,
-        'rbt',
-        files["rbt"]["insert"]
-    ), chunksize=100000, sep=";")
+    INSERTION_BST_PATH = os.path.join(DATA_PATH, 'bst', files["bst"]["insert"])
+    INSERTION_AVL_PATH = os.path.join(DATA_PATH, 'avl', files["avl"]["insert"])
+    INSERTION_RBT_PATH = os.path.join(DATA_PATH, 'rbt', files["rbt"]["insert"])
     
     insert_graphics_process = mp.Process(
         target=generate_insert_graphics,
         args=(
-            insertion_bst,
-            insertion_avl,
-            insertion_rbt,
+            INSERTION_BST_PATH,
+            INSERTION_AVL_PATH,
+            INSERTION_RBT_PATH,
+            GRAPHICS_PATH
+        )
+    )
+
+    insert_difference_graphics_process = mp.Process(
+        target=generate_insert_difference_graphics,
+        args=(
+            INSERTION_BST_PATH,
+            INSERTION_AVL_PATH,
+            INSERTION_RBT_PATH,
             GRAPHICS_PATH
         )
     )
 
     insert_graphics_process.start()
+    insert_difference_graphics_process.start()
 
     insert_graphics_process.join()
+    insert_difference_graphics_process.join()
