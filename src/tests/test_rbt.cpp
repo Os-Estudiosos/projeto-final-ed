@@ -188,7 +188,8 @@ void rbt_properties_tests() {
         printMessage("Testando propriedades RBT com insercao crescente (a, b, c, d, e)...", 0);
         BinaryTree* tree = RBT::create();
         std::vector<std::string> words = {"a", "b", "c", "d", "e"};
-        for (int i = 0; i < words.size(); ++i) RBT::insert(tree, words[i], i);
+        int size = words.size();
+        for (int i = 0; i < size; ++i) RBT::insert(tree, words[i], i);
 
         if (!isRBT(tree)) {
             RBT::destroy(tree);
@@ -207,7 +208,8 @@ void rbt_properties_tests() {
         printMessage("Testando propriedades RBT com insercao decrescente (e, d, c, b, a)...", 0);
         BinaryTree* tree = RBT::create();
         std::vector<std::string> words = {"e", "d", "c", "b", "a"};
-        for (int i = 0; i < words.size(); ++i) RBT::insert(tree, words[i], i);
+        int size = words.size();
+        for (int i = 0; i < size; ++i) RBT::insert(tree, words[i], i);
 
         if (!isRBT(tree)) {
             RBT::destroy(tree);

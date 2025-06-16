@@ -71,8 +71,9 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = RBT::create();
 
-        std::filesystem::create_directories("./build/stats/RBT/");
-        std::ofstream InsertingStats("./build/stats/RBT/RBTInsertStats_"+std::to_string(n_docs)+"archives.csv");
+        std::filesystem::path pathStats = pathAbsStats();
+        std::filesystem::create_directories(pathStats / "rbt/");
+        std::ofstream InsertingStats(pathStats.string() + "rbt/rbtInsertStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
@@ -118,7 +119,7 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
-        std::ofstream SearchingStats("./build/stats/rbt/rbtSearchStats_"+std::to_string(n_docs)+"archives.csv");
+        std::ofstream SearchingStats(pathStats.string() + "rbt/rbtSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::stringstream search_string;
         search_string << "word; time; comparisions; word_height" << std::endl;

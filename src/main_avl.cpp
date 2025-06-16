@@ -70,8 +70,9 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = AVL::create();
 
-        std::filesystem::create_directories("./build/stats/avl/");
-        std::ofstream InsertingStats("./build/stats/avl/avlInsertStats_"+ std::to_string(n_docs)+"archives.csv");
+        std::filesystem::path pathStats = pathAbsStats();
+        std::filesystem::create_directories(pathStats / "avl/");
+        std::ofstream InsertingStats(pathStats.string() + "avl/avlInsertStats_"+ std::to_string(n_docs)+"archives.csv");
 
         std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
@@ -117,7 +118,7 @@ int main(int argc, char* argv[])
         std::cout << std::endl;
 
         std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
-        std::ofstream SearchingStats("./build/stats/avl/avlSearchStats_"+std::to_string(n_docs)+"archives.csv");
+        std::ofstream SearchingStats(pathStats.string() + "avl/avlSearchStats_"+std::to_string(n_docs)+"archives.csv");
 
         std::stringstream search_string;
         search_string << "word; time; comparisions; word_height" << std::endl;
