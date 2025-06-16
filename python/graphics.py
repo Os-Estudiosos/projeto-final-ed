@@ -121,37 +121,33 @@ def generate_insert_graphics(
         "tree": ["BST", "AVL", "RBT"]
     })
 
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-
-    fig.suptitle("Informações para Comparação de Desempenho por tipo de Árvore")
-
+    
+    plt.title("Média do Tempo de Inserção em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        ax=axes[0],
         palette="pastel",
         x="tree",
         legend=False
     )
-    axes[0].set_title("Média do Tempo de Inserção em Nanosegundos por Árvore")
-    axes[0].set_ylabel("Média do Tempo de Inserção (Nanosegundos)")
-    axes[0].set_xlabel("Tipo de Árvore")
+    plt.ylabel("Média do Tempo de Inserção (Nanosegundos)")
+    plt.xlabel("Tipo de Árvore")
+    plt.savefig(os.path.join(graphics_path, "Insertion_Time_Mean.png"))
+    plt.close()
 
+    plt.title("Média de Comparações na Inserção por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="mean_comparisions",
-        ax=axes[1],
         palette="pastel",
         x="tree",
         legend=False
     )
-    axes[1].set_title("Média de Comparações na Inserção por Árvore")
-    axes[1].set_ylabel("Média de Comparações")
-    axes[1].set_xlabel("Tipo de Árvore")
-
-    plt.savefig(os.path.join(graphics_path, "Insertion_Time_Median.png"))
+    plt.ylabel("Média de Comparações")
+    plt.xlabel("Tipo de Árvore")
+    plt.savefig(os.path.join(graphics_path, "Insertion_Comparisions_Mean.png"))
     plt.close()
 
 
@@ -289,35 +285,31 @@ def generate_read_graphics(
         "tree": ["BST", "AVL", "RBT"]
     })
 
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-
-    fig.suptitle("Informações para Comparação de Desempenho por tipo de Árvore")
-
+    plt.title("Média do Tempo de Busca em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        ax=axes[0],
         palette="pastel",
         x="tree",
         legend=False
     )
-    axes[0].set_title("Média do Tempo de Busca em Nanosegundos por Árvore")
-    axes[0].set_ylabel("Média do Tempo de Busca (Nanosegundos)")
-    axes[0].set_xlabel("Tipo de Árvore")
+    plt.ylabel("Média do Tempo de Busca (Nanosegundos)")
+    plt.xlabel("Tipo de Árvore")
+    plt.savefig(os.path.join(graphics_path, "Search_Time_Median.png"))
+    plt.close()
 
+    plt.title("Média de Comparações na Busca por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="mean_comparisions",
-        ax=axes[1],
         palette="pastel",
         x="tree",
         legend=False
     )
-    axes[1].set_title("Média de Comparações na Busca por Árvore")
-    axes[1].set_ylabel("Média de Comparações")
-    axes[1].set_xlabel("Tipo de Árvore")
+    plt.ylabel("Média de Comparações")
+    plt.xlabel("Tipo de Árvore")
 
-    plt.savefig(os.path.join(graphics_path, "Search_Time_Median.png"))
+    plt.savefig(os.path.join(graphics_path, "Search_Comparisions_Median.png"))
     plt.close()

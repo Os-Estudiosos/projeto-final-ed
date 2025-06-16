@@ -1,5 +1,5 @@
 import os
-from insertion import *
+from graphics import *
 import multiprocessing as mp
 
 if __name__ == "__main__":
