@@ -229,3 +229,95 @@ def generate_insert_difference_graphics(
     plt.legend()
     plt.savefig(os.path.join(graphics_path, "Mean_Performance_per_Height.png"))
     plt.close()
+
+
+@execution_time
+def generate_read_graphics(
+    bst_insert_path: Iterator[pd.DataFrame],
+    avl_insert_path: Iterator[pd.DataFrame],
+    rbt_insert_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    bst_insert = pd.read_csv(bst_insert_path, chunksize=100000, sep=";")
+    avl_insert = pd.read_csv(avl_insert_path, chunksize=100000, sep=";")
+    rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
+
+    bst_mean_time = mp.Value('d', 0.0)
+    bst_mean_comparisions = mp.Value('d', 0.0)
+
+    avl_mean_time = mp.Value('d', 0.0)
+    avl_mean_comparisions = mp.Value('d', 0.0)
+
+    rbt_mean_time = mp.Value('d', 0.0)
+    rbt_mean_comparisions = mp.Value('d', 0.0)
+
+    # Tratando os dataframes passados
+    bst_cleaning_process = mp.Process(
+        target=get_mean_time_and_mean_comparisons,
+        args=(bst_insert, bst_mean_time, bst_mean_comparisions)
+    )
+
+    avl_cleaning_process = mp.Process(
+        target=get_mean_time_and_mean_comparisons,
+        args=(avl_insert, avl_mean_time, avl_mean_comparisions)
+    )
+
+    rbt_cleaning_process = mp.Process(
+        target=get_mean_time_and_mean_comparisons,
+        args=(rbt_insert, rbt_mean_time, rbt_mean_comparisions)
+    )
+
+    bst_cleaning_process.start()
+    avl_cleaning_process.start()
+    rbt_cleaning_process.start()
+
+    bst_cleaning_process.join()
+    avl_cleaning_process.join()
+    rbt_cleaning_process.join()
+
+    plot_df = pd.DataFrame({
+        "median_time": [
+            bst_mean_time.value,
+            avl_mean_time.value,
+            rbt_mean_time.value
+        ],
+        "mean_comparisions": [
+            bst_mean_comparisions.value,
+            avl_mean_comparisions.value,
+            rbt_mean_comparisions.value
+        ],
+        "tree": ["BST", "AVL", "RBT"]
+    })
+
+    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+
+    fig.suptitle("Informações para Comparação de Desempenho por tipo de Árvore")
+
+    sns.barplot(
+        data=plot_df,
+        hue="tree",
+        y="median_time",
+        ax=axes[0],
+        palette="pastel",
+        x="tree",
+        legend=False
+    )
+    axes[0].set_title("Média do Tempo de Busca em Nanosegundos por Árvore")
+    axes[0].set_ylabel("Média do Tempo de Busca (Nanosegundos)")
+    axes[0].set_xlabel("Tipo de Árvore")
+
+    sns.barplot(
+        data=plot_df,
+        hue="tree",
+        y="mean_comparisions",
+        ax=axes[1],
+        palette="pastel",
+        x="tree",
+        legend=False
+    )
+    axes[1].set_title("Média de Comparações na Busca por Árvore")
+    axes[1].set_ylabel("Média de Comparações")
+    axes[1].set_xlabel("Tipo de Árvore")
+
+    plt.savefig(os.path.join(graphics_path, "Search_Time_Median.png"))
+    plt.close()

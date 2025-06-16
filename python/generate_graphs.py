@@ -57,6 +57,10 @@ if __name__ == "__main__":
     INSERTION_BST_PATH = os.path.join(DATA_PATH, 'bst', files["bst"]["insert"])
     INSERTION_AVL_PATH = os.path.join(DATA_PATH, 'avl', files["avl"]["insert"])
     INSERTION_RBT_PATH = os.path.join(DATA_PATH, 'rbt', files["rbt"]["insert"])
+
+    SEARCH_BST_PATH = os.path.join(DATA_PATH, 'bst', files["bst"]["search"])
+    SEARCH_AVL_PATH = os.path.join(DATA_PATH, 'avl', files["avl"]["search"])
+    SEARCH_RBT_PATH = os.path.join(DATA_PATH, 'rbt', files["rbt"]["search"])
     
     insert_graphics_process = mp.Process(
         target=generate_insert_graphics,
@@ -78,8 +82,20 @@ if __name__ == "__main__":
         )
     )
 
+    read_graphics_process = mp.Process(
+        target=generate_read_graphics,
+        args=(
+            SEARCH_BST_PATH,
+            SEARCH_AVL_PATH,
+            SEARCH_RBT_PATH,
+            GRAPHICS_PATH
+        )
+    )
+
     insert_graphics_process.start()
     insert_difference_graphics_process.start()
+    read_graphics_process.start()
 
     insert_graphics_process.join()
     insert_difference_graphics_process.join()
+    read_graphics_process.join()
