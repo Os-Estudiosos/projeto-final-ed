@@ -94,7 +94,7 @@ namespace RBT
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
             Node* newNode = createNode(documentId, word, RED);                        // Criamos um novo nó
-            tree->nodeCount += 1;
+            tree->nodeCount += 1;                                                     // incrementando a contagem de nós
             newNode->parent = last;
 
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita

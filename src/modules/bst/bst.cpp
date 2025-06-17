@@ -93,7 +93,7 @@ namespace BST
             newNode->documentIds.push_back(documentId);                         // adiciono o id do documento ao seu vetor
             newNode->word = word;                                               // incremento a palavra sendo a palavra
             newNode->depth = newNode->parent->depth + 1;                        // a profundidade do novo nó sera a profundidade do pai mais um
-            tree->nodeCount += 1;
+            tree->nodeCount += 1;                                               // incrementando a contagem de nós
 
             // por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // se for "maior"

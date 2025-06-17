@@ -22,7 +22,7 @@ struct BinaryTree
     Node *root;
     Node *NIL; // usado na RBT (Opcional)
     int height;
-    int nodeCount;
+    int nodeCount;  // usado para estatística
 };
 
 struct InsertResult

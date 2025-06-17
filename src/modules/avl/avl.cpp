@@ -253,7 +253,7 @@ namespace AVL
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
             Node* newNode = createNode(documentId, word);                        // Criamos um novo nó
-            tree->nodeCount += 1;
+            tree->nodeCount += 1;                                                // incrementando a contagem de nós
 
             newNode->parent = last;
 
