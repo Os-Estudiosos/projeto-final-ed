@@ -208,6 +208,78 @@ def generate_insert_difference_graphics(
         process.join()
     
 
+    plt.title("Boxplot da Média de Comparações por Inserção na Árvore")
+    algorithm_series = None
+    insertion = None
+
+    for info in infos_to_plot:
+        if algorithm_series is None:
+            algorithm_series = pd.Series([ info[0] for _ in range(len(info[1])) ])
+        else:
+            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[1])) ]) ]).reset_index(drop=True)
+        
+        if insertion is None:
+            insertion = info[1]
+        else:
+            insertion = pd.concat([insertion, info[1]]).reset_index(drop=True)
+    
+    means_plot_df = pd.DataFrame({
+        "algorithm": algorithm_series,
+        "comparisions": insertion
+    })
+
+    sns.boxplot(
+        data=means_plot_df,
+        x="algorithm",
+        y="comparisions",
+        legend=False,
+        palette="pastel",
+        hue="algorithm"
+    )
+
+    plt.ylabel("Média de Comparações")
+    plt.xlabel("Algoritmo")
+
+    plt.savefig(os.path.join(graphics_path, "Mean_Comparisisons_Boxplot.png"))
+    plt.close()
+
+
+    plt.title("Boxplot da Média de Performance (Nanosegundo) por Inserção na Árvore")
+    algorithm_series = None
+    insertion = None
+
+    for info in infos_to_plot:
+        if algorithm_series is None:
+            algorithm_series = pd.Series([ info[0] for _ in range(len(info[2])) ])
+        else:
+            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[2])) ]) ]).reset_index(drop=True)
+        
+        if insertion is None:
+            insertion = info[2]
+        else:
+            insertion = pd.concat([insertion, info[2]]).reset_index(drop=True)
+    
+    means_plot_df = pd.DataFrame({
+        "algorithm": algorithm_series,
+        "times": insertion
+    })
+
+    sns.boxplot(
+        data=means_plot_df,
+        x="algorithm",
+        y="times",
+        legend=False,
+        palette="pastel",
+        hue="algorithm"
+    )
+
+    plt.ylabel("Tempo Médio de Desempenho (Nanosegundos)")
+    plt.xlabel("Algoritmo")
+
+    plt.savefig(os.path.join(graphics_path, "Mean_Performance_Boxplot.png"))
+    plt.close()
+    
+
     plt.title("Média de Comparações em Função da Altura da Árvore")
     for info in infos_to_plot:
         plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4)
