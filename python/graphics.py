@@ -279,21 +279,40 @@ def generate_insert_difference_graphics(
     plt.savefig(os.path.join(graphics_path, "Mean_Performance_Boxplot.png"))
     plt.close()
     
+    colors = {
+        "avl": "#90B8D0",
+        "rbt": "#66BB88",
+        "bst": "#E57373"
+    }
 
     plt.title("Média de Comparações em Função da Altura da Árvore")
+    ax = plt.gca()
+    ax.set_axisbelow(True)
+    ax.set_facecolor("#eeeeee")
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.tick_params(axis="both", labelsize=8)
     for info in infos_to_plot:
-        plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4)
+        plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
     plt.xlabel("Altura")
     plt.ylabel("Média de Comparações")
     plt.legend()
+    plt.grid(color="white")
     plt.savefig(os.path.join(graphics_path, "Mean_Comparisions_per_Height.png"))
     plt.close()
 
     plt.title("Média de Performance em Função da Altura da Árvore")
+    ax = plt.gca()
+    ax.set_axisbelow(True)
+    ax.set_facecolor("#eeeeee")
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.tick_params(axis="both", labelsize=8)
     for info in infos_to_plot:
-        plt.plot(info[2].index, info[2], "--o", label=info[0], linewidth=1, markersize=4)
+        plt.plot(info[2].index, info[2], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
     plt.xlabel("Altura")
     plt.ylabel("Média de Performance (Nanosegundos)")
+    plt.grid(color="white")
     plt.legend()
     plt.savefig(os.path.join(graphics_path, "Mean_Performance_per_Height.png"))
     plt.close()
