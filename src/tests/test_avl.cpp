@@ -60,7 +60,9 @@ void treeStructureTests()
         for (int i = 0; i < size; i++)
         {
             AVL::insert(tree, wordsToInsert[i], docsIds[i]);
+            
         }
+
 
         // Verificando se todas foram inseridas corretamente
         for (int j = 0; j < size; j++)
