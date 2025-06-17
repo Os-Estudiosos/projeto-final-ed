@@ -19,13 +19,13 @@ int main(int argc, char* argv[])
 
         BinaryTree* tree = BST::create();
 
-        for (int i = 0; i < numDocs; i++)
+        for (int i = 0;i < numDocs;i++)
         {
             std::string archivePath = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archivePath);
-            int size = words.size();    
+            int size = words.size();   
             
-            for (int j = 0; j < size; j++)
+            for (int j = 0;j < size;j++)
             {
                 BST::insert(tree, words[j], i);
             }
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
                 std::cout << "Ela se localiza nos documentos: ";
                 int size = result.documentIds.size();
 
-                for (int i = 0; i < size - 1; i++)
+                for (int i = 0;i < size - 1;i++)
                 {
                     std::cout << result.documentIds[i] << ", ";
                 }
@@ -90,23 +90,22 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insertString;
-        insertString << "word;time;comparisions;treeHeight\n";
+        insertString << "word;time;comparisions;treeHeight;nodes\n";
         
         int comparacoes = 0;
         long int time = 0;
         int cwords = 0;
         int size = 0;
-        for (int i = 0; i < numDocs; i++)
+        for (int i = 0;i < numDocs;i++)
         {
             std::string archivePath = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
             cwords += size;
-            for (int j = 0; j < size; j++)
+            for (int j = 0;j < size;j++)
             {
                 InsertResult result = BST::insert(tree, words[j], i);
-                int actualHeight = computeHeight(tree->root);
-                insertString << words[j] << "; " << result.executionTime << "; " << result.numComparisons << "; " << actualHeight << std::endl;
+                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << tree->height << ";" << tree->nodeCount << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
@@ -122,7 +121,7 @@ int main(int argc, char* argv[])
         std::cout << "Palavras unicas: " << uniqueWords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << tree->height << std::endl; 
+        std::cout << "Altura: " << tree->height << std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         std::cout << std::endl;
 
@@ -130,19 +129,19 @@ int main(int argc, char* argv[])
         std::ofstream SearchingStats(pathStats.string() + "bst/bstSearchStats_"+std::to_string(numDocs)+"archives.csv");
 
         std::stringstream search_string;
-        search_string << "word; time; comparisions; word_height" << std::endl;
+        search_string << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
         long int sumtime = 0;
         int sumComparisons = 0;
-        for(int i = 0; i < uniqueWords; i++)
+        for(int i = 0;i < uniqueWords;i++)
         {
             toSearch = words[i];
             result = search(tree, toSearch);
             sumtime += result.executionTime;
             sumComparisons += result.numComparisons;
-            search_string << words[i] << "; " << result.executionTime << "; " << result.numComparisons << "; " << result.numComparisons + 1 << std::endl;
+            search_string << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons + 1 << std::endl;
         }
 
         SearchingStats << search_string.str();
