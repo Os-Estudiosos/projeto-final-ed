@@ -52,7 +52,7 @@ namespace AVL
 
     int getHeight(Node* n) 
     {
-        return n == nullptr ? -1     : n->height;
+        return n == nullptr ? -1 : n->height;
     }
 
     void recomputeHeight(Node* n)
