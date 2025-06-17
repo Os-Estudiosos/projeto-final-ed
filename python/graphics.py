@@ -27,13 +27,13 @@ def get_mean_time_and_mean_comparisons(chunks: Iterator[pd.DataFrame], time_mean
     comparision_mean.value = mean_comparisions
 
 
-def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, queue):
+def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, group_column: str, queue):
     registered_comparisions = None
     registered_times = None
     registered_lines = None
 
     for chunk in chunks:
-        grouped_chunk = chunk.groupby("treeHeight")
+        grouped_chunk = chunk.groupby(group_column)
 
         comparisions_sum_result = grouped_chunk["comparisions"].sum().copy()
         if registered_comparisions is None:
@@ -152,7 +152,7 @@ def generate_insert_graphics(
 
 
 @execution_time
-def generate_insert_difference_graphics(
+def generate_insert_group_treeheight_graphics(
     bst_insert_path: Iterator[pd.DataFrame],
     avl_insert_path: Iterator[pd.DataFrame],
     rbt_insert_path: Iterator[pd.DataFrame],
@@ -170,6 +170,7 @@ def generate_insert_difference_graphics(
         args=(
             bst_insert,
             "bst",
+            "treeHeight",
             queue
         )
     )
@@ -179,6 +180,7 @@ def generate_insert_difference_graphics(
         args=(
             avl_insert,
             "avl",
+            "treeHeight",
             queue
         )
     )
@@ -188,6 +190,7 @@ def generate_insert_difference_graphics(
         args=(
             rbt_insert,
             "rbt",
+            "treeHeight",
             queue
         )
     )

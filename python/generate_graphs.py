@@ -72,8 +72,8 @@ if __name__ == "__main__":
         )
     )
 
-    insert_difference_graphics_process = mp.Process(
-        target=generate_insert_difference_graphics,
+    insert_group_tree_height_graphics_process = mp.Process(
+        target=generate_insert_group_treeheight_graphics,
         args=(
             INSERTION_BST_PATH,
             INSERTION_AVL_PATH,
@@ -93,9 +93,9 @@ if __name__ == "__main__":
     )
 
     insert_graphics_process.start()
-    insert_difference_graphics_process.start()
+    insert_group_tree_height_graphics_process.start()
     read_graphics_process.start()
 
     insert_graphics_process.join()
-    insert_difference_graphics_process.join()
+    insert_group_tree_height_graphics_process.join()
     read_graphics_process.join()
