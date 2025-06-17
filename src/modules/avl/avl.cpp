@@ -241,6 +241,8 @@ namespace AVL
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
             Node* newNode = createNode(documentId, word);                        // Criamos um novo nó
+            tree->nodeCount += 1;
+
             newNode->parent = last;
 
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
@@ -261,7 +263,7 @@ namespace AVL
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            result_insert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
+            result_insert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
             return result_insert;                                               // Retornamos a struct alterada
         }
     }
