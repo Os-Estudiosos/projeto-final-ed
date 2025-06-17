@@ -6,7 +6,7 @@ void clearTerminal()
 }
 
 // Função auxiliar para imprimir mensagens formatadas no terminal com opção de cor e quebra de linha
-void printMessage(std::string message, bool breakLine = 0, std::string colorCode = "")
+void printMessage(std::string message, bool breakLine, std::string colorCode)
 {
     std::cout << "\033[" << colorCode << "m" << message << "\033[m";
     if (breakLine) std::cout << std::endl;

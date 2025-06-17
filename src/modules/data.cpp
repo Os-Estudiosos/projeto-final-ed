@@ -15,7 +15,7 @@ std::vector<std::string> readArchive(std::string spath)
     FILE *fp;
     
     // Abre o arquivo no modo leitura
-    fp = fopen(path.c_str(), "r");
+    fp = fopen((char *)path.c_str(), "r");
     
     // Caso dê problema retorna erro informando qual arquivo não foi possível ler
     if (fp == nullptr) 
