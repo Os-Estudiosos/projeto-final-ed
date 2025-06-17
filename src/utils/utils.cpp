@@ -35,7 +35,14 @@ bool valCLI(int argc, char** argv)
         path = p / path;        // Concatena o caminho absoluto com o caminho relativo dado
     }
 
-    fp = fopen(path.string().c_str(), "r");
+    // Abre o arquivo no modo leitura
+    // diferencia windows do linux
+    #ifdef _WIN32
+        fp = _wfopen(path.wstring().c_str(), "r");
+    #else
+        fp = fopen(path.string().c_str(), "r");
+    #endif
+    
     if (fp == nullptr)
     {
         std::cout << "O diretório passado, " << argv[3] << " não é valido, use:\n" <<
