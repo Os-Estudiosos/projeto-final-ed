@@ -25,10 +25,17 @@ bool valCLI(int argc, char** argv)
     // a verificação do diretório pode ocorrer durante a função de leitura, mas podemos simplesmente
     // tentar abrir algum arquivo na pasta e ver se funciona
     FILE *fp;
-    std::string path = argv[3];
-    path += "0.txt";
-    fp = fopen(path.c_str(), "r");
+    std::filesystem::path path = argv[3];
+    path = path / "0.txt";
+    std::filesystem::path p = std::filesystem::current_path();
+    
+    // Verifica se o caminho é absoluto
+    if(!path.is_absolute())
+    {
+        path = p / path;        // Concatena o caminho absoluto com o caminho relativo dado
+    }
 
+    fp = fopen(path.string().c_str(), "r");
     if (fp == nullptr)
     {
         std::cout << "O diretório passado, " << argv[3] << " não é valido, use:\n" <<
