@@ -29,7 +29,6 @@ struct InsertResult
 {
     int numComparisons;
     double executionTime;
-    //<Possíveis outras variáveis>
 };
 
 struct SearchResult
@@ -38,7 +37,6 @@ struct SearchResult
     std::vector<int> documentIds;
     double executionTime;
     int numComparisons;
-    //<Possíveis outras variáveis>
 };
 
 /**

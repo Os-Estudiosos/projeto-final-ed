@@ -29,13 +29,13 @@ namespace RBT
     {
         auto start = std::chrono::high_resolution_clock::now();                 // Inicio a contagem do tempo
                                                                                 
-        InsertResult result_insert;                                             // Crio estrutura de insert
-        result_insert.numComparisons = 0;                                       // Defino ambas variáveis como zero
-        result_insert.executionTime = 0;    
+        InsertResult resultInsert;                                             // Crio estrutura de insert
+        resultInsert.numComparisons = 0;                                       // Defino ambas variáveis como zero
+        resultInsert.executionTime = 0;    
 
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
-            return result_insert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
+            return resultInsert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
 
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
@@ -44,8 +44,8 @@ namespace RBT
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            result_insert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
-            return result_insert;                                               // Retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
+            return resultInsert;                                               // Retornamos a struct alterada
         }
         else                                                                    // Caso a árvore já tenha algum nó
         {
@@ -60,33 +60,33 @@ namespace RBT
                     if (current->documentIds.back() == documentId)              // Vejo se o último elemento da lista de IDs é igual o id do documento atual
                     {                                                           // Pois se for, eu apenas ignoro
                                                                                 // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
-                        result_insert.numComparisons += 1;                      // Incremento o número de comparações (relacionado a comparar word == current->word)
+                        resultInsert.numComparisons += 1;                      // Incremento o número de comparações (relacionado a comparar word == current->word)
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        result_insert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return result_insert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
+                        return resultInsert;                                   // Retornamos a struct alterada
                     }
                     else                                                        // Caso o id ainda não estiver sido incluído no vetor                                                                       
                     {
-                        result_insert.numComparisons += 1;                      
+                        resultInsert.numComparisons += 1;                      
                         current->documentIds.push_back(documentId);             // Adiciono o id ao vetor 
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        result_insert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return result_insert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
+                        return resultInsert;                                   // Retornamos a struct alterada
                     }
                 }
                 else if (word > current->word)                                  // Caso a palavra não seja igual ao nó atual e seja "maior"
                 {
-                    result_insert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->right;                                   // Atualizo o current para direita pela palavra ser "maior"
                 }
                 else                                                            // Caso contrário (palavra menor que o nó atual)
                 {
-                    result_insert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->left;                                    // Atualizo o current para esquerda pela palavra ser "menor"
                 }
@@ -100,12 +100,12 @@ namespace RBT
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
             {                                                                   
-                result_insert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
                 last->right = newNode;                                          // Alteramos o nó da direita do pai como o nó que criamos
             }
             else                                                                // Se for "menor"
             {
-                result_insert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
 
@@ -115,8 +115,8 @@ namespace RBT
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            result_insert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
-            return result_insert;                                               // Retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
+            return resultInsert;                                               // Retornamos a struct alterada
         }
 
     }
@@ -246,7 +246,7 @@ namespace RBT
                 }
             }
         }
-
+        
         (*root)->isRed = BLACK;                                               // a raiz da árvore deve sempre ser preta
     }
 }
