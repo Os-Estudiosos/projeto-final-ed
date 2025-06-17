@@ -16,13 +16,13 @@ namespace BST
     {
         auto start = std::chrono::high_resolution_clock::now();                 // inicio a contagem do tempo
                                                                                 
-        InsertResult result_insert;                                             // crio estrutra de insert
-        result_insert.numComparisons = 0;                                       // defino ambas variáveis como zero
-        result_insert.executionTime = 0;    
+        InsertResult resultInsert;                                              // crio estrutra de insert
+        resultInsert.numComparisons = 0;                                        // defino ambas variáveis como zero
+        resultInsert.executionTime = 0;    
 
         if (tree == nullptr || word == "")                                      // verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // se for, apenas retorno a estrutura de insert inicial (tudo 0)
-            return result_insert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
+            return resultInsert;                                                // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
 
         if (tree->root == nullptr)                                              // se a árvore não for nula, mas sua raiz é (árvore vazia)
@@ -37,8 +37,10 @@ namespace BST
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
-            result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
-            return result_insert;                                               // retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                               // alteramos o atributo do tempo de execução
+            tree->nodeCount += 1;                                                // incrementando a contagem de nós
+ 
+            return resultInsert;                                                // retornamos a struct alterada
         }
         else                                                                    // caso a árvore já tenha algum nó
         {
@@ -53,33 +55,33 @@ namespace BST
                     if (current->documentIds.back() == documentId)              // vejo se o último elemento da lista de IDs é igual o id do documento atual
                     {                                                           // pois se for, eu apenas ignoro
                                                                                 // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
-                        result_insert.numComparisons += 1;                      // incremento o número de comparações(relacionado a comparar word == current-> word)
+                        resultInsert.numComparisons += 1;                      // incremento o número de comparações(relacionado a comparar word == current-> word)
                         auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // mudamos para double
-                        result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
-                        return result_insert;                                   // retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
+                        return resultInsert;                                   // retornamos a struct alterada
                     }
                     else                                                        // caso o id ainda não estiver sido incluído no vetor                                                                       
                     {
-                        result_insert.numComparisons += 1;                      
+                        resultInsert.numComparisons += 1;                      
                         current->documentIds.push_back(documentId);             // adiciono o id ao vetor 
                         auto end = std::chrono::high_resolution_clock::now();   // encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // mudamos para double
-                        result_insert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
-                        return result_insert;                                   // retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                  // alteramos o atributo do tempo de execução 
+                        return resultInsert;                                   // retornamos a struct alterada
                     }
                 }
                 else if (word > current->word)                                  // caso a palavra não seja igual ao nó atual e seja "maior"
                 {
-                    result_insert.numComparisons += 1;                          // incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                          // incrementamos o número de comparações
                     last = current;                                             // atualizo o último para ser o pai
                     current = current->right;                                   // atualizo o current para direita pela palavra ser "maior"
                 }
                 else                                                            // caso contrário (palavra menor que o nó atual)
                 {
-                    result_insert.numComparisons += 1;                          // incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                          // incrementamos o número de comparações
                     last = current;                                             // atualizo o último para ser o pai
                     current = current->left;                                    // atualizo o current para esquerda pela palavra ser "menor"
                 }
@@ -93,16 +95,17 @@ namespace BST
             newNode->documentIds.push_back(documentId);                         // adiciono o id do documento ao seu vetor
             newNode->word = word;                                               // incremento a palavra sendo a palavra
             newNode->depth = newNode->parent->depth + 1;                        // a profundidade do novo nó sera a profundidade do pai mais um
+            tree->nodeCount += 1;                                               // incrementando a contagem de nós
 
             // por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // se for "maior"
             {                                                                   
-                result_insert.numComparisons += 1;                              // incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                              // incrementamos o número de comparações
                 last->right = newNode;                                          // alteramos o nó da direita do pai como o nó que criamos
             }
             else                                                                // se for "menor"
             {
-                result_insert.numComparisons += 1;                              // incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                              // incrementamos o número de comparações
                 last->left = newNode;                                           // alteramos o nó da esquerda do pai como o nó que criamos
             }
 
@@ -114,9 +117,10 @@ namespace BST
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
-            result_insert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
-            return result_insert;                                               // retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                              // alteramos o atributo do tempo de execução 
+            return resultInsert;                                               // retornamos a struct alterada
         }
+
     }
 
     void destroy(BinaryTree *tree)
