@@ -58,5 +58,5 @@ namespace RBT
      * @param root Ponteiro para a raiz da árvore.
      * @param z Nó recém-inserido que pode causar violação.
      */
-    void fixInsert(Node **root, Node* z);
+    void fixInsert(Node **root, Node* z, BinaryTree *tree);
 }
