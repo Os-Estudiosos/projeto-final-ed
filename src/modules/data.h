@@ -12,7 +12,7 @@
 * @return Retorna um vetor com as palavras presentes no arquivo.
 * @note A função considera como palavra qualquer sequencia de char separados por espaços.
 */
-std::vector<std::string> readArchive(std::string path);
+std::vector<std::string> readArchive(std::filesystem::path path);
 
 /**
  * @brief verifica a estrutura correta para gerar o caminho correto para build/stats

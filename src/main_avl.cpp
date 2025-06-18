@@ -21,7 +21,8 @@ int main(int argc, char* argv[])
 
         for (int i = 0;i < numDocs;i++)
         {
-            std::string archivePath = path + std::to_string(i) + ".txt";
+            std::filesystem::path archive (std::to_string(i) + ".txt");
+            std::filesystem::path archivePath = path / archive; 
             std::vector<std::string> words = readArchive(archivePath);
             int size = words.size();
             
@@ -98,7 +99,8 @@ int main(int argc, char* argv[])
         int size = 0;
         for (int i = 0;i < numDocs;i++)
         {
-            std::string archivePath = path + std::to_string(i) + ".txt";
+            std::filesystem::path archive (std::to_string(i) + ".txt");
+            std::filesystem::path archivePath = path / archive; 
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
             cwords += size;

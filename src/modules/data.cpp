@@ -1,8 +1,7 @@
 #include "data.h"
 
-std::vector<std::string> readArchive(std::string spath)
+std::vector<std::string> readArchive(std::filesystem::path path)
 {
-    std::filesystem::path path = spath;
     std::filesystem::path p = std::filesystem::current_path();
     
     // Verifica se o caminho é absoluto
