@@ -15,7 +15,7 @@
 std::vector<std::string> readArchive(std::filesystem::path path);
 
 /**
- * @brief verifica a estrutura correta para gerar o caminho correto para build/stats
- * @return retorna o caminho absoluto correto para criar a pasta
+ * @brief Verifica a estrutura correta para gerar o caminho correto para build/stats.
+ * @return Retorna o caminho absoluto correto para criar a pasta.
  */
 std::filesystem::path pathAbsStats();

@@ -4,7 +4,6 @@
 
 namespace RBT
 {
-
     int getNodeHeight(Node* node)
     {
         return node ? node->height : 0;
@@ -54,24 +53,24 @@ namespace RBT
     {
         auto start = std::chrono::high_resolution_clock::now();                 // Inicio a contagem do tempo
                                                                                 
-        InsertResult resultInsert;                                             // Crio estrutura de insert
-        resultInsert.numComparisons = 0;                                       // Defino ambas variáveis como zero
+        InsertResult resultInsert;                                              // Crio estrutura de insert
+        resultInsert.numComparisons = 0;                                        // Defino ambas variáveis como zero
         resultInsert.executionTime = 0;    
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
-            return resultInsert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
+            return resultInsert;                                                // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
 
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
         {
-            tree->root = createNode(documentId, word, BLACK);                                         // Raiz é sempre preta em uma RBT
-            tree->nodeCount += 1;                                                // incrementando a contagem de nós
+            tree->root = createNode(documentId, word, BLACK);                   // Raiz é sempre preta em uma RBT
+            tree->nodeCount += 1;                                               // incrementando a contagem de nós
             tree->height = 1;
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
-            return resultInsert;                                               // Retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                               // Alteramos o atributo do tempo de execução
+            return resultInsert;                                                // Retornamos a struct alterada
         }
         else                                                                    // Caso a árvore já tenha algum nó
         {
@@ -86,12 +85,12 @@ namespace RBT
                     if (current->documentIds.back() == documentId)              // Vejo se o último elemento da lista de IDs é igual o id do documento atual
                     {                                                           // Pois se for, eu apenas ignoro
                                                                                 // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
-                        resultInsert.numComparisons += 1;                      // Incremento o número de comparações (relacionado a comparar word == current->word)
+                        resultInsert.numComparisons += 1;                       // Incremento o número de comparações (relacionado a comparar word == current->word)
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return resultInsert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                   // Alteramos o atributo do tempo de execução 
+                        return resultInsert;                                    // Retornamos a struct alterada
                     }
                     else                                                        // Caso o id ainda não estiver sido incluído no vetor                                                                       
                     {
@@ -100,38 +99,38 @@ namespace RBT
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return resultInsert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                   // Alteramos o atributo do tempo de execução 
+                        return resultInsert;                                    // Retornamos a struct alterada
                     }
                 }
                 else if (word > current->word)                                  // Caso a palavra não seja igual ao nó atual e seja "maior"
                 {
-                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                           // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->right;                                   // Atualizo o current para direita pela palavra ser "maior"
                 }
                 else                                                            // Caso contrário (palavra menor que o nó atual)
                 {
-                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                           // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->left;                                    // Atualizo o current para esquerda pela palavra ser "menor"
                 }
             }
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
-            Node* newNode = createNode(documentId, word, RED);                        // Criamos um novo nó
-            tree->nodeCount += 1;                                                     // incrementando a contagem de nós
+            Node* newNode = createNode(documentId, word, RED);                  // Criamos um novo nó
+            tree->nodeCount += 1;                                               // incrementando a contagem de nós
             newNode->parent = last;
 
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
             {                                                                   
-                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                               // Incrementamos o número de comparações
                 last->right = newNode;                                          // Alteramos o nó da direita do pai como o nó que criamos
             }
             else                                                                // Se for "menor"
             {
-                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                               // Incrementamos o número de comparações
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
 
@@ -143,10 +142,9 @@ namespace RBT
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução 
-            return resultInsert;                                               // Retornamos a struct alterada
+            resultInsert.executionTime = time_ms;                               // Alteramos o atributo do tempo de execução 
+            return resultInsert;                                                // Retornamos a struct alterada
         }
-
     }
 
     void destroy(BinaryTree *tree)
@@ -220,67 +218,67 @@ namespace RBT
 
     void fixInsert(Node **root, Node* z, BinaryTree *tree)
     {
-        while (z->parent != nullptr && z->parent->isRed == RED)                // enquanto o pai de z for vermelho (violação da RBT)
+        while (z->parent != nullptr && z->parent->isRed == RED)                 // enquanto o pai de z for vermelho (violação da RBT)
         {
-            Node* parent = z->parent;                                          // salva o pai
-            Node* grandparent = parent->parent;                                // salva o avô
+            Node* parent = z->parent;                                           // salva o pai
+            Node* grandparent = parent->parent;                                 // salva o avô
 
-            if (parent == grandparent->left)                                   // se o pai for filho à esquerda do avô
+            if (parent == grandparent->left)                                    // se o pai for filho à esquerda do avô
             {
-                Node* uncle = grandparent->right;                              // salva o tio (lado oposto)
+                Node* uncle = grandparent->right;                               // salva o tio (lado oposto)
 
-                if (uncle != nullptr && uncle->isRed == RED)                   // caso 1: tio vermelho
+                if (uncle != nullptr && uncle->isRed == RED)                    // caso 1: tio vermelho
                 {
-                    parent->isRed = BLACK;                                     // recolore pai para preto
-                    uncle->isRed = BLACK;                                      // recolore tio para preto
-                    grandparent->isRed = RED;                                  // recolore avô para vermelho
-                    z = grandparent;                                           // sobe para corrigir possíveis violações acima
+                    parent->isRed = BLACK;                                      // recolore pai para preto
+                    uncle->isRed = BLACK;                                       // recolore tio para preto
+                    grandparent->isRed = RED;                                   // recolore avô para vermelho
+                    z = grandparent;                                            // sobe para corrigir possíveis violações acima
                 }
-                else                                                           // tio preto (ou nulo)
+                else                                                            // tio preto (ou nulo)
                 {
-                    if (z == parent->right)                                   // caso 2: z é filho à direita do pai
+                    if (z == parent->right)                                     // caso 2: z é filho à direita do pai
                     {
-                        z = parent;                                           // salva o pai
-                        rotateLeft(tree, root, z);                                  // rotaciona para transformar no caso 3
-                        parent = z->parent;                                   // atualiza o pai
-                        grandparent = parent->parent;                         // atualiza o avô
+                        z = parent;                                             // salva o pai
+                        rotateLeft(tree, root, z);                              // rotaciona para transformar no caso 3
+                        parent = z->parent;                                     // atualiza o pai
+                        grandparent = parent->parent;                           // atualiza o avô
                     }
 
                     // caso 3: z é filho à esquerda do pai
-                    parent->isRed = BLACK;                                    // recolore pai para preto
-                    grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    rotateRight(tree, root, grandparent);                           // rotação à direita para balancear
+                    parent->isRed = BLACK;                                      // recolore pai para preto
+                    grandparent->isRed = RED;                                   // recolore avô para vermelho
+                    rotateRight(tree, root, grandparent);                       // rotação à direita para balancear
                 }
             }
-            else                                                               // espelho do caso acima (pai é filho à direita)
+            else                                                                // espelho do caso acima (pai é filho à direita)
             {
-                Node* uncle = grandparent->left;                              // salva o tio (lado oposto)
+                Node* uncle = grandparent->left;                                // salva o tio (lado oposto)
                 
-                if (uncle != nullptr && uncle->isRed == RED)                  // caso 1: tio vermelho
+                if (uncle != nullptr && uncle->isRed == RED)                    // caso 1: tio vermelho
                 {
-                    parent->isRed = BLACK;                                    // recolore pai para preto
-                    uncle->isRed = BLACK;                                     // recolore tio para preto
-                    grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    z = grandparent;                                          // sobe para corrigir possíveis violações acima
+                    parent->isRed = BLACK;                                      // recolore pai para preto
+                    uncle->isRed = BLACK;                                       // recolore tio para preto
+                    grandparent->isRed = RED;                                   // recolore avô para vermelho
+                    z = grandparent;                                            // sobe para corrigir possíveis violações acima
                 }
-                else                                                          // tio preto (ou nulo)
+                else                                                            // tio preto (ou nulo)
                 {
-                    if (z == parent->left)                                   // caso 2: z é filho à esquerda do pai
+                    if (z == parent->left)                                      // caso 2: z é filho à esquerda do pai
                     {
-                        z = parent;                                          // salva o pai
-                        rotateRight(tree, root, z);                                // rotação para transformar no caso 3
-                        parent = z->parent;                                  // atualiza o pai
-                        grandparent = parent->parent;                        // atualiza o avô
+                        z = parent;                                             // salva o pai
+                        rotateRight(tree, root, z);                             // rotação para transformar no caso 3
+                        parent = z->parent;                                     // atualiza o pai
+                        grandparent = parent->parent;                           // atualiza o avô
                     }
                     
                     // caso 3: z é filho à direita do pai
-                    parent->isRed = BLACK;                                   // recolore pai para preto
-                    grandparent->isRed = RED;                                // recolore avô para vermelho
-                    rotateLeft(tree, root, grandparent);                           // rotação à esquerda para balancear
+                    parent->isRed = BLACK;                                      // recolore pai para preto
+                    grandparent->isRed = RED;                                   // recolore avô para vermelho
+                    rotateLeft(tree, root, grandparent);                        // rotação à esquerda para balancear
                 }
             }
         }
         
-        (*root)->isRed = BLACK;                                               // a raiz da árvore deve sempre ser preta
+        (*root)->isRed = BLACK;                                                 // a raiz da árvore deve sempre ser preta
     }
 }

@@ -38,16 +38,16 @@ int computeMinHeight(Node* node)
 
 void deleteNode(Node *node)
 {
-    if (node == nullptr)                            // caso o nó a ser deletado seja nulo
+    if (node == nullptr)                                                    // caso o nó a ser deletado seja nulo
     {
-        return;                                     // nada acontece
+        return;                                                             // nada acontece
     }
-    else                                            // caso não seja nulo, então há algo a deletar
+    else                                                                    // caso não seja nulo, então há algo a deletar
     {
-        deleteNode(node->left);                     // então chamo a mesma função para deletar seus filhos
-        deleteNode(node->right);                    // a mesma coisa acontece para os filhos dos filhos, e assim sucessivamente, até que, 
-                                                    // primeiramente, as folhas sejam deletadas, e então seus pais, até a raiz  
-        delete node;                                // deleta o nó atual
+        deleteNode(node->left);                                             // então chamo a mesma função para deletar seus filhos
+        deleteNode(node->right);                                            // a mesma coisa acontece para os filhos dos filhos, e assim sucessivamente, até que, 
+                                                                            // primeiramente, as folhas sejam deletadas, e então seus pais, até a raiz  
+        delete node;                                                        // deleta o nó atual
     }   
 }
 
@@ -208,8 +208,8 @@ SearchResult search(BinaryTree *tree, const std::string &word)
     {
         auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-        double timeMs = duration.count();                                   // mudamos para double
-        resultSearch.executionTime = timeMs;                                // alteramos o atributo do tempo de execução 
+        double time_ms = duration.count();                                  // mudamos para double
+        resultSearch.executionTime = time_ms;                               // alteramos o atributo do tempo de execução 
         return resultSearch;                                                // retornamos a struct alterada
     }
     else                                                                    // caso exista a árvore e exista algum nó
@@ -224,8 +224,8 @@ SearchResult search(BinaryTree *tree, const std::string &word)
                 resultSearch.documentIds = current->documentIds;            // altero o vetor de documentos para ser o vetor da palavra encontrada
                 auto end = std::chrono::high_resolution_clock::now();       // encerramos a contagem de tempo
                 auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-                double timeMs = duration.count();                           // mudamos para double
-                resultSearch.executionTime = timeMs;                        // alteramos o atributo do tempo de execução 
+                double time_ms = duration.count();                          // mudamos para double
+                resultSearch.executionTime = time_ms;                       // alteramos o atributo do tempo de execução 
                 return resultSearch;                                        // retornamos a struct alterada
             }
             else if (word > current->word)                                  // caso a palavra não seja igual ao nó atual e seja "maior"
@@ -243,8 +243,8 @@ SearchResult search(BinaryTree *tree, const std::string &word)
         // note que se não acharmos a palavra na árvore, apenas retornaremos a struct search result como definida inicialmente, a menos de mudar o tempo
         auto end = std::chrono::high_resolution_clock::now();               // portanto, encerramos a contagem de tempo
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
-        double timeMs = duration.count();                                   // mudamos para double
-        resultSearch.executionTime = timeMs;                                // alteramos o atributo do tempo de execução 
+        double time_ms = duration.count();                                  // mudamos para double
+        resultSearch.executionTime = time_ms;                               // alteramos o atributo do tempo de execução 
         return resultSearch;                                                // retornamos a struct alterada
     }
 }

@@ -41,16 +41,16 @@ struct SearchResult
 };
 
 /**
- * @brief Função que calcula a altura de uma árvore a partir de um nó
- * @param node Nó a ser analisado
- * @return int Altura da árvore
+ * @brief Função que calcula a altura de uma árvore a partir de um nó.
+ * @param node Nó a ser analisado.
+ * @return int Altura da árvore.
  */
 int computeHeight(Node* node);
 
 /**
- * @brief Função que calcula a menor altura da árvore a partir de um nó
- * @param node Nó que será analisado
- * @return int Menor altura
+ * @brief Função que calcula a menor altura da árvore a partir de um nó.
+ * @param node Nó que será analisado.
+ * @return int Menor altura.
  */
 int computeMinHeight(Node* node);
 
@@ -87,20 +87,20 @@ void printTree(BinaryTree* tree);
 void auxPrintTree(Node *aux, std::string space);
 
 /**
- * @brief Armazena em um vetor todas as palavras presentes na arvore, conta a quantidade de palavras unicas e define a altura da arvore, usando a função countNodesAux
- * @param tree Ponteiro para arvore
- * @param words Ponteiro para o vetor de palavras que será atualizado durante a função
- * @return Retorna a quantidade de palavras unicas
+ * @brief Armazena em um vetor todas as palavras presentes na arvore, conta a quantidade de palavras unicas e define a altura da arvore, usando a função countNodesAux.
+ * @param tree Ponteiro para arvore.
+ * @param words Ponteiro para o vetor de palavras que será atualizado durante a função.
+ * @return Retorna a quantidade de palavras unicas.
  */
 int countNodes(BinaryTree* tree, std::vector<std::string> *words);
 
 /**
- * @brief Auxilia a função countNodes de forma recursiva
- * @param aux Ponteiro para nó
- * @param num Ponteiro de int que armazena a quantidade de nós na arvore
- * @param words Ponteiro para o vetor de palavras que será atualizado durante a função
- * @param height armazena a altura do nó atual
- * @param tree Ponteiro para arvore, usado para poder alterar sua altura
+ * @brief Auxilia a função countNodes de forma recursiva.
+ * @param aux Ponteiro para nó.
+ * @param num Ponteiro de int que armazena a quantidade de nós na arvore.
+ * @param words Ponteiro para o vetor de palavras que será atualizado durante a função.
+ * @param height armazena a altura do nó atual.
+ * @param tree Ponteiro para arvore, usado para poder alterar sua altura.
  */
 void countNodesAux(Node *aux, int *num, std::vector<std::string> *words, int height, BinaryTree* tree);
 

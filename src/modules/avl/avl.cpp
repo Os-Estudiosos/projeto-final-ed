@@ -34,13 +34,13 @@ namespace AVL
     {
         auto start = std::chrono::high_resolution_clock::now();                 // Inicio a contagem do tempo
                                                                                 
-        InsertResult resultInsert;                                             // Crio estrutura de insert
-        resultInsert.numComparisons = 0;                                       // Defino ambas variáveis como zero
+        InsertResult resultInsert;                                              // Crio estrutura de insert
+        resultInsert.numComparisons = 0;                                        // Defino ambas variáveis como zero
         resultInsert.executionTime = 0;    
 
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
-            return resultInsert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
+            return resultInsert;                                                // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
         }   
 
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
@@ -50,10 +50,9 @@ namespace AVL
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
+            resultInsert.executionTime = time_ms;                               // Alteramos o atributo do tempo de execução
 
-            return resultInsert;                                               // Retornamos a struct alterada
-            
+            return resultInsert;                                                // Retornamos a struct alterada
         }
         else                                                                    // Caso a árvore já tenha algum nó
         {
@@ -68,12 +67,13 @@ namespace AVL
                     if (current->documentIds.back() == documentId)              // Vejo se o último elemento da lista de IDs é igual o id do documento atual
                     {                                                           // Pois se for, eu apenas ignoro
                                                                                 // (posso olhar apenas o último id do vetor pois os ids são colocados em ordem e portanto para olhar se um id já foi colocado basta olhar por último)
-                        resultInsert.numComparisons += 1;                      // Incremento o número de comparações (relacionado a comparar word == current->word)
+                        resultInsert.numComparisons += 1;                       // Incremento o número de comparações (relacionado a comparar word == current->word)
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return resultInsert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                   // Alteramos o atributo do tempo de execução 
+                        
+                        return resultInsert;                                    // Retornamos a struct alterada
                     }
                     else                                                        // Caso o id ainda não estiver sido incluído no vetor                                                                       
                     {
@@ -82,39 +82,39 @@ namespace AVL
                         auto end = std::chrono::high_resolution_clock::now();   // Encerramos a contagem de tempo
                         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
                         double time_ms = duration.count();                      // Mudamos para double
-                        resultInsert.executionTime = time_ms;                  // Alteramos o atributo do tempo de execução 
-                        return resultInsert;                                   // Retornamos a struct alterada
+                        resultInsert.executionTime = time_ms;                   // Alteramos o atributo do tempo de execução 
+                        return resultInsert;                                    // Retornamos a struct alterada
                     }
                 }
                 else if (word > current->word)                                  // Caso a palavra não seja igual ao nó atual e seja "maior"
                 {
-                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                           // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->right;                                   // Atualizo o current para direita pela palavra ser "maior"
                 }
                 else                                                            // Caso contrário (palavra menor que o nó atual)
                 {
-                    resultInsert.numComparisons += 1;                          // Incrementamos o número de comparações
+                    resultInsert.numComparisons += 1;                           // Incrementamos o número de comparações
                     last = current;                                             // Atualizo o último para ser o pai
                     current = current->left;                                    // Atualizo o current para esquerda pela palavra ser "menor"
                 }
             }
 
             // Se a palavra não está na lista e chegamos no current ser nullptr (lembre-se que salvamos o pai, o "last"):
-            Node* newNode = createNode(documentId, word);                        // Criamos um novo nó
-            tree->nodeCount += 1;                                                // incrementando a contagem de nós
+            Node* newNode = createNode(documentId, word);                       // Criamos um novo nó
+            tree->nodeCount += 1;                                               // incrementando a contagem de nós
 
             newNode->parent = last;
 
             // Por fim, devemos verificar se iremos alterar o ponteiro para o filho do último nó a esquerda ou a direita
             if (word > last->word)                                              // Se for "maior"
             {                                                                   
-                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                               // Incrementamos o número de comparações
                 last->right = newNode;                                          // Alteramos o nó da direita do pai como o nó que criamos
             }
             else                                                                // Se for "menor"
             {
-                resultInsert.numComparisons += 1;                              // Incrementamos o número de comparações
+                resultInsert.numComparisons += 1;                               // Incrementamos o número de comparações
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
 
@@ -124,10 +124,10 @@ namespace AVL
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
-            resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
-            tree->height = tree->root->height;                                 // Definindo a altura da árvore
+            resultInsert.executionTime = time_ms;                               // Alteramos o atributo do tempo de execução
+            tree->height = tree->root->height;                                  // Definindo a altura da árvore
 
-            return resultInsert;                                               // Retornamos a struct alterada
+            return resultInsert;                                                // Retornamos a struct alterada
         }
     }
 
@@ -152,7 +152,7 @@ namespace AVL
 
     int max(int a, int b) 
     {
-        return (a > b) ? a : b;                                                // Retorna o maior entre a e b
+        return (a > b) ? a : b;                                                 // Retorna o maior entre a e b
     }
 
     int getHeight(Node* n) 
@@ -238,9 +238,9 @@ namespace AVL
     
     int balanceFactor(Node* n) 
     {
-        if (n == nullptr) return 0;                                            // Se o nó for nulo, o fator de balanceamento é 0
+        if (n == nullptr) return 0;                                             // Se o nó for nulo, o fator de balanceamento é 0
        
-        return getHeight(n->left) - getHeight(n->right);                       // Retorna a diferença entre a altura do filho esquerdo e do direito
+        return getHeight(n->left) - getHeight(n->right);                        // Retorna a diferença entre a altura do filho esquerdo e do direito
     }
 
 
