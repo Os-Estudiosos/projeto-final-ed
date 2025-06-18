@@ -17,7 +17,7 @@ std::vector<std::string> readArchive(std::string spath)
     // Abre o arquivo no modo leitura
     // diferencia windows do linux
     #ifdef _WIN32
-        fp = _wfopen(path.wstring().c_str(), "r");
+        fp = _wfopen(path.wstring().c_str(), L"r");
     #else
         fp = fopen(path.string().c_str(), "r");
     #endif
