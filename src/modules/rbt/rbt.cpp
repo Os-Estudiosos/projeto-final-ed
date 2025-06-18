@@ -41,12 +41,11 @@ namespace RBT
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
         {
             tree->root = createNode(documentId, word, BLACK);                                         // Raiz é sempre preta em uma RBT
+            tree->nodeCount += 1;                                                // incrementando a contagem de nós
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
             resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
-            tree->nodeCount += 1;                                                // incrementando a contagem de nós
-
             return resultInsert;                                               // Retornamos a struct alterada
         }
         else                                                                    // Caso a árvore já tenha algum nó

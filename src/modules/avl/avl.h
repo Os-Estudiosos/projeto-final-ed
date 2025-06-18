@@ -83,5 +83,5 @@ namespace AVL
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó que foi inserido e precisa ser corrigido.
      */
-    void fixInsert(Node** root, Node* x);
+    void fixInsert(Node** root, Node* x, BinaryTree* tree);
 }
