@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
             for (int j = 0;j < size;j++)
             {
                 InsertResult result = AVL::insert(tree, words[j], i);
-                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< tree->height << ";" << tree->nodeCount << std::endl;
+                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< tree->root->height << ";" << tree->nodeCount << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }

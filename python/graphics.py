@@ -267,6 +267,15 @@ def generate_insert_group_treeheight_graphics(
         "times": insertion
     })
 
+    Q1 = means_plot_df["times"].quantile(.25)
+    Q3 = means_plot_df["times"].quantile(.75)
+    IQR = Q3 - Q1
+
+    SUP = Q3 + 1.5*IQR
+    INF = Q1 - 1.5*IQR
+
+    means_plot_df = means_plot_df[(INF <= means_plot_df["times"]) & (means_plot_df["times"] <= SUP)]
+
     sns.boxplot(
         data=means_plot_df,
         x="algorithm",
@@ -284,39 +293,47 @@ def generate_insert_group_treeheight_graphics(
     
     colors = {
         "avl": "#90B8D0",
-        "rbt": "#66BB88",
-        "bst": "#E57373"
+        "bst": "#66BB88",
+        "rbt": "#E57373"
     }
 
-    plt.title("Média de Comparações em Função da Altura da Árvore")
-    ax = plt.gca()
-    ax.set_axisbelow(True)
-    ax.set_facecolor("#eeeeee")
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(axis="both", labelsize=8)
-    for info in infos_to_plot:
-        plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
-    plt.xlabel("Altura")
-    plt.ylabel("Média de Comparações")
-    plt.legend()
-    plt.grid(color="white")
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    fig.suptitle("Média de Comparações em Função da Altura da Árvore")
+
+    for j, info in enumerate(infos_to_plot):
+        axes[j].plot(info[1].index, info[1], "--o", linewidth=1, markersize=4, color=colors[info[0]])
+        axes[j].set_title(info[0].upper())
+
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.set_facecolor("#eeeeee")
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.tick_params(axis="both", labelsize=8)
+        ax.set_xlabel("Altura")
+        ax.set_ylabel("Média de Comparações")
+        ax.grid(color="white")
+    
     plt.savefig(os.path.join(graphics_path, "Mean_Comparisions_per_Height.png"))
     plt.close()
 
-    plt.title("Média de Performance em Função da Altura da Árvore")
-    ax = plt.gca()
-    ax.set_axisbelow(True)
-    ax.set_facecolor("#eeeeee")
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(axis="both", labelsize=8)
-    for info in infos_to_plot:
-        plt.plot(info[2].index, info[2], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
-    plt.xlabel("Altura")
-    plt.ylabel("Média de Performance (Nanosegundos)")
-    plt.grid(color="white")
-    plt.legend()
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    fig.suptitle("Média de Performance em Função da Altura da Árvore")
+
+    for i, info in enumerate(infos_to_plot):
+        axes[i].plot(info[2].index, info[2], "--o", linewidth=1, markersize=4, color=colors[info[0]])
+        axes[i].set_title(info[0].upper())
+    
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.set_facecolor("#eeeeee")
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.tick_params(axis="both", labelsize=8)
+        ax.set_xlabel("Altura")
+        ax.set_ylabel("Média de Comparações")
+        ax.grid(color="white")
+    
     plt.savefig(os.path.join(graphics_path, "Mean_Performance_per_Height.png"))
     plt.close()
 
