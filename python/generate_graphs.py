@@ -5,7 +5,7 @@ import multiprocessing as mp
 if __name__ == "__main__":
     # Pegando o caminho dos arquivos
     DATA_PATH = os.path.join(os.getcwd(), 'build', 'stats')
-    GRAPHICS_PATH = os.path.join(os.getcwd(), 'build', 'graphics')
+    GRAPHICS_PATH = os.path.join(os.getcwd(), 'docs', 'graphics')
 
     # Se o arquivo especificado não existir, eu levando um erro
     if not os.path.exists(DATA_PATH):
@@ -112,14 +112,25 @@ if __name__ == "__main__":
         )
     )
 
+    generate_mean_rotations_count_per_unique_words_process = mp.Process(
+        target=generate_mean_rotations_count_per_unique_words,
+        args=(
+            INSERTION_AVL_PATH,
+            INSERTION_RBT_PATH,
+            GRAPHICS_PATH
+        )
+    )
+
     insert_graphics_process.start()
     insert_group_tree_height_graphics_process.start()
     read_graphics_process.start()
     read_boxplots_performance_process.start()
     read_boxplots_comparisions_process.start()
+    generate_mean_rotations_count_per_unique_words_process.start()
 
     insert_graphics_process.join()
     insert_group_tree_height_graphics_process.join()
     read_graphics_process.join()
     read_boxplots_performance_process.join()
     read_boxplots_comparisions_process.join()
+    generate_mean_rotations_count_per_unique_words_process.join()
