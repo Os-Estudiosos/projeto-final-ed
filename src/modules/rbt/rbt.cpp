@@ -4,13 +4,36 @@
 
 namespace RBT
 {
+
+    int getNodeHeight(Node* node)
+    {
+        return node ? node->height : 0;
+    }
+
+    void updateNodeHeight(Node* node)
+    {
+        if (node)
+        {
+            node->height = 1 + std::max(getNodeHeight(node->left), getNodeHeight(node->right));
+        }
+    }
+    
+    void updateHeightUpwards(Node* node)
+    {
+        while(node != nullptr)
+        {
+            updateNodeHeight(node);
+            node = node->parent;
+        }
+    }
+
     BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;  
         tree->height = 0;                                                       // defino a raiz como nula
-        tree->rotationsCount = 0;                                               // inicio a contagem de rotações com 0
-        tree->nodeCount = 0;                                                    // inicio a contagem dos nos
+        tree->rotationsCount = 0;
+        tree->nodeCount = 0;
         return tree;                                                            // retorno a árvore criada
     }
 
@@ -23,7 +46,7 @@ namespace RBT
         node->left = nullptr;
         node->right = nullptr;
         node->isRed = color;   
-        
+        node->height = 1;
         return node;  
     }
 
@@ -43,6 +66,7 @@ namespace RBT
         {
             tree->root = createNode(documentId, word, BLACK);                                         // Raiz é sempre preta em uma RBT
             tree->nodeCount += 1;                                                // incrementando a contagem de nós
+            tree->height = 1;
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
@@ -111,9 +135,11 @@ namespace RBT
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
 
+            updateHeightUpwards(last);
             // Corrigir as propriedades da RBT após a inserção
             fixInsert(&tree->root, newNode, tree);
 
+            tree->height = getNodeHeight(tree->root);
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
@@ -163,6 +189,8 @@ namespace RBT
 
         y->left = x;                                                            // x vira filho à esquerda de y
         x->parent = y;                                                          // atualiza o pai de x para ser y
+        updateNodeHeight(x);
+        updateNodeHeight(y);
     }
 
     void rotateRight(BinaryTree *tree, Node** root, Node* y)
@@ -186,6 +214,8 @@ namespace RBT
 
         x->right = y;                                                           // y vira filho à direita de x
         y->parent = x;                                                          // atualiza o pai de y para ser x
+        updateNodeHeight(y);
+        updateNodeHeight(x);
     }
 
     void fixInsert(Node **root, Node* z, BinaryTree *tree)

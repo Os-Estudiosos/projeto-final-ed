@@ -8,7 +8,7 @@ from typing import Iterator
 import multiprocessing as mp
 
 
-def get_mean_time_and_mean_comparisons(chunks: Iterator[pd.DataFrame], time_mean, comparision_mean):
+def get_mean_time_and_total_comparisons(chunks: Iterator[pd.DataFrame], time_mean, comparisions_total):
     total_lines = 0
     total_time_sum = 0
     total_comparisions = 0
@@ -21,10 +21,9 @@ def get_mean_time_and_mean_comparisons(chunks: Iterator[pd.DataFrame], time_mean
         total_time_sum += time_sum
     
     mean_time = total_time_sum / total_lines
-    mean_comparisions = total_comparisions / total_lines
 
     time_mean.value = mean_time
-    comparision_mean.value = mean_comparisions
+    comparisions_total.value = total_comparisions
 
 
 def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, group_column: str, queue):
@@ -63,6 +62,50 @@ def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, group_column
     queue.put((wich, average_comparisions, average_performance))
 
 
+def group_by_nodes_count_and_get_mean_rotations(chunks: Iterator[pd.DataFrame], wich, queue):
+    registered_rotations = None
+    registered_lines = None
+
+    for chunk in chunks:
+        grouped_chunk = chunk.groupby("nodes")
+
+        rotations_sum_result = grouped_chunk["rotations"].sum().copy()
+        if registered_rotations is None:
+            registered_rotations = rotations_sum_result
+        else:
+            partial_sum = registered_rotations + rotations_sum_result
+            registered_rotations = partial_sum.combine_first(rotations_sum_result).combine_first(registered_rotations)
+
+        number_of_lines_per_nodesCount = grouped_chunk.size().copy()
+        if registered_lines is None:
+            registered_lines = number_of_lines_per_nodesCount
+        else:
+            partial_sum = registered_lines + number_of_lines_per_nodesCount
+            registered_lines = partial_sum.combine_first(number_of_lines_per_nodesCount).combine_first(registered_lines)
+    
+    average_rotations = registered_rotations / registered_lines
+
+    
+    queue.put((wich, average_rotations))
+
+
+def group_to_boxplot(chunks: Iterator[pd.DataFrame], column, queue, wich):
+    column_series = None
+    for chunk in chunks:
+        if column_series is None:
+            column_series = chunk[column]
+        else:
+            column_series = pd.concat([column_series, chunk[column]])
+
+    algorithm_series = pd.Series([wich for _ in range(len(column_series))])
+
+    df = pd.DataFrame({
+        "algorithm": algorithm_series,
+        column: column_series
+    })
+
+    queue.put(df)
+
 @execution_time
 def generate_insert_graphics(
     bst_insert_path: Iterator[pd.DataFrame],
@@ -75,28 +118,28 @@ def generate_insert_graphics(
     rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
 
     bst_mean_time = mp.Value('d', 0.0)
-    bst_mean_comparisions = mp.Value('d', 0.0)
+    bst_total_comparisions = mp.Value('d', 0.0)
 
     avl_mean_time = mp.Value('d', 0.0)
-    avl_mean_comparisions = mp.Value('d', 0.0)
+    avl_total_comparisions = mp.Value('d', 0.0)
 
     rbt_mean_time = mp.Value('d', 0.0)
-    rbt_mean_comparisions = mp.Value('d', 0.0)
+    rbt_total_comparisions = mp.Value('d', 0.0)
 
     # Tratando os dataframes passados
     bst_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(bst_insert, bst_mean_time, bst_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(bst_insert, bst_mean_time, bst_total_comparisions)
     )
 
     avl_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(avl_insert, avl_mean_time, avl_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(avl_insert, avl_mean_time, avl_total_comparisions)
     )
 
     rbt_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(rbt_insert, rbt_mean_time, rbt_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(rbt_insert, rbt_mean_time, rbt_total_comparisions)
     )
 
     bst_cleaning_process.start()
@@ -109,25 +152,30 @@ def generate_insert_graphics(
 
     plot_df = pd.DataFrame({
         "median_time": [
-            bst_mean_time.value,
             avl_mean_time.value,
+            bst_mean_time.value,
             rbt_mean_time.value
         ],
-        "mean_comparisions": [
-            bst_mean_comparisions.value,
-            avl_mean_comparisions.value,
-            rbt_mean_comparisions.value
+        "total_comparisions": [
+            avl_total_comparisions.value,
+            bst_total_comparisions.value,
+            rbt_total_comparisions.value
         ],
-        "tree": ["BST", "AVL", "RBT"]
+        "tree": ["AVL", "BST", "RBT"]
     })
 
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
     
     plt.title("Média do Tempo de Inserção em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -136,18 +184,18 @@ def generate_insert_graphics(
     plt.savefig(os.path.join(graphics_path, "Insertion_Time_Mean.png"))
     plt.close()
 
-    plt.title("Média de Comparações na Inserção por Árvore")
+    plt.title("Total de Comparações na Inserção por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
-        y="mean_comparisions",
-        palette="pastel",
+        y="total_comparisions",
+        palette=colors,
         x="tree",
         legend=False
     )
-    plt.ylabel("Média de Comparações")
+    plt.ylabel("Total de Comparações")
     plt.xlabel("Tipo de Árvore")
-    plt.savefig(os.path.join(graphics_path, "Insertion_Comparisions_Mean.png"))
+    plt.savefig(os.path.join(graphics_path, "Insertion_Comparisions_Total.png"))
     plt.close()
 
 
@@ -210,113 +258,76 @@ def generate_insert_group_treeheight_graphics(
     for process in processes:
         process.join()
     
-
-    plt.title("Boxplot da Média de Comparações por Inserção na Árvore")
-    algorithm_series = None
-    insertion = None
-
-    for info in infos_to_plot:
-        if algorithm_series is None:
-            algorithm_series = pd.Series([ info[0] for _ in range(len(info[1])) ])
-        else:
-            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[1])) ]) ]).reset_index(drop=True)
-        
-        if insertion is None:
-            insertion = info[1]
-        else:
-            insertion = pd.concat([insertion, info[1]]).reset_index(drop=True)
-    
-    means_plot_df = pd.DataFrame({
-        "algorithm": algorithm_series,
-        "comparisions": insertion
-    })
-
-    sns.boxplot(
-        data=means_plot_df,
-        x="algorithm",
-        y="comparisions",
-        legend=False,
-        palette="pastel",
-        hue="algorithm"
-    )
-
-    plt.ylabel("Média de Comparações")
-    plt.xlabel("Algoritmo")
-
-    plt.savefig(os.path.join(graphics_path, "Mean_Comparisisons_Boxplot.png"))
-    plt.close()
-
-
-    plt.title("Boxplot da Média de Performance (Nanosegundo) por Inserção na Árvore")
-    algorithm_series = None
-    insertion = None
-
-    for info in infos_to_plot:
-        if algorithm_series is None:
-            algorithm_series = pd.Series([ info[0] for _ in range(len(info[2])) ])
-        else:
-            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[2])) ]) ]).reset_index(drop=True)
-        
-        if insertion is None:
-            insertion = info[2]
-        else:
-            insertion = pd.concat([insertion, info[2]]).reset_index(drop=True)
-    
-    means_plot_df = pd.DataFrame({
-        "algorithm": algorithm_series,
-        "times": insertion
-    })
-
-    sns.boxplot(
-        data=means_plot_df,
-        x="algorithm",
-        y="times",
-        legend=False,
-        palette="pastel",
-        hue="algorithm"
-    )
-
-    plt.ylabel("Tempo Médio de Desempenho (Nanosegundos)")
-    plt.xlabel("Algoritmo")
-
-    plt.savefig(os.path.join(graphics_path, "Mean_Performance_Boxplot.png"))
-    plt.close()
-    
     colors = {
         "avl": "#90B8D0",
-        "rbt": "#66BB88",
-        "bst": "#E57373"
+        "bst": "#66BB88",
+        "rbt": "#E57373"
     }
 
-    plt.title("Média de Comparações em Função da Altura da Árvore")
-    ax = plt.gca()
-    ax.set_axisbelow(True)
-    ax.set_facecolor("#eeeeee")
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(axis="both", labelsize=8)
-    for info in infos_to_plot:
-        plt.plot(info[1].index, info[1], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
-    plt.xlabel("Altura")
-    plt.ylabel("Média de Comparações")
-    plt.legend()
-    plt.grid(color="white")
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    fig.suptitle("Média de Comparações em Função da Altura da Árvore")
+
+    sizes = [len(info[1]) for info in infos_to_plot]
+
+    infos_to_plot = sorted(infos_to_plot, key=lambda i: i[0])
+
+    coeffs = {
+        "bst": 3.7,
+        "avl": 3.7,
+        "rbt": 3.7
+    }
+
+    maximum_series = max(infos_to_plot, key=lambda i: i[1].max())[1]
+
+    for j, info in enumerate(infos_to_plot):
+        x = np.array(maximum_series.index)
+        x = x[x != 0]
+        y = coeffs[info[0]]*np.log(x)
+        axes[j].plot(x, y, color="#ffc380", label=f"y = {coeffs[info[0]]}*log(x)")
+        axes[j].plot(info[1].index, info[1], "--o", linewidth=1, markersize=4, color=colors[info[0]])
+        axes[j].set_title(info[0].upper())
+
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.set_facecolor("#eeeeee")
+        ax.set_ylim(bottom=0, top=maximum_series.max())
+        ax.set_xlim(left=0, right=max(sizes))
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.tick_params(axis="both", labelsize=8)
+        ax.set_xlabel("Altura")
+        ax.set_ylabel("Média de Comparações")
+        ax.grid(color="white")
+        ax.legend()
+    
     plt.savefig(os.path.join(graphics_path, "Mean_Comparisions_per_Height.png"))
     plt.close()
 
-    plt.title("Média de Performance em Função da Altura da Árvore")
-    ax = plt.gca()
-    ax.set_axisbelow(True)
-    ax.set_facecolor("#eeeeee")
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(axis="both", labelsize=8)
-    for info in infos_to_plot:
-        plt.plot(info[2].index, info[2], "--o", label=info[0], linewidth=1, markersize=4, color=colors[info[0]])
-    plt.xlabel("Altura")
-    plt.ylabel("Média de Performance (Nanosegundos)")
-    plt.grid(color="white")
-    plt.legend()
+
+    sizes = [len(info[2]) for info in infos_to_plot]
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+    fig.suptitle("Média de Performance em Função da Altura da Árvore")
+
+    infos_to_plot = sorted(infos_to_plot, key=lambda i: i[0])
+
+    for i, info in enumerate(infos_to_plot):
+        axes[i].plot(info[2].index, info[2], "--o", linewidth=1, markersize=4, color=colors[info[0]])
+        axes[i].set_title(info[0].upper())
+    
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.set_facecolor("#eeeeee")
+        maximum_series = max(infos_to_plot, key=lambda i: i[2].max())[2]
+        ax.set_ylim(bottom=0, top=maximum_series.max())
+        ax.set_xlim(left=0, right=max(sizes))
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.tick_params(axis="both", labelsize=8)
+        ax.set_xlabel("Altura")
+        ax.set_ylabel("Média de Comparações")
+        ax.grid(color="white")
+    
     plt.savefig(os.path.join(graphics_path, "Mean_Performance_per_Height.png"))
     plt.close()
 
@@ -333,28 +344,28 @@ def generate_read_graphics(
     rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
 
     bst_mean_time = mp.Value('d', 0.0)
-    bst_mean_comparisions = mp.Value('d', 0.0)
+    bst_total_comparisions = mp.Value('d', 0.0)
 
     avl_mean_time = mp.Value('d', 0.0)
-    avl_mean_comparisions = mp.Value('d', 0.0)
+    avl_total_comparisions = mp.Value('d', 0.0)
 
     rbt_mean_time = mp.Value('d', 0.0)
-    rbt_mean_comparisions = mp.Value('d', 0.0)
+    rbt_total_comparisions = mp.Value('d', 0.0)
 
     # Tratando os dataframes passados
     bst_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(bst_insert, bst_mean_time, bst_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(bst_insert, bst_mean_time, bst_total_comparisions)
     )
 
     avl_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(avl_insert, avl_mean_time, avl_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(avl_insert, avl_mean_time, avl_total_comparisions)
     )
 
     rbt_cleaning_process = mp.Process(
-        target=get_mean_time_and_mean_comparisons,
-        args=(rbt_insert, rbt_mean_time, rbt_mean_comparisions)
+        target=get_mean_time_and_total_comparisons,
+        args=(rbt_insert, rbt_mean_time, rbt_total_comparisions)
     )
 
     bst_cleaning_process.start()
@@ -367,24 +378,30 @@ def generate_read_graphics(
 
     plot_df = pd.DataFrame({
         "median_time": [
-            bst_mean_time.value,
             avl_mean_time.value,
+            bst_mean_time.value,
             rbt_mean_time.value
         ],
-        "mean_comparisions": [
-            bst_mean_comparisions.value,
-            avl_mean_comparisions.value,
-            rbt_mean_comparisions.value
+        "total_comparisions": [
+            avl_total_comparisions.value,
+            bst_total_comparisions.value,
+            rbt_total_comparisions.value
         ],
-        "tree": ["BST", "AVL", "RBT"]
+        "tree": ["AVL", "BST", "RBT"]
     })
+
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
 
     plt.title("Média do Tempo de Busca em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -393,17 +410,272 @@ def generate_read_graphics(
     plt.savefig(os.path.join(graphics_path, "Search_Time_Median.png"))
     plt.close()
 
-    plt.title("Média de Comparações na Busca por Árvore")
+    plt.title("Total de Comparações na Busca por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
-        y="mean_comparisions",
-        palette="pastel",
+        y="total_comparisions",
+        palette=colors,
         x="tree",
         legend=False
     )
-    plt.ylabel("Média de Comparações")
+    plt.ylabel("Total de Comparações")
     plt.xlabel("Tipo de Árvore")
 
-    plt.savefig(os.path.join(graphics_path, "Search_Comparisions_Median.png"))
+    plt.savefig(os.path.join(graphics_path, "Search_Comparisions_Total.png"))
+    plt.close()
+
+
+@execution_time
+def boxplots_performance(
+    bst_search_path: Iterator[pd.DataFrame],
+    avl_search_path: Iterator[pd.DataFrame],
+    rbt_search_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    bst_search = pd.read_csv(bst_search_path, chunksize=100000, sep=";")
+    avl_search = pd.read_csv(avl_search_path, chunksize=100000, sep=";")
+    rbt_search = pd.read_csv(rbt_search_path, chunksize=100000, sep=";")
+
+    queue = mp.Queue()
+
+    bst_search_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            bst_search,
+            "time",
+            queue,
+            'BST'
+        )
+    )
+    avl_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            avl_search,
+            "time",
+            queue,
+            'AVL'
+        )
+    )
+    rbt_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            rbt_search,
+            "time",
+            queue,
+            'RBT'
+        )
+    )
+
+    bst_search_process.start()
+    avl_insert_process.start()
+    rbt_insert_process.start()
+    
+    dataframes = []
+    for _ in range(3):
+        dataframes.append(queue.get())
+    
+    dataframes = pd.concat(dataframes)
+
+    bst_search_process.join()
+    avl_insert_process.join()
+    rbt_insert_process.join()
+
+    plt.title("Boxplot dos Tempos de Execução na BUSCA")
+
+    Q1 = dataframes["time"].quantile(.25)
+    Q3 = dataframes["time"].quantile(.75)
+    IQR = Q3 - Q1
+
+    SUP = Q3 + 1.5*IQR
+    INF = Q1 - 1.5*IQR
+
+    dataframes = dataframes[ (dataframes["time"]>=INF) & (dataframes["time"]<=SUP) ]
+
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
+
+    sns.boxplot(
+        data=dataframes,
+        legend=False,
+        x="algorithm",
+        y="time",
+        hue="algorithm",
+        palette=colors,
+        order=["AVL", "BST", "RBT"]
+    )
+
+    plt.xlabel("Algoritmo")
+    plt.ylabel("Tempo de Execução da Busca (Nanosegundos)")
+
+    plt.savefig(os.path.join(graphics_path, 'Boxplot_Performance_Search'))
+    plt.close()
+
+
+@execution_time
+def boxplots_comparisions(
+    bst_search_path: Iterator[pd.DataFrame],
+    avl_search_path: Iterator[pd.DataFrame],
+    rbt_search_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    bst_search = pd.read_csv(bst_search_path, chunksize=100000, sep=";")
+    avl_search = pd.read_csv(avl_search_path, chunksize=100000, sep=";")
+    rbt_search = pd.read_csv(rbt_search_path, chunksize=100000, sep=";")
+
+    queue = mp.Queue()
+
+    bst_search_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            bst_search,
+            "comparisions",
+            queue,
+            'BST'
+        )
+    )
+    avl_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            avl_search,
+            "comparisions",
+            queue,
+            'AVL'
+        )
+    )
+    rbt_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            rbt_search,
+            "comparisions",
+            queue,
+            'RBT'
+        )
+    )
+
+    bst_search_process.start()
+    avl_insert_process.start()
+    rbt_insert_process.start()
+    
+    dataframes = []
+    for _ in range(3):
+        dataframes.append(queue.get())
+    
+    dataframes = pd.concat(dataframes)
+
+    bst_search_process.join()
+    avl_insert_process.join()
+    rbt_insert_process.join()
+
+    plt.title("Boxplot das Comparações na BUSCA")
+
+    Q1 = dataframes["comparisions"].quantile(.25)
+    Q3 = dataframes["comparisions"].quantile(.75)
+    IQR = Q3 - Q1
+
+    SUP = Q3 + 1.5*IQR
+    INF = Q1 - 1.5*IQR
+
+    dataframes = dataframes[ (dataframes["comparisions"]>=INF) & (dataframes["comparisions"]<=SUP) ]
+
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
+
+    sns.boxplot(
+        data=dataframes,
+        legend=False,
+        x="algorithm",
+        y="comparisions",
+        hue="algorithm",
+        palette=colors,
+        order=["AVL", "BST", "RBT"]
+    )
+
+    plt.xlabel("Algoritmo")
+    plt.ylabel("Comparações")
+
+    plt.savefig(os.path.join(graphics_path, 'Boxplot_Comparisions_Search'))
+    plt.close()
+
+
+@execution_time
+def generate_mean_rotations_count_per_unique_words(
+    avl_insert_path: Iterator[pd.DataFrame],
+    rbt_insert_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    queue = mp.Queue()
+    processes = []
+
+    avl_insert = pd.read_csv(avl_insert_path, chunksize=100000, sep=";")
+    rbt_insert = pd.read_csv(rbt_insert_path, chunksize=100000, sep=";")
+
+    avl_grouping_process = mp.Process(
+        target=group_by_nodes_count_and_get_mean_rotations,
+        args=(
+            avl_insert,
+            "avl",
+            queue
+        )
+    )
+
+    rbt_grouping_process = mp.Process(
+        target=group_by_nodes_count_and_get_mean_rotations,
+        args=(
+            rbt_insert,
+            "rbt",
+            queue
+        )
+    )
+
+    processes.append(avl_grouping_process)
+    processes.append(rbt_grouping_process)
+
+    for process in processes:
+        process.start()
+
+    infos_to_plot = []
+
+    for _ in range(len(processes)):
+        infos_to_plot.append(queue.get())
+    
+    for process in processes:
+        process.join()
+    
+    colors = {
+        "avl": "#90B8D0",
+        "rbt": "#E57373"
+    }
+
+    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+    fig.suptitle("Média de Rotações em Função da Quantidade de Palavras Únicas durante o processo de Inserção")
+
+    sizes = [len(info[1]) for info in infos_to_plot]
+
+    infos_to_plot = sorted(infos_to_plot, key=lambda i: i[0])
+
+    for j, info in enumerate(infos_to_plot):
+        axes[j].plot(info[1].index, info[1], linewidth=2, color=colors[info[0]])
+        axes[j].set_title(info[0].upper())
+
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.set_facecolor("#eeeeee")
+        maximum_series = max(infos_to_plot, key=lambda i: i[1].max())[1]
+        ax.set_ylim(bottom=0, top=maximum_series.max())
+        ax.set_xlim(left=0, right=max(sizes))
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.tick_params(axis="both", labelsize=8)
+        ax.set_xlabel("Quantidade de Palavras Únicas")
+        ax.set_ylabel("Média de Rotações")
+        ax.grid(color="white")
+    
+    plt.savefig(os.path.join(graphics_path, "Mean_Rotations_per_Unique_Word.png"))
     plt.close()

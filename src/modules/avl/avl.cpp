@@ -10,8 +10,8 @@ namespace AVL
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;                                                   // defino a raiz como nula
         tree->height = 0;                                                       // altura da árvore
-        tree->rotationsCount = 0;                                               // inicio a contagem de rotações com 0
-        tree->nodeCount = 0;                                                    // inicio a contagem dos nos
+        tree->rotationsCount = 0;                                               // contagem de rotações
+        tree->nodeCount = 0;
 
         return tree;                                                            // retorno a árvore criada
     }

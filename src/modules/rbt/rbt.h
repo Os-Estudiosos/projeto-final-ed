@@ -59,4 +59,23 @@ namespace RBT
      * @param z Nó recém-inserido que pode causar violação.
      */
     void fixInsert(Node **root, Node* z, BinaryTree *tree);
+
+    /**
+     * @brief Obtém a altura de um nó, retornando 0 se o nó for nulo.
+     * @param node Ponteiro para o nó.
+     * @return int A altura do nó.
+     */
+    int getNodeHeight(Node* node);
+
+    /**
+     * @brief Atualiza a altura de um nó com base na altura máxima de seus filhos.
+     * @param node Ponteiro para o nó a ser atualizado.
+     */
+    void updateNodeHeight(Node* node);
+
+    /**
+     * @brief Sobe na árvore a partir de um nó, atualizando a altura de seus ancestrais.
+     * @param node Nó inicial para a atualização.
+     */
+    void updateHeightUpwards(Node* node);
 }

@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
         std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insertString;
-        insertString << "word;time;comparisions;treeHeight;nodes\n";
+        insertString << "word;time;comparisions;treeHeight;nodes;rotations\n";
         
         int comparacoes = 0;
         long long time = 0;
@@ -102,10 +102,16 @@ int main(int argc, char* argv[])
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
             cwords += size;
+            for(int h = 0; h < 10; h++)
+            {
+                auto start = std::chrono::high_resolution_clock::now();                        // Raiz é sempre preta em uma RBT
+                auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
+                auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); 
+            }
             for (int j = 0;j < size;j++)
             {
                 InsertResult result = AVL::insert(tree, words[j], i);
-                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< tree->height << ";" << tree->nodeCount << std::endl;
+                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< tree->root->height << ";" << tree->nodeCount << ";" << tree->rotationsCount << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
