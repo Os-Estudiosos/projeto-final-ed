@@ -9,6 +9,8 @@ namespace BST
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;                                                   // defino a raiz como nula
         tree->height = 0;                                                       // inicio a altura como 0
+        tree->rotationsCount = 0;                                               // inicio a contagem de rotações com 0 (aqui é para não acessar valores indevidos)
+        tree->nodeCount = 0;                                                    // inicio a contagem dos nos
         return tree;                                                            // retorno a árvore criada
     }
 

@@ -9,7 +9,8 @@ namespace RBT
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;  
         tree->height = 0;                                                       // defino a raiz como nula
-        tree->rotationsCount = 0;
+        tree->rotationsCount = 0;                                               // inicio a contagem de rotações com 0
+        tree->nodeCount = 0;                                                    // inicio a contagem dos nos
         return tree;                                                            // retorno a árvore criada
     }
 
