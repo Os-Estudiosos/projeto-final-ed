@@ -4,11 +4,36 @@
 
 namespace RBT
 {
+
+    int getNodeHeight(Node* node)
+    {
+        return node ? node->height : 0;
+    }
+
+    void updateNodeHeight(Node* node)
+    {
+        if (node)
+        {
+            node->height = 1 + std::max(getNodeHeight(node->left), getNodeHeight(node->right));
+        }
+    }
+    
+    void updateHeightUpwards(Node* node)
+    {
+        while(node != nullptr)
+        {
+            updateNodeHeight(node);
+            node = node->parent;
+        }
+    }
+
     BinaryTree* create()
     {
         BinaryTree *tree = new BinaryTree;                                      // inicio uma árvore nova
         tree->root = nullptr;  
         tree->height = 0;                                                       // defino a raiz como nula
+        tree->rotationsCount = 0;
+        tree->nodeCount = 0;
         return tree;                                                            // retorno a árvore criada
     }
 
@@ -21,7 +46,7 @@ namespace RBT
         node->left = nullptr;
         node->right = nullptr;
         node->isRed = color;   
-        
+        node->height = 1;
         return node;  
     }
 
@@ -32,7 +57,6 @@ namespace RBT
         InsertResult resultInsert;                                             // Crio estrutura de insert
         resultInsert.numComparisons = 0;                                       // Defino ambas variáveis como zero
         resultInsert.executionTime = 0;    
-
         if (tree == nullptr || word == "")                                      // Verifico se a árvore é nula ou se passaram uma palavra vazia
         {                                                                       // Se for, apenas retorno a estrutura de insert inicial (tudo 0)
             return resultInsert;                                               // (não faz sentido finalizar a contagem de tempo, pois esse caso nada incrementa as estatísticas)
@@ -41,12 +65,12 @@ namespace RBT
         if (tree->root == nullptr)                                              // Se a árvore não for nula, mas sua raiz é (árvore vazia)
         {
             tree->root = createNode(documentId, word, BLACK);                                         // Raiz é sempre preta em uma RBT
+            tree->nodeCount += 1;                                                // incrementando a contagem de nós
+            tree->height = 1;
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
             resultInsert.executionTime = time_ms;                              // Alteramos o atributo do tempo de execução
-            tree->nodeCount += 1;                                                // incrementando a contagem de nós
-
             return resultInsert;                                               // Retornamos a struct alterada
         }
         else                                                                    // Caso a árvore já tenha algum nó
@@ -111,9 +135,11 @@ namespace RBT
                 last->left = newNode;                                           // Alteramos o nó da esquerda do pai como o nó que criamos
             }
 
+            updateHeightUpwards(last);
             // Corrigir as propriedades da RBT após a inserção
-            fixInsert(&tree->root, newNode);
+            fixInsert(&tree->root, newNode, tree);
 
+            tree->height = getNodeHeight(tree->root);
             auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // Subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // Mudamos para double
@@ -142,8 +168,9 @@ namespace RBT
         }
     }
 
-        void rotateLeft(Node** root, Node* x)
+        void rotateLeft( BinaryTree *tree, Node** root, Node* x)
     {
+        tree->rotationsCount ++;
         Node* y = x->right;                                                     // y será o novo pai de x após a rotação
         x->right = y->left;                                                     // o filho esquerdo de y vira o filho direito de x
 
@@ -162,10 +189,13 @@ namespace RBT
 
         y->left = x;                                                            // x vira filho à esquerda de y
         x->parent = y;                                                          // atualiza o pai de x para ser y
+        updateNodeHeight(x);
+        updateNodeHeight(y);
     }
 
-    void rotateRight(Node** root, Node* y)
+    void rotateRight(BinaryTree *tree, Node** root, Node* y)
     {
+        tree->rotationsCount ++;
         Node* x = y->left;                                                      // x será o novo pai de y após a rotação
         y->left = x->right;                                                     // o filho direito de x vira o filho esquerdo de y
 
@@ -184,9 +214,11 @@ namespace RBT
 
         x->right = y;                                                           // y vira filho à direita de x
         y->parent = x;                                                          // atualiza o pai de y para ser x
+        updateNodeHeight(y);
+        updateNodeHeight(x);
     }
 
-    void fixInsert(Node **root, Node* z)
+    void fixInsert(Node **root, Node* z, BinaryTree *tree)
     {
         while (z->parent != nullptr && z->parent->isRed == RED)                // enquanto o pai de z for vermelho (violação da RBT)
         {
@@ -209,7 +241,7 @@ namespace RBT
                     if (z == parent->right)                                   // caso 2: z é filho à direita do pai
                     {
                         z = parent;                                           // salva o pai
-                        rotateLeft(root, z);                                  // rotaciona para transformar no caso 3
+                        rotateLeft(tree, root, z);                                  // rotaciona para transformar no caso 3
                         parent = z->parent;                                   // atualiza o pai
                         grandparent = parent->parent;                         // atualiza o avô
                     }
@@ -217,13 +249,13 @@ namespace RBT
                     // caso 3: z é filho à esquerda do pai
                     parent->isRed = BLACK;                                    // recolore pai para preto
                     grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    rotateRight(root, grandparent);                           // rotação à direita para balancear
+                    rotateRight(tree, root, grandparent);                           // rotação à direita para balancear
                 }
             }
             else                                                               // espelho do caso acima (pai é filho à direita)
             {
                 Node* uncle = grandparent->left;                              // salva o tio (lado oposto)
-
+                
                 if (uncle != nullptr && uncle->isRed == RED)                  // caso 1: tio vermelho
                 {
                     parent->isRed = BLACK;                                    // recolore pai para preto
@@ -236,7 +268,7 @@ namespace RBT
                     if (z == parent->left)                                   // caso 2: z é filho à esquerda do pai
                     {
                         z = parent;                                          // salva o pai
-                        rotateRight(root, z);                                // rotação para transformar no caso 3
+                        rotateRight(tree, root, z);                                // rotação para transformar no caso 3
                         parent = z->parent;                                  // atualiza o pai
                         grandparent = parent->parent;                        // atualiza o avô
                     }
@@ -244,7 +276,7 @@ namespace RBT
                     // caso 3: z é filho à direita do pai
                     parent->isRed = BLACK;                                   // recolore pai para preto
                     grandparent->isRed = RED;                                // recolore avô para vermelho
-                    rotateLeft(root, grandparent);                           // rotação à esquerda para balancear
+                    rotateLeft(tree, root, grandparent);                           // rotação à esquerda para balancear
                 }
             }
         }

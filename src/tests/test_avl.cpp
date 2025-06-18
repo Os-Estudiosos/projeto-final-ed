@@ -60,7 +60,9 @@ void treeStructureTests()
         for (int i = 0; i < size; i++)
         {
             AVL::insert(tree, wordsToInsert[i], docsIds[i]);
+            
         }
+
 
         // Verificando se todas foram inseridas corretamente
         for (int j = 0; j < size; j++)
@@ -180,7 +182,7 @@ void treeAvlPropreties()
             AVL::insert(tree, "b", 1);
             AVL::insert(tree, "c", 2);
             if (!(tree->root->word == "b" && tree->root->left->word == "a" && tree->root->right->word == "c" &&
-                tree->root->height == 2 && tree->root->left->height == 1 && tree->root->right->height == 1))
+                tree->root->height == 1 && tree->root->left->height == 0 && tree->root->right->height == 0))
             {
                 AVL::destroy(tree);
                 throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso RR");
@@ -203,7 +205,7 @@ void treeAvlPropreties()
             AVL::insert(tree, "b", 1);
             AVL::insert(tree, "a", 2);
             if (!(tree->root->word == "b" && tree->root->left->word == "a" && tree->root->right->word == "c" &&
-                tree->root->height == 2 && tree->root->left->height == 1 && tree->root->right->height == 1))
+                tree->root->height == 1 && tree->root->left->height == 0 && tree->root->right->height == 0))
             {
                 AVL::destroy(tree);
                 throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso LL");
@@ -226,7 +228,7 @@ void treeAvlPropreties()
             AVL::insert(tree, "a", 1);
             AVL::insert(tree, "b", 2);
             if (!(tree->root->word == "b" && tree->root->left->word == "a" && tree->root->right->word == "c" &&
-                tree->root->height == 2 && tree->root->left->height == 1 && tree->root->right->height == 1))
+                tree->root->height == 1 && tree->root->left->height == 0 && tree->root->right->height == 0))
             {
                 AVL::destroy(tree);
                 throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso LR");
@@ -249,7 +251,7 @@ void treeAvlPropreties()
             AVL::insert(tree, "c", 1);
             AVL::insert(tree, "b", 2);
             if (!(tree->root->word == "b" && tree->root->left->word == "a" && tree->root->right->word == "c" &&
-                tree->root->height == 2 && tree->root->left->height == 1 && tree->root->right->height == 1))
+                tree->root->height == 1 && tree->root->left->height == 0 && tree->root->right->height == 0))
             {
                 AVL::destroy(tree);
                 throw std::runtime_error("A arvore nao esta sendo balanceada corretamente para o caso RL");

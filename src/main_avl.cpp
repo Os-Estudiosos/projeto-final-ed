@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
         insertString << "word;time;comparisions;treeHeight;nodes\n";
         
         int comparacoes = 0;
-        long int time = 0;
+        long long time = 0;
         int cwords = 0;
         int size = 0;
         for (int i = 0;i < numDocs;i++)

@@ -34,11 +34,11 @@ namespace BST
             tree->root->left = nullptr;
             tree->root->right = nullptr;
             tree->root->depth = 0;                                              // profundidade da raiz é 0
+            tree->nodeCount += 1;                                                // incrementando a contagem de nós
             auto end = std::chrono::high_resolution_clock::now();               // encerramos a contagem de tempo
             auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); // subtraímos o tempo do começo e o do fim
             double time_ms = duration.count();                                  // mudamos para double
             resultInsert.executionTime = time_ms;                               // alteramos o atributo do tempo de execução
-            tree->nodeCount += 1;                                                // incrementando a contagem de nós
  
             return resultInsert;                                                // retornamos a struct alterada
         }

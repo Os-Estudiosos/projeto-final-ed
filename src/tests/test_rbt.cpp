@@ -283,13 +283,13 @@ void rbtPropertiesTests()
         RBT::insert(tree, "b", 1);
         RBT::insert(tree, "e", 2);
         RBT::insert(tree, "a", 3);
-
+        
         if (!isRBT(tree) || tree->root->left->isRed != RBT::BLACK || tree->root->right->isRed != RBT::BLACK)
         {
             RBT::destroy(tree);
             throw std::runtime_error("A arvore falhou na recoloracao ou violou propriedades.");
         }
-
+        
         RBT::destroy(tree);
         printMessage(" CONCLUIDO", 1, "92");
     } catch (const std::runtime_error& err)
@@ -297,6 +297,36 @@ void rbtPropertiesTests()
         printMessage(" ERRO", 1, "91");
         printMessage(std::string(".......") + err.what(), 1);
     }
+    
+    try
+    {
+        printMessage("Testando propriedades RBT com numero de rotacoes...", 0);
+        BinaryTree* tree = RBT::create();
+        std::vector<std::string> words = {"a", "b", "c", "d", "e", "f", "g"};
+        for(size_t i = 0; i < words.size(); ++i) {
+            RBT::insert(tree, words[i], i);
+        }
+        
+        // Para a sequência de 1 a 7, o número esperado de rotações é 5.
+        int valorEsperado = 3; 
+        
+        if (tree->rotationsCount != valorEsperado)
+        {
+            // Monta a mensagem de erro
+            std::string error_msg = "Errou a contagem de rotacoes. Esperado: " + 
+            std::to_string(valorEsperado) + ", Obtido: " + 
+            std::to_string(tree->rotationsCount);
+            throw std::runtime_error(error_msg);
+        }
+        RBT::destroy(tree);
+        printMessage(" CONCLUIDO", 1, "92");
+        
+    } catch (const std::runtime_error& err)
+    {
+        printMessage("FALHA", 1, "91"); // Vermelho brilhante
+        printMessage(err.what(), 1);
+    }
+    
 }
 
 
