@@ -98,10 +98,6 @@ int main(int argc, char* argv[])
         int size = 0;
         for (int i = 0;i < numDocs;i++)
         {
-            if (i % 100 == 0)
-            {
-                std::cout<< i << " / " << numDocs << std::endl;
-            }
             std::string archivePath = path + std::to_string(i) + ".txt";
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
