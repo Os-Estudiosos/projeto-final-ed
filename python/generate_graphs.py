@@ -92,10 +92,34 @@ if __name__ == "__main__":
         )
     )
 
+    read_boxplots_performance_process = mp.Process(
+        target=boxplots_performance,
+        args=(
+            SEARCH_BST_PATH,
+            SEARCH_AVL_PATH,
+            SEARCH_RBT_PATH,
+            GRAPHICS_PATH
+        )
+    )
+
+    read_boxplots_comparisions_process = mp.Process(
+        target=boxplots_comparisions,
+        args=(
+            SEARCH_BST_PATH,
+            SEARCH_AVL_PATH,
+            SEARCH_RBT_PATH,
+            GRAPHICS_PATH
+        )
+    )
+
     insert_graphics_process.start()
     insert_group_tree_height_graphics_process.start()
     read_graphics_process.start()
+    read_boxplots_performance_process.start()
+    read_boxplots_comparisions_process.start()
 
     insert_graphics_process.join()
     insert_group_tree_height_graphics_process.join()
     read_graphics_process.join()
+    read_boxplots_performance_process.join()
+    read_boxplots_comparisions_process.join()

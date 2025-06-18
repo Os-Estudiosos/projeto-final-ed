@@ -63,6 +63,23 @@ def group_by_and_average(chunks: Iterator[pd.DataFrame], wich: str, group_column
     queue.put((wich, average_comparisions, average_performance))
 
 
+def group_to_boxplot(chunks: Iterator[pd.DataFrame], column, queue, wich):
+    column_series = None
+    for chunk in chunks:
+        if column_series is None:
+            column_series = chunk[column]
+        else:
+            column_series = pd.concat([column_series, chunk[column]])
+
+    algorithm_series = pd.Series([wich for _ in range(len(column_series))])
+
+    df = pd.DataFrame({
+        "algorithm": algorithm_series,
+        column: column_series
+    })
+
+    queue.put(df)
+
 @execution_time
 def generate_insert_graphics(
     bst_insert_path: Iterator[pd.DataFrame],
@@ -209,43 +226,6 @@ def generate_insert_group_treeheight_graphics(
     
     for process in processes:
         process.join()
-    
-
-    plt.title("Boxplot da Média de Comparações por Inserção na Árvore")
-    algorithm_series = None
-    insertion = None
-
-    for info in infos_to_plot:
-        if algorithm_series is None:
-            algorithm_series = pd.Series([ info[0] for _ in range(len(info[1])) ])
-        else:
-            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[1])) ]) ]).reset_index(drop=True)
-        
-        if insertion is None:
-            insertion = info[1]
-        else:
-            insertion = pd.concat([insertion, info[1]]).reset_index(drop=True)
-    
-    means_plot_df = pd.DataFrame({
-        "algorithm": algorithm_series,
-        "comparisions": insertion
-    })
-
-    sns.boxplot(
-        data=means_plot_df,
-        x="algorithm",
-        y="comparisions",
-        legend=False,
-        palette="pastel",
-        hue="algorithm"
-    )
-
-    plt.ylabel("Média de Comparações")
-    plt.xlabel("Algoritmo")
-
-    plt.savefig(os.path.join(graphics_path, "Mean_Comparisisons_Boxplot.png"))
-    plt.close()
-
 
     plt.title("Boxplot da Média de Performance (Nanosegundo) por Inserção na Árvore")
     algorithm_series = None
@@ -300,6 +280,8 @@ def generate_insert_group_treeheight_graphics(
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Média de Comparações em Função da Altura da Árvore")
 
+    sizes = [len(info[1]) for info in infos_to_plot]
+
     for j, info in enumerate(infos_to_plot):
         axes[j].plot(info[1].index, info[1], "--o", linewidth=1, markersize=4, color=colors[info[0]])
         axes[j].set_title(info[0].upper())
@@ -307,6 +289,9 @@ def generate_insert_group_treeheight_graphics(
     for ax in axes:
         ax.set_axisbelow(True)
         ax.set_facecolor("#eeeeee")
+        maximum_series = max(infos_to_plot, key=lambda i: i[1].max())[1]
+        ax.set_ylim(bottom=0, top=maximum_series.max())
+        ax.set_xlim(left=0, right=max(sizes))
         for spine in ax.spines.values():
             spine.set_visible(False)
         ax.tick_params(axis="both", labelsize=8)
@@ -316,6 +301,9 @@ def generate_insert_group_treeheight_graphics(
     
     plt.savefig(os.path.join(graphics_path, "Mean_Comparisions_per_Height.png"))
     plt.close()
+
+
+    sizes = [len(info[2]) for info in infos_to_plot]
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Média de Performance em Função da Altura da Árvore")
@@ -327,6 +315,9 @@ def generate_insert_group_treeheight_graphics(
     for ax in axes:
         ax.set_axisbelow(True)
         ax.set_facecolor("#eeeeee")
+        maximum_series = max(infos_to_plot, key=lambda i: i[2].max())[2]
+        ax.set_ylim(bottom=0, top=maximum_series.max())
+        ax.set_xlim(left=0, right=max(sizes))
         for spine in ax.spines.values():
             spine.set_visible(False)
         ax.tick_params(axis="both", labelsize=8)
@@ -423,4 +414,168 @@ def generate_read_graphics(
     plt.xlabel("Tipo de Árvore")
 
     plt.savefig(os.path.join(graphics_path, "Search_Comparisions_Median.png"))
+    plt.close()
+
+
+@execution_time
+def boxplots_performance(
+    bst_search_path: Iterator[pd.DataFrame],
+    avl_search_path: Iterator[pd.DataFrame],
+    rbt_search_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    bst_search = pd.read_csv(bst_search_path, chunksize=100000, sep=";")
+    avl_search = pd.read_csv(avl_search_path, chunksize=100000, sep=";")
+    rbt_search = pd.read_csv(rbt_search_path, chunksize=100000, sep=";")
+
+    queue = mp.Queue()
+
+    bst_search_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            bst_search,
+            "time",
+            queue,
+            'BST'
+        )
+    )
+    avl_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            avl_search,
+            "time",
+            queue,
+            'AVL'
+        )
+    )
+    rbt_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            rbt_search,
+            "time",
+            queue,
+            'RBT'
+        )
+    )
+
+    bst_search_process.start()
+    avl_insert_process.start()
+    rbt_insert_process.start()
+    
+    dataframes = []
+    for _ in range(3):
+        dataframes.append(queue.get())
+    
+    dataframes = pd.concat(dataframes)
+
+    bst_search_process.join()
+    avl_insert_process.join()
+    rbt_insert_process.join()
+
+    plt.title("Boxplot dos Tempos de Execução na BUSCA")
+
+    Q1 = dataframes["time"].quantile(.25)
+    Q3 = dataframes["time"].quantile(.75)
+    IQR = Q3 - Q1
+
+    SUP = Q3 + 1.5*IQR
+    INF = Q1 - 1.5*IQR
+
+    dataframes = dataframes[ (dataframes["time"]>=INF) & (dataframes["time"]<=SUP) ]
+
+    sns.boxplot(
+        data=dataframes,
+        legend=False,
+        x="algorithm",
+        y="time",
+        hue="algorithm",
+        palette="pastel"
+    )
+
+    plt.xlabel("Algoritmo")
+    plt.ylabel("Tempo de Execução da Busca")
+
+    plt.savefig(os.path.join(graphics_path, 'Boxplot_Performance_Search'))
+    plt.close()
+
+
+@execution_time
+def boxplots_comparisions(
+    bst_search_path: Iterator[pd.DataFrame],
+    avl_search_path: Iterator[pd.DataFrame],
+    rbt_search_path: Iterator[pd.DataFrame],
+    graphics_path: str
+):
+    bst_search = pd.read_csv(bst_search_path, chunksize=100000, sep=";")
+    avl_search = pd.read_csv(avl_search_path, chunksize=100000, sep=";")
+    rbt_search = pd.read_csv(rbt_search_path, chunksize=100000, sep=";")
+
+    queue = mp.Queue()
+
+    bst_search_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            bst_search,
+            "comparisions",
+            queue,
+            'BST'
+        )
+    )
+    avl_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            avl_search,
+            "comparisions",
+            queue,
+            'AVL'
+        )
+    )
+    rbt_insert_process = mp.Process(
+        target=group_to_boxplot,
+        args=(
+            rbt_search,
+            "comparisions",
+            queue,
+            'RBT'
+        )
+    )
+
+    bst_search_process.start()
+    avl_insert_process.start()
+    rbt_insert_process.start()
+    
+    dataframes = []
+    for _ in range(3):
+        dataframes.append(queue.get())
+    
+    dataframes = pd.concat(dataframes)
+
+    bst_search_process.join()
+    avl_insert_process.join()
+    rbt_insert_process.join()
+
+    plt.title("Boxplot das Comparações na BUSCA")
+
+    Q1 = dataframes["comparisions"].quantile(.25)
+    Q3 = dataframes["comparisions"].quantile(.75)
+    IQR = Q3 - Q1
+
+    SUP = Q3 + 1.5*IQR
+    INF = Q1 - 1.5*IQR
+
+    dataframes = dataframes[ (dataframes["comparisions"]>=INF) & (dataframes["comparisions"]<=SUP) ]
+
+    sns.boxplot(
+        data=dataframes,
+        legend=False,
+        x="algorithm",
+        y="comparisions",
+        hue="algorithm",
+        palette="pastel"
+    )
+
+    plt.xlabel("Algoritmo")
+    plt.ylabel("Comparações")
+
+    plt.savefig(os.path.join(graphics_path, 'Boxplot_Comparisions_Search'))
     plt.close()
