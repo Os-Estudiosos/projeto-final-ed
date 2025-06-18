@@ -102,6 +102,12 @@ int main(int argc, char* argv[])
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
             cwords += size;
+            for(int h = 0; h < 10; h++)
+            {
+                auto start = std::chrono::high_resolution_clock::now();                        // Raiz é sempre preta em uma RBT
+                auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
+                auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); 
+            }
             for (int j = 0;j < size;j++)
             {
                 InsertResult result = AVL::insert(tree, words[j], i);

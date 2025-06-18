@@ -126,25 +126,30 @@ def generate_insert_graphics(
 
     plot_df = pd.DataFrame({
         "median_time": [
-            bst_mean_time.value,
             avl_mean_time.value,
+            bst_mean_time.value,
             rbt_mean_time.value
         ],
         "mean_comparisions": [
-            bst_mean_comparisions.value,
             avl_mean_comparisions.value,
+            bst_mean_comparisions.value,
             rbt_mean_comparisions.value
         ],
-        "tree": ["BST", "AVL", "RBT"]
+        "tree": ["AVL", "BST", "RBT"]
     })
 
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
     
     plt.title("Média do Tempo de Inserção em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -158,7 +163,7 @@ def generate_insert_graphics(
         data=plot_df,
         hue="tree",
         y="mean_comparisions",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -226,50 +231,6 @@ def generate_insert_group_treeheight_graphics(
     
     for process in processes:
         process.join()
-
-    plt.title("Boxplot da Média de Performance (Nanosegundo) por Inserção na Árvore")
-    algorithm_series = None
-    insertion = None
-
-    for info in infos_to_plot:
-        if algorithm_series is None:
-            algorithm_series = pd.Series([ info[0] for _ in range(len(info[2])) ])
-        else:
-            algorithm_series = pd.concat([ algorithm_series, pd.Series([ info[0] for _ in range(len(info[2])) ]) ]).reset_index(drop=True)
-        
-        if insertion is None:
-            insertion = info[2]
-        else:
-            insertion = pd.concat([insertion, info[2]]).reset_index(drop=True)
-    
-    means_plot_df = pd.DataFrame({
-        "algorithm": algorithm_series,
-        "times": insertion
-    })
-
-    Q1 = means_plot_df["times"].quantile(.25)
-    Q3 = means_plot_df["times"].quantile(.75)
-    IQR = Q3 - Q1
-
-    SUP = Q3 + 1.5*IQR
-    INF = Q1 - 1.5*IQR
-
-    means_plot_df = means_plot_df[(INF <= means_plot_df["times"]) & (means_plot_df["times"] <= SUP)]
-
-    sns.boxplot(
-        data=means_plot_df,
-        x="algorithm",
-        y="times",
-        legend=False,
-        palette="pastel",
-        hue="algorithm"
-    )
-
-    plt.ylabel("Tempo Médio de Desempenho (Nanosegundos)")
-    plt.xlabel("Algoritmo")
-
-    plt.savefig(os.path.join(graphics_path, "Mean_Performance_Boxplot.png"))
-    plt.close()
     
     colors = {
         "avl": "#90B8D0",
@@ -281,6 +242,8 @@ def generate_insert_group_treeheight_graphics(
     fig.suptitle("Média de Comparações em Função da Altura da Árvore")
 
     sizes = [len(info[1]) for info in infos_to_plot]
+
+    infos_to_plot = sorted(infos_to_plot, key=lambda i: i[0])
 
     for j, info in enumerate(infos_to_plot):
         axes[j].plot(info[1].index, info[1], "--o", linewidth=1, markersize=4, color=colors[info[0]])
@@ -307,6 +270,8 @@ def generate_insert_group_treeheight_graphics(
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Média de Performance em Função da Altura da Árvore")
+
+    infos_to_plot = sorted(infos_to_plot, key=lambda i: i[0])
 
     for i, info in enumerate(infos_to_plot):
         axes[i].plot(info[2].index, info[2], "--o", linewidth=1, markersize=4, color=colors[info[0]])
@@ -375,24 +340,30 @@ def generate_read_graphics(
 
     plot_df = pd.DataFrame({
         "median_time": [
-            bst_mean_time.value,
             avl_mean_time.value,
+            bst_mean_time.value,
             rbt_mean_time.value
         ],
         "mean_comparisions": [
-            bst_mean_comparisions.value,
             avl_mean_comparisions.value,
+            bst_mean_comparisions.value,
             rbt_mean_comparisions.value
         ],
-        "tree": ["BST", "AVL", "RBT"]
+        "tree": ["AVL", "BST", "RBT"]
     })
+
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
 
     plt.title("Média do Tempo de Busca em Nanosegundos por Árvore")
     sns.barplot(
         data=plot_df,
         hue="tree",
         y="median_time",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -406,7 +377,7 @@ def generate_read_graphics(
         data=plot_df,
         hue="tree",
         y="mean_comparisions",
-        palette="pastel",
+        palette=colors,
         x="tree",
         legend=False
     )
@@ -483,17 +454,24 @@ def boxplots_performance(
 
     dataframes = dataframes[ (dataframes["time"]>=INF) & (dataframes["time"]<=SUP) ]
 
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
+
     sns.boxplot(
         data=dataframes,
         legend=False,
         x="algorithm",
         y="time",
         hue="algorithm",
-        palette="pastel"
+        palette=colors,
+        order=["AVL", "BST", "RBT"]
     )
 
     plt.xlabel("Algoritmo")
-    plt.ylabel("Tempo de Execução da Busca")
+    plt.ylabel("Tempo de Execução da Busca (Nanosegundos)")
 
     plt.savefig(os.path.join(graphics_path, 'Boxplot_Performance_Search'))
     plt.close()
@@ -565,13 +543,20 @@ def boxplots_comparisions(
 
     dataframes = dataframes[ (dataframes["comparisions"]>=INF) & (dataframes["comparisions"]<=SUP) ]
 
+    colors = {
+        "AVL": "#90B8D0",
+        "BST": "#66BB88",
+        "RBT": "#E57373"
+    }
+
     sns.boxplot(
         data=dataframes,
         legend=False,
         x="algorithm",
         y="comparisions",
         hue="algorithm",
-        palette="pastel"
+        palette=colors,
+        order=["AVL", "BST", "RBT"]
     )
 
     plt.xlabel("Algoritmo")
