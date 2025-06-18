@@ -142,8 +142,9 @@ namespace RBT
         }
     }
 
-        void rotateLeft(Node** root, Node* x)
+        void rotateLeft( BinaryTree *tree, Node** root, Node* x)
     {
+        tree->rotationsCount ++;
         Node* y = x->right;                                                     // y será o novo pai de x após a rotação
         x->right = y->left;                                                     // o filho esquerdo de y vira o filho direito de x
 
@@ -164,8 +165,9 @@ namespace RBT
         x->parent = y;                                                          // atualiza o pai de x para ser y
     }
 
-    void rotateRight(Node** root, Node* y)
+    void rotateRight(BinaryTree *tree, Node** root, Node* y)
     {
+        tree->rotationsCount ++;
         Node* x = y->left;                                                      // x será o novo pai de y após a rotação
         y->left = x->right;                                                     // o filho direito de x vira o filho esquerdo de y
 
@@ -209,17 +211,15 @@ namespace RBT
                     if (z == parent->right)                                   // caso 2: z é filho à direita do pai
                     {
                         z = parent;                                           // salva o pai
-                        rotateLeft(root, z);                                  // rotaciona para transformar no caso 3
+                        rotateLeft(tree, root, z);                                  // rotaciona para transformar no caso 3
                         parent = z->parent;                                   // atualiza o pai
                         grandparent = parent->parent;                         // atualiza o avô
-                        tree->rotationsCount ++;
                     }
 
                     // caso 3: z é filho à esquerda do pai
                     parent->isRed = BLACK;                                    // recolore pai para preto
                     grandparent->isRed = RED;                                 // recolore avô para vermelho
-                    rotateRight(root, grandparent);                           // rotação à direita para balancear
-                    tree->rotationsCount ++;
+                    rotateRight(tree, root, grandparent);                           // rotação à direita para balancear
                 }
             }
             else                                                               // espelho do caso acima (pai é filho à direita)
@@ -238,17 +238,15 @@ namespace RBT
                     if (z == parent->left)                                   // caso 2: z é filho à esquerda do pai
                     {
                         z = parent;                                          // salva o pai
-                        rotateRight(root, z);                                // rotação para transformar no caso 3
+                        rotateRight(tree, root, z);                                // rotação para transformar no caso 3
                         parent = z->parent;                                  // atualiza o pai
                         grandparent = parent->parent;                        // atualiza o avô
-                        tree->rotationsCount ++;
                     }
                     
                     // caso 3: z é filho à direita do pai
                     parent->isRed = BLACK;                                   // recolore pai para preto
                     grandparent->isRed = RED;                                // recolore avô para vermelho
-                    rotateLeft(root, grandparent);                           // rotação à esquerda para balancear
-                    tree->rotationsCount ++;
+                    rotateLeft(tree, root, grandparent);                           // rotação à esquerda para balancear
                 }
             }
         }

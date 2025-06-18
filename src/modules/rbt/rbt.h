@@ -44,14 +44,14 @@ namespace RBT
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó ao redor do qual a rotação será feita.
      */
-    void rotateLeft(Node** root, Node* x);
+    void rotateLeft( BinaryTree *tree, Node** root, Node* x);
 
     /**
      * @brief Realiza uma rotação à direita em torno do nó y.
      * @param root Ponteiro para a raiz da árvore.
      * @param y Nó ao redor do qual a rotação será feita.
      */
-    void rotateRight(Node** root, Node* y);
+    void rotateRight( BinaryTree *tree, Node** root, Node* y);
 
     /**
      * @brief Corrige as violações da propriedade rubro-negra após uma inserção.
