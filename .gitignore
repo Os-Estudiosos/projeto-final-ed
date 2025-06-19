@@ -1,2 +1,8 @@
 /data/
 /src/stats/
+/.vscode
+/build
+/venv
+**/__pycache__/
+/data_2/
+*.exe

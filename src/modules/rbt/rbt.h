@@ -2,10 +2,7 @@
 
 #include "../../utils/tree_utils.h"
 
-// #include <vector>
 #include <string>
-// #include <iostream>
-
 
 namespace RBT
 {
@@ -36,14 +33,6 @@ namespace RBT
     InsertResult insert(BinaryTree *tree, const std::string &word, int documentId);
 
     /**
-     * @brief Busca uma palavra na árvore binária de busca.
-     * @param tree Ponteiro para a árvore onde a busca será realizada.
-     * @param word Palavra a ser buscada.
-     * @return SearchResult Estrutura contendo se a palavra foi encontrada (found), a lista de documentIds, o número de comparações (numComparisons), e o tempo de execução (executionTime) em milissegundos.
-     */
-    SearchResult search(BinaryTree *tree, const std::string &word);
-
-    /**
      * @brief Libera toda a memória alocada pela árvore binária de busca.
      * @param tree Ponteiro para a árvore a ser destruída.
      */
@@ -52,25 +41,44 @@ namespace RBT
 
     /**
      * @brief Realiza uma rotação à esquerda em torno do nó x.
-     * 
+     * @param tree Ponteiro para a árvore a ser destruída.
      * @param root Ponteiro para a raiz da árvore.
      * @param x Nó ao redor do qual a rotação será feita.
      */
-    void rotateLeft(Node** root, Node* x);
+    void rotateLeft( BinaryTree *tree, Node** root, Node* x);
 
     /**
      * @brief Realiza uma rotação à direita em torno do nó y.
-     * 
+     * @param tree Ponteiro para a árvore a ser destruída.
      * @param root Ponteiro para a raiz da árvore.
      * @param y Nó ao redor do qual a rotação será feita.
      */
-    void rotateRight(Node** root, Node* y);
+    void rotateRight( BinaryTree *tree, Node** root, Node* y);
 
     /**
      * @brief Corrige as violações da propriedade rubro-negra após uma inserção.
-     * 
      * @param root Ponteiro para a raiz da árvore.
      * @param z Nó recém-inserido que pode causar violação.
+     * @param tree Ponteiro para a árvore a ser destruída.
      */
-    void fixInsert(Node **root, Node* z);
+    void fixInsert(Node **root, Node* z, BinaryTree *tree);
+
+    /**
+     * @brief Obtém a altura de um nó, retornando 0 se o nó for nulo.
+     * @param node Ponteiro para o nó.
+     * @return int A altura do nó.
+     */
+    int getNodeHeight(Node* node);
+
+    /**
+     * @brief Atualiza a altura de um nó com base na altura máxima de seus filhos.
+     * @param node Ponteiro para o nó a ser atualizado.
+     */
+    void updateNodeHeight(Node* node);
+
+    /**
+     * @brief Sobe na árvore a partir de um nó, atualizando a altura de seus ancestrais.
+     * @param node Nó inicial para a atualização.
+     */
+    void updateHeightUpwards(Node* node);
 }
