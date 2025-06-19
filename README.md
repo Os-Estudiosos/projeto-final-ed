@@ -292,14 +292,7 @@ Em `projeto-final-ed/docs/` há um arquivo `relatorio.pdf` com o relatório feit
 
 ## Integrantes
 Alex Júnio Maia de Oliveira\
-João Pedro Jerônimo de Oliveira\ 
+João Pedro Jerônimo de Oliveira\
 Lucas Batista Pereira\
 Matheus Villarino Pinto\
 Thalis Ambrosim Falqueto
-
-**tipo_arvore** = bst, avl ou rbt
-
-## Nota
-Para checar o que essa versão é capaz e o que falta ser implementado, consultar a aba **releases**.
-
-O código aqui feito funciona apenas para pastas que os arquivos estão nomeados de `0.txt` à `n.txt` com $n \in \N$, pois não foi especificado no enunciado sobre uma melhor reprodutibilidade do código.
