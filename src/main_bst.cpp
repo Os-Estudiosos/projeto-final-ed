@@ -87,8 +87,8 @@ int main(int argc, char* argv[])
         std::filesystem::create_directories(pathStats / "bst/");
         std::ofstream InsertingStats(pathStats.string() + "bst/bstInsertStats_" + std::to_string(numDocs) + "archives.csv");
 
-        std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
-        std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
+        std::cout << "\033[37mDependendo de quantos documentos voce esta fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
+        std::cout << "\033[36mCalculando as estatisticas de Insercao\033[m" << std::endl;
 
         std::stringstream insertString;
         insertString << "word;time;comparisions;treeHeight;nodes\n";
@@ -117,8 +117,8 @@ int main(int argc, char* argv[])
         std::vector<std::string> words;
         int uniqueWords = countNodes(tree, &words);
 
-        std::cout << "=====================\033[36mESTATÍSTICAS DE INSERÇÃO\033[m=====================" << std::endl;
-        std::cout << "Tempo de Inserção: " << (float)time/1e9 << " segundos" << std::endl;
+        std::cout << "=====================\033[36mESTATISTICAS DE INSERCAO\033[m=====================" << std::endl;
+        std::cout << "Tempo de Insercao: " << (float)time/1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uniqueWords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         std::cout << std::endl;
 
-        std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
+        std::cout << "\033[36mCalculando as estatisticas de Busca\033[m" << std::endl;
         std::ofstream SearchingStats(pathStats.string() + "bst/bstSearchStats_"+std::to_string(numDocs)+"archives.csv");
 
         std::stringstream search_string;
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 
         SearchingStats << search_string.str();
 
-        std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
+        std::cout << "=====================\033[36mESTATISTICAS DE BUSCA\033[m=====================" << std::endl;
         std::cout << "Media tempo de busca: " << (float)sumtime/(uniqueWords*1e9) << " segundos" << std::endl;
         std::cout << "Media de comparacoes de busca: " << (float)sumComparisons/uniqueWords << std::endl;
 

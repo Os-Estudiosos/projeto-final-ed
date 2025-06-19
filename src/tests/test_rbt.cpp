@@ -341,7 +341,7 @@ int main()
     std::cout << "\n====================== TESTANDO PROPRIEDADES DA RBT ======================" << std::endl;
     rbtPropertiesTests();
 
-    std::cout << "\nTodos os testes foram concluídos." << std::endl;
+    std::cout << "\nTodos os testes foram concluidos." << std::endl;
 
     return 0;
 }

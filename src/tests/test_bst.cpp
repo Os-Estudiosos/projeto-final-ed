@@ -136,7 +136,7 @@ void treeReturnsTests()
         BST::destroy(tree);
         if (result1.documentIds.size() != 1 || result2.documentIds.size() != 1)
         {
-            throw std::runtime_error("A funcao está inserindo o mesmo documento mais de uma vez");
+            throw std::runtime_error("A funcao esta inserindo o mesmo documento mais de uma vez");
         }
 
         printMessage(" CONCLUIDO", 1, "92");
