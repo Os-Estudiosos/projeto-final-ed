@@ -154,7 +154,7 @@ int countNodes(BinaryTree* tree, std::vector<std::string> *words)
         return -1;
     }
     Node *aux = tree->root;
-    int count = 1;
+    int count = 0;
     
     // usa countNodesAux para contar a quantidade de nós e armazenar a quantidade de palavras
     if (aux != nullptr)

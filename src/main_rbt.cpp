@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 
         SearchResult result;
         std::string toSearch;
-        long int sumTime = 0;
+        long long sumTime = 0;
         int sumComp = 0;
         for(int i = 0;i < uniqueWords;i++)
         {
