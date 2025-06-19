@@ -1,10 +1,10 @@
-﻿# Projeto final estrutura de dados - Implementação de indices invertidos
+﻿# Projeto final estrutura de dados - Implementação de índices invertidos
 
 Este projeto, desenvolvido para a disciplina de Estrutura de Dados, foca na implementação e análise de três tipos de árvores binárias de busca: Árvore Binária de Busca (BST), Árvore AVL e Árvore Rubro-Negra (RBT).\
-O objetivo principal é a implementação do indice invertido usando os 3 diferentes tipos de arvores aprendidos em sala, coletando dados para analise
+O objetivo principal é a implementação do índice invertido usando os 3 diferentes tipos de árvores aprendidos em sala, coletando dados para análise
 ---
 ## Sumário
-[1- Sobre as arvores](#sobre-as-arvores)\
+[1- Sobre as árvores](#sobre-as-arvores)\
 [2- Estrutura do repositório](#estrutura-do-repositório)\
 [3- Resquisitos](#requisitos)\
 [4- Compilação](#compilação)\
@@ -13,11 +13,11 @@ O objetivo principal é a implementação do indice invertido usando os 3 difere
 [7- Testes](#testes)\
 [8- Integrantes](#integrantes)
 
-## Sobre as arvores
+## Sobre as árvores
 1. **BST**\
-A arvore mais simples, com apenas uma propriedade, definida a sua raiz, todo valor a ser inserido passa por uma comparação, caso seja maior vai para um nó a direita, caso seja menor vai para um nó a esquerda, seguindo assim até em que após uma comparação não haja nó na direção que o valor deve ir, sendo assim, ela será a posição do nó referente ao novo valor
+A árvore mais simples, com apenas uma propriedade, definida a sua raiz, todo valor a ser inserido passa por uma comparação, caso seja maior vai para um nó a direita, caso seja menor vai para um nó a esquerda, seguindo assim até em que após uma comparação não haja nó na direção que o valor deve ir, sendo assim, ela será a posição do nó referente ao novo valor
 2. **AVL**\
-Essa arvore, diferente da Bst sem mantém balanceada, sua inserção é semelhante a Bst, porém realiza rotações para manter o balanceamento, seguindo que sendo l a altura à esquerda e r a altura à direitra, a arvore rotaciona de forma em que $-1 \leq r - l \geq 1$
+Essa árvore, diferente da BST sem mantém balanceada, sua inserção é semelhante a BST, porém realiza rotações para manter o balanceamento, seguindo que sendo l a altura à esquerda e r a altura à direitra, a arvore rotaciona de forma em que $-1 \leq r - l \geq 1$
 3. **Rbt**\
 Se assemelha a AVL, porém nela os nós tem cores (pretos e vermelhos), mantém uma estrutura em que não há duas cores consecultivas e as folhas não podem ser vermelhas, também nela há menos rotações que a AVL
 
