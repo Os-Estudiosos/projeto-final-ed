@@ -25,31 +25,31 @@ int main(int argc, char* argv[])
             std::filesystem::path archivePath = path / archive; 
             std::vector<std::string> words = readArchive(archivePath);
             int size = words.size();
-            
+
             for (int j = 0;j < size;j++)
             {
                 AVL::insert(tree, words[j], i);
             }
         }
 
-        std::string wordToSearch = "";
-    
+        std::string word_to_search = "";
+
         while (true)
         {
             std::cout << "========================\033[96m PESQUISA COM INDICE INVERTIDO \033[m========================" << std::endl;
             std::cout << "(Se quiser sair, digite . e de enter)" << std::endl;
             std::cout << "Digite a palavra que gostaria de procurar:" << std::endl;
             std::cout << "--> ";
-            std::cin >> wordToSearch;
+            std::cin >> word_to_search;
             std::cout << std::endl;
 
-            if (!strcmp(wordToSearch.c_str(), "."))
+            if (!strcmp(word_to_search.c_str(),"."))
             {
                 std::cout << "Encerrando o programa" << std::endl;
                 break;
             }
 
-            SearchResult result = search(tree, wordToSearch);
+            SearchResult result = search(tree, word_to_search);
             
             if (result.found)
             {
@@ -62,14 +62,14 @@ int main(int argc, char* argv[])
                     std::cout << result.documentIds[i] << ", ";
                 }
                 std::cout << result.documentIds[size - 1];
-
+                
                 std::cout << std::endl;
                 std::cout << "Aperte Enter para procurar outra palavra" << std::endl;
                 std::cin.ignore();
                 std::cin.get();
             } else
             {
-                std::cout << "Sua palavra \033[91nao\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << std::endl;
+                std::cout << "Sua palavra \033[91mnao\033[m foi encontrada :(. Aperte Enter para procurar outra palavra" << std::endl;
                 std::cin.ignore();
                 std::cin.get();
             }
@@ -87,8 +87,8 @@ int main(int argc, char* argv[])
         std::filesystem::create_directories(pathStats / "avl/");
         std::ofstream InsertingStats(pathStats.string() + "avl/avlInsertStats_" + std::to_string(numDocs) + "archives.csv");
 
-        std::cout << "\033[37mDependendo de quantos documentos voce esta fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
-        std::cout << "\033[36mCalculando as estatisticas de Insercao\033[m" << std::endl;
+        std::cout << "\033[37mDependendo de quantos documentos você está fazendo a leitura, isso pode levar um tempinho\033[m" << std::endl;
+        std::cout << "\033[36mCalculando as estatísticas de Inserção\033[m" << std::endl;
 
         std::stringstream insertString;
         insertString << "word;time;comparisions;treeHeight;nodes;rotations\n";
@@ -104,16 +104,10 @@ int main(int argc, char* argv[])
             std::vector<std::string> words = readArchive(archivePath);
             size = words.size();
             cwords += size;
-            for(int h = 0; h < 10; h++)
-            {
-                auto start = std::chrono::high_resolution_clock::now();                        // Raiz é sempre preta em uma RBT
-                auto end = std::chrono::high_resolution_clock::now();               // Encerramos a contagem de tempo
-                auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start); 
-            }
             for (int j = 0;j < size;j++)
             {
                 InsertResult result = AVL::insert(tree, words[j], i);
-                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";"<< tree->root->height << ";" << tree->nodeCount << ";" << tree->rotationsCount << std::endl;
+                insertString << words[j] << ";" << result.executionTime << ";" << result.numComparisons << ";" << tree->height << ";" << tree->nodeCount << ";" << tree->rotationsCount << std::endl;
                 time +=result.executionTime;
                 comparacoes += result.numComparisons;
             }
@@ -123,45 +117,49 @@ int main(int argc, char* argv[])
         std::vector<std::string> words;
         int uniqueWords = countNodes(tree, &words);
 
-        std::cout << "=====================\033[36mESTATISTICAS DE INSERCAO\033[m=====================" << std::endl;
-        std::cout << "Tempo de Insercao: " << (float)time/1e9 << " segundos" << std::endl;
+        std::cout << "=====================\033[36mESTATISTICAS DE INSERÇÃO\033[m=====================" << std::endl;
+        std::cout << "Tempo de Inserção: " << (float)time/1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uniqueWords << std::endl;
         std::cout << "Total de comparacoes: " << comparacoes << std::endl;
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
-        std::cout << "Altura: " << computeHeight(tree->root) << std::endl;
+        std::cout << "Altura: " << tree->height <<std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
+        std::cout << "Quantidade total de rotacoes: " << tree->rotationsCount << std::endl;
+        std::cout << "Quantidade media de rotacoes: " << (float)tree->rotationsCount/uniqueWords << std::endl;
         std::cout << std::endl;
 
         std::cout << "\033[36mCalculando as estatisticas de Busca\033[m" << std::endl;
         std::ofstream SearchingStats(pathStats.string() + "avl/avlSearchStats_" + std::to_string(numDocs) + "archives.csv");
 
-        std::stringstream searchString;
-        searchString << "word;time;comparisions;word_height" << std::endl;
+        std::stringstream search_string;
+        search_string << "word;time;comparisions;word_height" << std::endl;
 
         SearchResult result;
         std::string toSearch;
         long int sumTime = 0;
-        int sumComparisons = 0;
+        int sumComp = 0;
         for(int i = 0;i < uniqueWords;i++)
         {
             toSearch = words[i];
             result = search(tree, toSearch);
             sumTime += result.executionTime;
-            sumComparisons += result.numComparisons;
-            searchString << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons + 1 << std::endl;
+            sumComp += result.numComparisons;
+            search_string << words[i] << ";" << result.executionTime << ";" << result.numComparisons << ";" << result.numComparisons + 1 << std::endl;
         }
 
-        SearchingStats << searchString.str();
+        SearchingStats << search_string.str();
 
         std::cout << "=====================\033[36mESTATISTICAS DE BUSCA\033[m=====================" << std::endl;
         std::cout << "Media tempo de busca: " << (float)sumTime/(uniqueWords*1e9) << " segundos" << std::endl;
-        std::cout << "Media de comparacoes de busca: " << (float)sumComparisons/uniqueWords << std::endl;
+        std::cout << "Media de comparacoes de busca: " << (float)sumComp/uniqueWords << std::endl;
+
 
         InsertingStats.close();
         SearchingStats.close();
 
         AVL::destroy(tree);
+        
     }
     return 0;
 }

@@ -125,6 +125,8 @@ int main(int argc, char* argv[])
         std::cout << "Media de comparacoes: " << (float)comparacoes/cwords << std::endl;
         std::cout << "Altura: " << tree->height <<std::endl;
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
+        std::cout << "Quantidade total de rotacoes: " << tree->rotationsCount << std::endl;
+        std::cout << "Quantidade media de rotacoes: " << (float)tree->rotationsCount/uniqueWords << std::endl;
         std::cout << std::endl;
 
         std::cout << "\033[36mCalculando as estatisticas de Busca\033[m" << std::endl;
