@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
         std::vector<std::string> words;
         int uniqueWords = countNodes(tree, &words);
 
-        std::cout << "=====================\033[36mESTATÍSTICAS DE INSERÇÃO\033[m=====================" << std::endl;
+        std::cout << "=====================\033[36mESTATISTICAS DE INSERÇÃO\033[m=====================" << std::endl;
         std::cout << "Tempo de Inserção: " << (float)time/1e9 << " segundos" << std::endl;
         std::cout << "Total de palavras inseridas: " << cwords << std::endl;
         std::cout << "Palavras unicas: " << uniqueWords << std::endl;
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
         std::cout << "Menor altura: " << computeMinHeight(tree->root) << std::endl;
         std::cout << std::endl;
 
-        std::cout << "\033[36mCalculando as estatísticas de Busca\033[m" << std::endl;
+        std::cout << "\033[36mCalculando as estatisticas de Busca\033[m" << std::endl;
         std::ofstream SearchingStats(pathStats.string() + "rbt/rbtSearchStats_" + std::to_string(numDocs) + "archives.csv");
 
         std::stringstream search_string;
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 
         SearchingStats << search_string.str();
 
-        std::cout << "=====================\033[36mESTATÍSTICAS DE BUSCA\033[m=====================" << std::endl;
+        std::cout << "=====================\033[36mESTATISTICAS DE BUSCA\033[m=====================" << std::endl;
         std::cout << "Media tempo de busca: " << (float)sumTime/(uniqueWords*1e9) << " segundos" << std::endl;
         std::cout << "Media de comparacoes de busca: " << (float)sumComp/uniqueWords << std::endl;
 

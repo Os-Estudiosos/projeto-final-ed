@@ -45,8 +45,8 @@ bool valCLI(int argc, char** argv)
     
     if (fp == nullptr)
     {
-        std::cout << "O diretório passado, " << argv[3] << " não é valido, use:\n" <<
-        argv[0] << " " <<argv[1] << " " << argv[2] << " <diretorio> \t com um diretório válido\n";
+        std::cout << "O diretorio passado, " << argv[3] << " nao e valido, use:\n" <<
+        argv[0] << " " <<argv[1] << " " << argv[2] << " <diretorio> \t com um diretorio valido\n";
         return true;
     }
     // fecha o arquivo
