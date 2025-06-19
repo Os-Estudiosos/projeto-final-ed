@@ -52,7 +52,7 @@ bool isRBT(BinaryTree* tree)
     // Propriedade 1: Raiz deve ser preta
     if (tree->root->isRed != RBT::BLACK)
     {
-        printMessage("  [FALHA] Propriedade da Raiz: A raiz não é PRETA.", 1, "91");
+        printMessage("  [FALHA] Propriedade da Raiz: A raiz nao e PRETA.", 1, "91");
         return false;
     }
 
@@ -60,14 +60,14 @@ bool isRBT(BinaryTree* tree)
     Node* prev = nullptr;
     if (!isBstUtil(tree->root, prev))
     {
-        printMessage("  [FALHA] Propriedade da BST: A ordem dos nós está incorreta.", 1, "91");
+        printMessage("  [FALHA] Propriedade da BST: A ordem dos nós esta incorreta.", 1, "91");
         return false;
     }
 
     // Propriedade 3: Não pode haver dois nós vermelhos consecutivos
     if (!checkRedProperty(tree->root))
     {
-        printMessage("  [FALHA] Propriedade Vermelha: Existem dois nós vermelhos adjacentes.", 1, "91");
+        printMessage("  [FALHA] Propriedade Vermelha: Existem dois nos vermelhos adjacentes.", 1, "91");
         return false;
     }
 
@@ -85,7 +85,7 @@ void treeStructureTests()
 {
     try
     {
-        printMessage("Testando insercao numa ÁRVORE NULA...", 0);
+        printMessage("Testando insercao numa ARVORE NULA...", 0);
         RBT::insert(nullptr, "Pamonha", 3);
         printMessage(" CONCLUiDO", 1, "92");
     } catch (const std::exception& e)

@@ -8,7 +8,7 @@ void treeStructureTests()
     try
     {
         // Teste de inserção em uma árvore nula (ponteiro nullptr)
-        printMessage("Testando insercao numa ÁRVORE NULA...", 0);
+        printMessage("Testando insercao numa ARVORE NULA...", 0);
         BST::insert(nullptr, "Pamonha", 3);  // Espera-se que isso lance exceção ou erro
         printMessage(" CONCLUiDO", 1, "92"); // Verde
     } catch (int errorCode) 
@@ -30,7 +30,7 @@ void treeStructureTests()
         if (tree->root->word != "Almofada")
         {
             BST::destroy(tree);
-            throw std::runtime_error("A palavra nao foi inserida no noh da árvore");
+            throw std::runtime_error("A palavra nao foi inserida no noh da arvore");
         }
         BST::destroy(tree);
         if (!contains(docsIds, 0))
