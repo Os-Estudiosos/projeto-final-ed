@@ -294,5 +294,5 @@ Em `projeto-final-ed/docs/` há um arquivo `relatorio.pdf` com o relatório feit
 Alex Júnio Maia de Oliveira\
 João Pedro Jerônimo de Oliveira\
 Lucas Batista Pereira\
-Matheus Villarino Pinto\
+Matheus Villarino de Souza Pinto\
 Thalis Ambrosim Falqueto
